@@ -51,7 +51,7 @@ class Ennemi():
 
     def Random_Damage_Dealer(self):
         """Récupère un ennemi aléatoire de la catégorie "DamageDealer"
-         dans la table "enemies" de la base de données """
+         dans la table "enemies" de la base de données test """
         self.perso = choice(GetDamageDealers())
 
     def Random_Tank(self):
