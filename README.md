@@ -1,2 +1,2 @@
 # RPGproject
-Game project for scoul
+Game project for school
