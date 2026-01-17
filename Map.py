@@ -103,41 +103,25 @@ class Map(arcade.Window):
     def on_key_press(self, key, modifiers):
         if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
             if key == arcade.key.D:  # Droite
-                if self.player_sprite.center_x <500:
-                    self.player_sprite.strafe(200)
-        if self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
+                self.player_sprite.strafe(200)
+        elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
             if key == arcade.key.Q:  # Gauche
-                if self.player_sprite.center_x >100 :
-                    self.player_sprite.strafe(-200)
+                self.player_sprite.strafe(-200)
             elif key == arcade.key.S:  # Bas
-                if self.player_sprite.center_y >100:
-                    self.player_sprite.center_y -= 200
-        if self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
-            if key == arcade.key.Z:  # Haut
-                if self.player_sprite.center_y <500 :
-                    self.player_sprite.center_y += 200
+                self.player_sprite.center_y -= 200
+        elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
+            if key == arcade.key.Z:  # Haut:
+                self.player_sprite.center_y += 200
             elif key == arcade.key.S:  # Bas
-                if self.player_sprite.center_y >100:
-                    self.player_sprite.center_y -= 200
-        """if self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
-            if key == arcade.key.Q:  # Gauche
-                if self.player_sprite.center_x >100 :
-                    self.player_sprite.strafe(-200)
+                self.player_sprite.center_y -= 200
+        elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
+            if key == arcade.key.D:  # Droite
+                self.player_sprite.strafe(200)
             elif key == arcade.key.Z:  # Haut
-                if self.player_sprite.center_y <500 :
-                    self.player_sprite.center_y += 200
-        if self.player_sprite.center_x == 500 and self.player_sprite.center_y == 100:
+                self.player_sprite.center_y += 200
+        elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
             if key == arcade.key.Q:  # Gauche
-                if self.player_sprite.center_x >100 :
-                    self.player_sprite.strafe(-200)"""
-
-
-
-    def on_key_release(self, key, modifiers):
-        if key == arcade.key.Q or key == arcade.key.D:
-            self.player_sprite.change_x = 0
-        if key == arcade.key.Z or key == arcade.key.S:
-            self.player_sprite.change_y = 0
+                self.player_sprite.strafe(-200)
 
     def deplacement(self,x,y):
         while x != self.player_sprite.center_x or y != self.player_sprite.center_y:
