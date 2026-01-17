@@ -119,3 +119,5 @@ EnnemiesInGame:
 
 	GetNbEnnemies():
 		Renvoie le nombre d'énnemies.
+
+test
