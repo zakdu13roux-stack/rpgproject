@@ -16,9 +16,9 @@ def Start():
     while all(vie > 0 for vie in enemiesLife) and plr.vie>0:
         if tour==0:
             branche(0,ennemies,plr.GetPlayerStats()[2])
-            enemiesLife[0]=ennemies.GetEnnemieStats(i)[2]
+            enemiesLife[0]=ennemies.GetEnnemieStats(0)[2]
             tour=1
-            print("ennemie vie = ",enemiesLife[0])
+            print("ennemie vie = ",enemiesLife)
         else:
             for i in range(ennemies.GetNbEnnemies()):
                 if enemiesLife[i]>0:
