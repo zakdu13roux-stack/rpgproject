@@ -1,6 +1,14 @@
 import mysql.connector
 import uuid
 import os
+from CheckDB import seeDB
+
+def LookForDB():
+    """
+    Créer la base de données si elle n'existe pas sinon ne rien faire.
+    """
+    seeDB()
+
 
 db = mysql.connector.connect(
   host="localhost",
@@ -8,6 +16,7 @@ db = mysql.connector.connect(
   database="testosterone"
 )
 cursor = db.cursor()
+
 
 def get_computer_uuid(curseur):
     """
@@ -31,6 +40,7 @@ def get_computer_uuid(curseur):
         return new_uuid
 
 uuid = get_computer_uuid(cursor)
+
 
 def OG(curseur,id):
     """
@@ -64,42 +74,40 @@ def SignIn(curseur, id):
     curseur.execute(f"Insert Into players (PlayerID,Name,MDP) Values ('{id}','{Nom}','{MDP}')")
     db.commit()
 
-def __GetLife__(curseur,id):
-    curseur.execute(f"Select Vie From players Where PlayerID = '{id}'")
-    return curseur.fetchall()[0][0]
 def GetLife():
     """
     Donne la vie du joueur.
     """
-    return __GetLife__(cursor,uuid)
+    cursor.execute(f"Select Vie From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
 
-def __GetAtkBase__(curseur,id):
-    curseur.execute(f"Select AtkDeBase From players Where PlayerID = '{id}'")
-    return curseur.fetchall()[0][0]
-def GetAtkBase():
+def GetAtk():
     """
-    Donne l'attaque de base du joueur.
+    Donne l'attaque du joueur.
     """
-    return __GetAtkBase__(cursor,uuid)
+    cursor.execute(f"Select AtkDeBase From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
 
-def __GetReducDegat__(curseur,id):
-    curseur.execute(f"Select ReducDegat From players Where PlayerID = '{id}'")
-    return curseur.fetchall()[0][0]
 def GetReducDegat():
     """
     Donne la réduction des dégâts du joueur.
     """
-    return __GetReducDegat__(cursor,uuid)
+    cursor.execute(f"Select ReducDegat From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
 
-def __GetArgent__(curseur,id):
-    curseur.execute(f"Select Argent From players Where PlayerID = '{id}'")
-    return curseur.fetchall()[0][0]
 def GetArgent():
     """
     Donne l'argent du joueur.
     """
-    return __GetArgent__(cursor,uuid)
+    cursor.execute(f"Select Argent From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
+
+def GetName():
+    """
+    Donne le nom du joueur.
+    """
+    cursor.execute(f"Select Name From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
 
 if __name__ == '__main__':
-    OG(cursor,uuid)
-    print(GetLife())
+    print(GetName())

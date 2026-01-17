@@ -1,0 +1,121 @@
+CheckDb:
+	seeDB():
+		Créer la base de données si elle n'existe pas et renvoie 'False', sinon renvoie 'True.
+
+##################################################
+
+PlayerStats:
+	LookForDB():
+		Créer la base de données si elle n'existe pas sinon ne rien faire.
+
+	get_computer_uuid(curseur):
+		Donne l'UUID déjà enregistré si il y en à déjà un et sinon en créer un jusqu'à qu'il n'y en ai pas d'identique dans la base de données.
+
+    		Entrée:
+        		curseur: La base de données visée
+
+	OG(curseur,id):
+		Vérifier si l'utilisateur à déjà joué, sinon lancer l'enregistrement.
+
+    		Entrée:
+    	  		curseur: La base de données visée
+    	  		id: L'UUID enregistrée plus tôt
+
+	SignIn(curseur,id):
+		S'enregistrer dans la base de données en choisissant un nom et un mot de passe.
+
+    		Entrée:
+        		curseur: La base de données visée
+        		id: L'UUID enregistrée plus tôt
+
+	GetLife():
+		Donne la vie du joueur.
+
+	GetAtk():
+		Donne l'attaque du joueur
+
+	GetReducDegat():
+		Donne la réduction des dégâts du joueur.
+
+	GetArgent():
+		Donne l'argent du joueur.
+
+##################################################
+
+EnnemiesStats:
+	GetDamageDealers():
+		Donne tout les ennemies et leurs statistiques du type 'Damage Dealer'.
+
+	GetTanks():
+		Donne tout les ennemies et leurs statistiques du type 'Tank'.
+
+	GetSupports():
+		Donne tout les ennemies et leurs statistiques du type 'Tank'.
+
+	GetEnemyStats(enemy):
+		Donne toutes les statistiques (nom, type, atout) de l'ennemie donné.
+
+    		Entrée:
+        		enemy: le nom de l'ennemie
+
+##################################################
+
+WeaponsStats:
+	GetWeapons():
+		Donne toutes les armes.
+
+	GetPourieWeapons():
+		Donne toutes les armes de rareté 'Pourie'.
+
+	GetOkWeapons():
+		Donne toutes les armes de rareté 'Ok'.
+
+	GetLegendaireWeapons():
+		Donne toutes les armes de rareté 'Légendaire'.
+
+##################################################
+
+PlayerInGame:
+	class player():
+		Créer le joueur et ses stats.
+
+	takeDamage(dmg):
+		Prend des dégats (ne peut pas aller en dessous de 0 pv).
+
+	heal(health):
+		Soigne un nombre de pv (ne peut pas depasser la vie max).
+
+	GetPlayerStats():
+		Renvoie toutes les stats du joueur (Vie max, Vie, Attaque, Reduction des dégats).
+
+##################################################
+
+EnnemiesInGame:
+	class SetUp():
+		Créer une variable ennemies de self qui est un dictionnaire contenant tout les énnemies (nom, vie, vie max, dégats).
+
+	dealDamage(enemy,dmg):
+		Fait des dégats à l'énnemie choisis (ne peut pas aller en dessous de 0 pv).
+
+		Entrée:
+			enemy: l'indice de l'ennemie (de 0 à n-1 énnemies).
+			dmg: les dégats infligés.
+
+	Heal(enemy,health):
+		Soigne l'énnemie choisis (ne peut pas depasser la vie max).
+
+		Entrée:
+			enemy: l'indice de l'ennemie (de 0 à n-1 énnemies).
+			health: la vie donnée.
+
+	GetEnnemieStats(enemy):
+		Renvoie l'ennemie et toutes ses stats (Nom, Vie max, Vie, Attaque).
+
+		Entrée:
+			enemy: l'indice de l'ennemie (de 0 à n-1 énnemies).
+
+	GetAllEnnemies():
+		Renvoie Tous les ennemies avec leurs stats.
+
+	GetNbEnnemies():
+		Renvoie le nombre d'énnemies.

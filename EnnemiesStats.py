@@ -7,34 +7,39 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor()
 
-def __GetDamageDealers__(curseur):
-    curseur.execute("Select * From enemies Where Type = 'DamageDealer'")
-    return curseur.fetchall()
 def GetDamageDealers():
     """
     Donne tout les ennemies et leurs statistiques du type 'Damage Dealer'.
     """
-    return __GetDamageDealers__(cursor)
+    cursor.execute("Select * From enemies Where Type = 'DamageDealer'")
+    return cursor.fetchall()
 
-def __GetTanks__(curseur):
-    curseur.execute("Select * From enemies Where Type = 'Tank'")
-    return curseur.fetchall()
 def GetTanks():
     """
     Donne tout les ennemies et leurs statistiques du type 'Tank'.
     """
-    return __GetTanks__(cursor)
+    cursor.execute("Select * From enemies Where Type = 'Tank'")
+    return cursor.fetchall()
 
-def __GetSupports__(curseur):
-    curseur.execute("Select * From enemies Where Type = 'Support'")
-    return curseur.fetchall()
 def GetSupports():
     """
     Donne tout les ennemies et leurs statistiques du type 'Support'.
     """
-    return __GetSupports__(cursor)
+    cursor.execute("Select * From enemies Where Type = 'Support'")
+    return cursor.fetchall()
+
+def GetEnemyStats(enemy):
+    """
+    Donne toutes les statistiques (nom, type, atout) de l'ennemie donné.
+
+    Entrée:
+        enemy: le nom de l'ennemie
+    """
+    cursor.execute(f"Select * From enemies Where Nom = '{enemy}'")
+    return cursor.fetchall()[0]
 
 if __name__ == '__main__':
     print(GetDamageDealers())
     print(GetTanks())
     print(GetSupports())
+    print(GetEnemyStats("Gorille"))

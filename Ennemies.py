@@ -1,5 +1,5 @@
 from random import randint, random, choice
-from PlayerStats import GetLife, GetAtkBase
+from PlayerStats import GetLife, GetAtk
 from EnnemiesStats import GetDamageDealers, GetTanks, GetSupports
 
 class Ennemi():
@@ -30,7 +30,7 @@ class Ennemi():
             temp = random()
             while temp > 0.5:
                 temp = random()
-            self.attaque = GetAtkBase() - temp
+            self.attaque = GetAtk() - temp
             self.Random_Tank()
 
         elif choix_type == 'Damage Dealer':
@@ -38,7 +38,7 @@ class Ennemi():
             temp = random()
             while temp > 0.5:
                 temp = random()
-            self.attaque = GetAtkBase() + temp
+            self.attaque = GetAtk() + temp
             self.Random_Damage_Dealer()
 
         else:
@@ -46,12 +46,12 @@ class Ennemi():
             temp = random()
             while temp > 0.5:
                 temp = random()
-            self.attaque = GetAtkBase() - temp
+            self.attaque = GetAtk() - temp
             self.Random_Support()
 
     def Random_Damage_Dealer(self):
         """Récupère un ennemi aléatoire de la catégorie "DamageDealer"
-         dans la table "enemies" de la base de données test 2"""
+         dans la table "enemies" de la base de données """
         self.perso = choice(GetDamageDealers())
 
     def Random_Tank(self):
@@ -67,8 +67,7 @@ class Ennemi():
 
 
 
-
-Test = Ennemi()
-print(Test.perso)
-print((Test.vie,Test.attaque))
-
+if __name__ == '__main__':
+    Test = Ennemi()
+    print(Test.perso)
+    print((Test.vie,Test.attaque))

@@ -27,7 +27,7 @@ class MyGame(arcade.Window):
         self.clear()
 
         # Définir la vue pour suivre le joueur
-        
+
         self.camera.use()
 
         # Carrés d'herbe
@@ -48,11 +48,11 @@ class MyGame(arcade.Window):
             offset_left = abs(hash(i)) % 3 * 20
             x_left = 80 + offset_left
             arcade.draw_texture_rect(texture, arcade.XYWH(x_left, y, texture.width, texture.height).scale(scale))
-            
+
             offset_right = abs(hash(i + 1000)) % 3 * 20
             x_right = 530 + offset_right
             arcade.draw_texture_rect(texture, arcade.XYWH(x_right, y, texture.width, texture.height).scale(scale))
-            
+
 
         # Trottoirs
         arcade.draw_line(201, -100000, 201, 100000, arcade.csscolor.BLACK)
@@ -60,7 +60,7 @@ class MyGame(arcade.Window):
 
         # Dessiner les sprites
         self.player_list.draw()
-    
+
     def center_camera_on_player(self):
         screen_width = self.width
         screen_height = self.height
@@ -98,6 +98,4 @@ class MyGame(arcade.Window):
 game = MyGame()
 arcade.run()
 
-if __name__ == "__main__":
-    pass  # No need for main() since arcade.run() handles it
 
