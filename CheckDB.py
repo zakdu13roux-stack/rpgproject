@@ -34,3 +34,6 @@ def seeDB():
         mycursor.execute(" ".join(f.readlines()))
         f.close()
         return False
+    
+if __name__ == '__main__':
+    seeDB()
