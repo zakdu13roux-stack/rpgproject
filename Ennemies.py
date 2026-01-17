@@ -27,25 +27,25 @@ class Ennemi():
         choix_type = choice(lst_types)
         if choix_type == 'Tank':
             self.vie = GetLife() + randint(50,100)
-            temp = random()
+            temp = round(random(),2)
             while temp > 0.5:
-                temp = random()
+                temp = round(random(),2)
             self.attaque = GetAtk() - temp
             self.Random_Tank()
 
         elif choix_type == 'Damage Dealer':
             self.vie = GetLife() - randint(20,30)
-            temp = random()
+            temp = round(random(),2)
             while temp > 0.5:
-                temp = random()
+                temp = round(random(),2)
             self.attaque = GetAtk() + temp
             self.Random_Damage_Dealer()
 
         else:
             self.vie = GetLife() - randint(25,40)
-            temp = random()
+            temp = round(random(),2)
             while temp > 0.5:
-                temp = random()
+                temp = round(random(),2)
             self.attaque = GetAtk() - temp
             self.Random_Support()
 
