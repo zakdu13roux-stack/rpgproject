@@ -2,9 +2,9 @@ import arcade
 import arcade.gui
 import os
 
-class Spawn(arcade.Window):
+class Spawn(arcade.View):
     def __init__(self):
-        super().__init__(600, 600, "Main Fenêtre", False, False)
+        super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
 
         # Sprite du joueur
@@ -49,15 +49,24 @@ class Spawn(arcade.Window):
         self.manager = arcade.gui.UIManager()
 
         # Bouton Menu
-        self.bouton_menu = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=150)
+        self.bouton_menu = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=100)
         @self.bouton_menu.event("on_click")
         def on_click_bouton_menu(event):
-            vue = MenuView(self)
+            from Menu import MenuView
+            vue = MenuView()
             self.window.show_view(vue)
 
         # Anchor pour positionner le bouton
         self.anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        self.anchor.add(anchor_x="center_x",anchor_y="center_y", child= self.bouton_menu)
+        self.anchor.add(anchor_x="right",anchor_y="top", child= self.bouton_menu)
+
+    def on_show_view(self):
+        arcade.set_background_color(arcade.csscolor.GREEN)
+        self.manager.enable()
+
+    def on_hide_view(self):
+        self.manager.disable()
+
 
     def on_draw(self):
         self.clear()
@@ -120,6 +129,9 @@ class Spawn(arcade.Window):
         if key == arcade.key.Z or key == arcade.key.S:
             self.player_sprite.change_y = 0
 
-game = Spawn()
-arcade.run()
-
+# Main application setup
+if __name__ == "__main__":
+    window = arcade.Window(600, 600, "RPG Game with Menu")
+    spawn_view = Spawn()
+    window.show_view(spawn_view)
+    arcade.run()
