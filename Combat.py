@@ -24,8 +24,12 @@ def Start():
                 if enemiesLife[i]>0:
                     branche("player",plr,ennemies.GetEnnemieStats(i)[3])
             tour=0
-            print(plr.Name,"vie = ",plr.vie)
-        
+            print(plr.Name,"vie = ",plr.vie,"\n","------------------")
+    print("\nFINI\n")
+    if plr.vie>0:
+        print(plr.Name,"à gagné avec",plr.vie,"pv restant!!")
+    else:
+        print(ennemies.GetAllEnnemies(),"à gagné avec",enemiesLife,"pv restant!!")
 
 
 
