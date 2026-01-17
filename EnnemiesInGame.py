@@ -14,7 +14,8 @@ class SetUpEnemy():
     def dealDamage(self,enemy,dmg):
         if self.ennemies[enemy][2]-dmg<=0:
             self.ennemies[enemy][2]=0
-        self.ennemies[enemy][2]-=dmg
+        else:
+            self.ennemies[enemy][2]-=dmg
     def Heal(self,enemy,health):
         if self.ennemies[enemy][2]+health>=self.ennemies[enemy][1]:
             self.ennemies[enemy][2]=copy(self.ennemies[enemy][1])
@@ -32,7 +33,7 @@ class SetUpEnemy():
 
 
 if __name__ == '__main__':
-    test = SetUpEnemy(nbEnnemi)
+    test = SetUpEnemy()
     print(test.GetEnnemieStats(0))
     test.dealDamage(0,23)
     print(test.GetEnnemieStats(0))
