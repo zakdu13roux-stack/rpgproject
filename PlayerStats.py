@@ -80,6 +80,12 @@ def GetLife():
     """
     cursor.execute(f"Select Vie From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
+def UpdateLife(vie):
+    """
+    actualise la vie du joueur.
+    """
+    cursor.execute(f"Update players Set Vie = Vie+{vie} Where PlayerID = '{uuid}'")
+    db.commit()
 
 def GetAtk():
     """
@@ -87,6 +93,12 @@ def GetAtk():
     """
     cursor.execute(f"Select AtkDeBase From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
+def UpdateAtk(dg):
+    """
+    actualise l'attaque du joueur.
+    """
+    cursor.execute(f"Update players Set AtkDeBase = AtkDeBase+{dg} Where PlayerID = '{uuid}'")
+    db.commit()
 
 def GetReducDegat():
     """
@@ -94,6 +106,12 @@ def GetReducDegat():
     """
     cursor.execute(f"Select ReducDegat From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
+def UpdateReducDegat(dg):
+    """
+    actualise la réduction des dégâts du joueur.
+    """
+    cursor.execute(f"Update players Set ReducDegat = ReducDegat+{dg} Where PlayerID = '{uuid}'")
+    db.commit()
 
 def GetArgent():
     """
@@ -101,6 +119,12 @@ def GetArgent():
     """
     cursor.execute(f"Select Argent From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
+def UpdateArgent(arg):
+    """
+    actualise l'argent du joueur.
+    """
+    cursor.execute(f"Update players Set Argent = Argent+{arg} Where PlayerID = '{uuid}'")
+    db.commit()
 
 def GetName():
     """
@@ -108,6 +132,12 @@ def GetName():
     """
     cursor.execute(f"Select Name From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
+def UpdateName(name):
+    """
+    actualise le nom du joueur.
+    """
+    cursor.execute(f"Update players Set Argent = name Where PlayerID = '{uuid}'")
+    db.commit()
 
 if __name__ == '__main__':
-    print(GetName())
+    UpdateLife(-10)

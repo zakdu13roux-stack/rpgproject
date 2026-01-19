@@ -21,6 +21,13 @@ class Spawn(arcade.View):
         self.deco_list= arcade.SpriteList()
         self.deco_list.append(self.shop_sprite)
 
+        #Sprite Portail
+        self.portal_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__),"Images","portal.png"),scale = 0.3)
+        self.portal_sprite.center_x = 550
+        self.portal_sprite.center_y = 300
+        self.portal_list = arcade.SpriteList()
+        self.portal_list.append(self.portal_sprite)
+
         # Limite de la map
         self.map_width = 1200
         self.map_height = 1200
@@ -44,6 +51,7 @@ class Spawn(arcade.View):
         self.hitboxe_basecolor=(255, 255, 255)
         self.hitboxe_collcolor =(0, 0, 255)
         self.hit = False
+        self.teleport = False
 
         # UI manager
         self.manager = arcade.gui.UIManager()
@@ -84,9 +92,11 @@ class Spawn(arcade.View):
             self.deco_list.draw_hit_boxes(self.hitboxe_basecolor)
 
         # Dessiner les sprites
+        self.portal_list.draw()
         self.player_list.draw()
         self.deco_list.draw()
         self.manager.draw()
+
 
     def center_camera_on_player(self):
         screen_width = self.width
@@ -113,6 +123,12 @@ class Spawn(arcade.View):
         else:
             self.hit = False
 
+        if arcade.check_for_collision_with_list(self.player_sprite,self.portal_list):
+            self.teleport = True
+        else:
+            self.teleport = False
+
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.Q :# Gauche
             self.player_sprite.change_x = -self.player_speed
@@ -122,6 +138,10 @@ class Spawn(arcade.View):
             self.player_sprite.change_y = self.player_speed
         elif key == arcade.key.S:  # Bas
             self.player_sprite.change_y = -self.player_speed
+        if self.teleport == True:
+            from Map import Map
+            map_view = Map()
+            window.show_view(map_view)
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.Q or key == arcade.key.D:

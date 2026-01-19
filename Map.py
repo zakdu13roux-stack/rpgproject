@@ -1,11 +1,11 @@
 import arcade
 import os
 from random import randint
+from FightScene import FightScene
 
-class Map(arcade.Window):
+class Map(arcade.View):
     def __init__(self):
-        super().__init__(600, 600, "Map Fenêtre", False, False)
-        arcade.set_background_color(arcade.csscolor.GREEN)
+        super().__init__()
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
@@ -44,6 +44,57 @@ class Map(arcade.Window):
         self.icon_list.append(self.icon_sprite4)
         self.icon_list.append(self.icon_sprite5)
 
+        # Sprites décor
+
+        self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
+        self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
+        self.arbre3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
+        self.arbre4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
+        self.arbre5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
+
+        self.arbre1.center_x = randint(40,250)
+        self.arbre1.center_y = randint(40,350)
+
+        self.arbre2.center_x = randint(40,250)
+        self.arbre2.center_y = randint(40,350)
+
+        self.arbre3.center_x = randint(350,560)
+        self.arbre3.center_y = randint(250,560)
+
+        self.arbre4.center_x = randint(350,560)
+        self.arbre4.center_y = randint(250,560)
+
+        self.arbre5.center_x = randint(50,550)
+        self.arbre5.center_y = randint(50,550)
+
+        self.rock1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Rock.png"), scale = 0.2)
+        self.rock2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Rock.png"), scale = 0.2)
+        self.rock3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Rock.png"), scale = 0.2)
+        self.rock4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Rock.png"), scale = 0.2)
+
+        self.rock1.center_x = randint(40,250)
+        self.rock1.center_y = randint(40,350)
+
+        self.rock2.center_x = randint(40,250)
+        self.rock2.center_y = randint(40,350)
+
+        self.rock3.center_x = randint(350,560)
+        self.rock3.center_y = randint(250,560)
+
+        self.rock4.center_x = randint(350,560)
+        self.rock4.center_y = randint(250,560)
+
+
+        self.decor_list = arcade.SpriteList()
+        self.decor_list.append(self.rock1)
+        self.decor_list.append(self.rock2)
+        self.decor_list.append(self.rock3)
+        self.decor_list.append(self.rock4)
+        self.decor_list.append(self.arbre1)
+        self.decor_list.append(self.arbre2)
+        self.decor_list.append(self.arbre3)
+        self.decor_list.append(self.arbre4)
+        self.decor_list.append(self.arbre5)
 
         # Limite de la map
         self.map_width = 1200
@@ -65,21 +116,21 @@ class Map(arcade.Window):
         self.batch.append(path3)
         self.batch.append(path4)
 
-
         # Camera
         self.camera = arcade.Camera2D()
 
     def on_draw(self):
         self.clear()
 
+        # Dessiner les sprites
         self.batch.draw()
+        self.icon_list.draw()
+        self.player_list.draw()
+        self.decor_list.draw()
 
         # Définir la vue pour suivre le joueur
         self.camera.use()
 
-        # Dessiner les sprites
-        self.icon_list.draw()
-        self.player_list.draw()
 
     def center_camera_on_player(self):
         screen_width = self.width
@@ -90,6 +141,9 @@ class Map(arcade.Window):
 
         self.camera.position = (camera_x, camera_y)
 
+    def on_show_view(self):
+        arcade.set_background_color(arcade.csscolor.GREEN)
+
 
 
     def on_update(self, delta_time):
@@ -99,6 +153,7 @@ class Map(arcade.Window):
         self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.height))
         # Pas de clamp sur y pour scrolling infini
         self.center_camera_on_player()
+
 
     def on_key_press(self, key, modifiers):
         if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
@@ -122,11 +177,14 @@ class Map(arcade.Window):
         elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
             if key == arcade.key.Q:  # Gauche
                 self.player_sprite.strafe(-200)
+        if key == arcade.key.ENTER:  # Lancer un combat
+            fight_scene_view = FightScene()
+            self.window.show_view(fight_scene_view)
 
-    def deplacement(self,x,y):
-        while x != self.player_sprite.center_x or y != self.player_sprite.center_y:
-            pass
 
-game = Map()
-arcade.run()
+if __name__ == "__main__":
+    window = arcade.Window(600,600,"Fights")
+    game = Map()
+    window.show_view(game)
+    arcade.run()
 

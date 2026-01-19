@@ -1,13 +1,14 @@
 import arcade
 import os
-import time
+import arcade.gui
+import Animations
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
-class FightScene(arcade.Window):
+class FightScene(arcade.View):
     def __init__(self):
-        super().__init__(SCREEN_WIDTH,SCREEN_HEIGHT, "FIGHT !!!", False, False)
+        super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
         self.batch = arcade.shape_list.ShapeElementList()
@@ -24,19 +25,41 @@ class FightScene(arcade.Window):
         self.enemy_monkey.center_x = 500
         self.enemy_monkey.center_y = 500
 
-
-
         self.listeSprite = arcade.SpriteList()
         self.listeSprite.append(self.player_sprite)
         self.listeSprite.append(self.enemy_monkey)
 
 
-    def monterdescend(self, delta_time):
-        self.center_y += 10
-        time.sleep(0.1)
-        self.center_y -= 10
+        # UI manager
+        self.manager = arcade.gui.UIManager()
+
+        # Grille pour organiser les boutons
+        self.grid = arcade.gui.UIGridLayout(columns=1, vertical_spacing=0, horizontal_spacing=0)
+
+        # Boutons du menu
+        resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, height=50)
+
+        # Ajouter les boutons à la grille
+
+        self.grid.add(resume_button, col_num=1, row_num=1)
+
+        # Ajouter la grille au manager avec un layout d'ancrage
+        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor.add(child=self.grid, anchor_x="center", anchor_y="center")
 
 
+        @resume_button.event("on_click")
+        def on_click_resume_button(event):
+            Animations.Branche(self,self.player_sprite)
+
+
+
+    def on_show_view(self):
+        arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
+        self.manager.enable()
+
+    def on_hide_view(self):
+        self.manager.disable()
 
     def on_update(self,delta_time):
         self.listeSprite.update()
@@ -46,9 +69,12 @@ class FightScene(arcade.Window):
         self.clear()
         self.batch.draw()
         self.listeSprite.draw()
+        self.manager.draw()
 
 
 
-
-game = FightScene()
-arcade.run()
+if __name__ == "__main__":
+    window = arcade.Window(600,600,"FightScene")
+    FightScene_view = FightScene()
+    window.show_view(FightScene_view)
+    arcade.run()
