@@ -20,12 +20,12 @@ class ShopView(arcade.View):
         self.prix_vie = self.stat_vie + 50
 
         # Boutons du menu
-        return_buttun = arcade.gui.UIFlatButton(text="Return", width=200, height=50)
-        buy_buttun = arcade.gui.UIFlatButton(text=str(self.prix_vie), width=200, height=50)
+        return_button = arcade.gui.UIFlatButton(text="Return", width=200, height=50)
+        self.buy_button = arcade.gui.UIFlatButton(text=str(self.prix_vie), width=200, height=50)
 
         # Ajouter les boutons à la grille
-        self.grid.add(buy_buttun, col_num=0, row_num=0)
-        self.grid.add(return_buttun, col_num=1, row_num=0)
+        self.grid.add(self.buy_button, col_num=0, row_num=0)
+        self.grid.add(return_button, col_num=1, row_num=0)
 
 
         # Ajouter la grille au manager avec un layout d'ancrage
@@ -33,12 +33,15 @@ class ShopView(arcade.View):
         anchor.add(child=self.grid, anchor_x="center", anchor_y="center")
 
 
-        @buy_buttun.event("on_click")
+        @self.buy_button.event("on_click")
         def on_click_buy_buttun(event):
             UpdateLife(50)
+            self.prix_vie = GetLife() + 50
+            self.buy_button.text = str(self.prix_vie)
+            print(self.buy_button.text)
 
 
-        @return_buttun.event("on_click")
+        @return_button.event("on_click")
         def on_click_return_button(event):
             spawn_view = Spawn()
             self.window.show_view(spawn_view)
