@@ -141,7 +141,7 @@ class Spawn(arcade.View):
         if self.teleport == True:
             from Map import Map
             map_view = Map()
-            window.show_view(map_view)
+            self.window.show_view(map_view)
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.Q or key == arcade.key.D:
