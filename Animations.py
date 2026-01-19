@@ -2,15 +2,14 @@ import arcade
 import time
 import FightScene
 
-def Branche(self,sprite):
-    self.wait_time = time.monotonic()
-    self.waiting = True
-    sprite.strafe(200)
-    if self.waiting:
-            self.wait_time += time.monotonic()
-            print(self.wait_time)
-            if self.wait_time >= 1:  # 1 second
-                print("Done waiting!")
-                self.waiting = False
-                sprite.strafe(-200)
+def Branche(sprite):
+    print("Go")
+    MoveBranche1(sprite)
 
+def MoveBranche1(sprite):
+    sprite.strafe(200)
+    arcade.schedule(MoveBranche2(sprite), 1)
+def MoveBranche2(sprite):
+    arcade.unschedule(MoveBranche2)
+    sprite.strafe(-200)
+    print("Done waiting!")

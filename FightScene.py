@@ -50,7 +50,7 @@ class FightScene(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            Animations.Branche(self,self.player_sprite)
+            Animations.Branche(self.player_sprite)
 
 
 
