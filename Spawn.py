@@ -85,11 +85,11 @@ class Spawn(arcade.View):
         # Définir la vue pour suivre le joueur
         self.camera.use()
 
+        # Entrer dans le magazin
         if self.hit:
-            self.deco_list.draw_hit_boxes(self.hitboxe_collcolor)
-            arcade.draw_text("collision", 400, 400, arcade.csscolor.RED)
-        else:
-            self.deco_list.draw_hit_boxes(self.hitboxe_basecolor)
+            from ShopView import ShopView
+            shop_view = ShopView()
+            self.window.show_view(shop_view)
 
         # Dessiner les sprites
         self.portal_list.draw()
