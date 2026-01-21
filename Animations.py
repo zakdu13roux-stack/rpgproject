@@ -1,15 +1,24 @@
 import arcade
-import time
-import FightScene
+
+sprite_ref = None
+
 
 def Branche(sprite):
-    print("Go")
-    MoveBranche1(sprite)
+    global sprite_ref
+    sprite_ref = sprite
+    arcade.schedule(MoveBranche1, 1 / 60)
 
-def MoveBranche1(sprite):
-    sprite.strafe(200)
-    arcade.schedule(MoveBranche2(sprite), 1)
-def MoveBranche2(sprite):
+
+def MoveBranche1(delta_time):
+    if sprite_ref.Player == True:
+        sprite_ref.strafe(100)
+    else:
+        sprite_ref.strafe(-100)
+    arcade.unschedule(MoveBranche1)
+    arcade.schedule(MoveBranche2, .125)
+def MoveBranche2(delta_time):
     arcade.unschedule(MoveBranche2)
-    sprite.strafe(-200)
-    print("Done waiting!")
+    if sprite_ref.Player == True:
+        sprite_ref.strafe(-100)
+    else:
+        sprite_ref.strafe(100)

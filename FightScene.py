@@ -20,10 +20,12 @@ class FightScene(arcade.View):
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=3)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 50
+        self.player_sprite.Player = True
 
         self.enemy_monkey = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "banana.png"), scale=0.5)
         self.enemy_monkey.center_x = 500
         self.enemy_monkey.center_y = 500
+        self.enemy_monkey.Player = False
 
         self.listeSprite = arcade.SpriteList()
         self.listeSprite.append(self.player_sprite)
@@ -50,7 +52,7 @@ class FightScene(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            Animations.Branche(self.player_sprite)
+            Animations.Branche(self.enemy_monkey)
 
 
 
