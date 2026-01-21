@@ -6,7 +6,7 @@ sprite_ref = None
 def Branche(sprite):
     global sprite_ref
     sprite_ref = sprite
-    arcade.schedule(MoveBranche1, 1 / 60)
+    arcade.schedule(MoveBranche1, 1/60)
 
 
 def MoveBranche1(delta_time):
