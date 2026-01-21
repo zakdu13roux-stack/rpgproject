@@ -2,6 +2,9 @@ import arcade
 import os
 import arcade.gui
 import Animations
+from EnnemiesInGame import *
+from PlayerInGame import *
+from Weapons import *
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
@@ -22,14 +25,25 @@ class FightScene(arcade.View):
         self.player_sprite.center_y = 50
         self.player_sprite.Player = True
 
-        self.enemy_monkey = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "banana.png"), scale=0.5)
-        self.enemy_monkey.center_x = 500
-        self.enemy_monkey.center_y = 500
-        self.enemy_monkey.Player = False
-
         self.listeSprite = arcade.SpriteList()
         self.listeSprite.append(self.player_sprite)
-        self.listeSprite.append(self.enemy_monkey)
+
+
+        self.ennemies={}
+        nbEnemies=2
+        AllEnemy=SetUpEnemy(nbEnnemi=nbEnemies)
+
+        for i in range(nbEnemies):
+            if AllEnemy.GetAllEnnemies()[i][0]=="Singe":
+                self.ennemies[i]=(AllEnemy.ennemies[i],False,arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "banana.png"), scale=0.5))
+            elif AllEnemy.GetAllEnnemies()[i][0]=="Araignee":
+                self.ennemies[i]=(AllEnemy.ennemies[i],False,arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "spider.png"), scale=0.06))
+            elif AllEnemy.GetAllEnnemies()[i][0]=="Gorille":
+                self.ennemies[i]=(AllEnemy.ennemies[i],False,arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "gorilla.png"), scale=0.4))
+            
+            self.ennemies[i][2].center_x=500-200*i
+            self.ennemies[i][2].center_y=500
+            self.listeSprite.append(self.ennemies[i][2])
 
 
         # UI manager
@@ -42,7 +56,6 @@ class FightScene(arcade.View):
         resume_button = arcade.gui.UIFlatButton(text="Resume", width=200, height=50)
 
         # Ajouter les boutons à la grille
-
         self.grid.add(resume_button, col_num=1, row_num=1)
 
         # Ajouter la grille au manager avec un layout d'ancrage
@@ -52,7 +65,7 @@ class FightScene(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            Animations.Branche(self.enemy_monkey)
+            Animations.Branche((None,True,self.player_sprite))#(None,True,self.player_sprite)-> Bouge le joueur /// self.ennemies[0]-> Bouge l'ennemie 0
 
 
 

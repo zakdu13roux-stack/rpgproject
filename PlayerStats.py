@@ -80,7 +80,7 @@ def GetLife():
     """
     cursor.execute(f"Select Vie From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
-def UpdateLife(vie):
+def AddLife(vie):
     """
     actualise la vie du joueur.
     """
@@ -93,7 +93,7 @@ def GetAtk():
     """
     cursor.execute(f"Select AtkDeBase From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
-def UpdateAtk(dg):
+def AddAtk(dg):
     """
     actualise l'attaque du joueur.
     """
@@ -106,7 +106,7 @@ def GetReducDegat():
     """
     cursor.execute(f"Select ReducDegat From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
-def UpdateReducDegat(dg):
+def AddReducDegat(dg):
     """
     actualise la réduction des dégâts du joueur.
     """
@@ -119,7 +119,7 @@ def GetArgent():
     """
     cursor.execute(f"Select Argent From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
-def UpdateArgent(arg):
+def AddArgent(arg):
     """
     actualise l'argent du joueur.
     """
@@ -132,7 +132,7 @@ def GetName():
     """
     cursor.execute(f"Select Name From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
-def UpdateName(name):
+def ChangeName(name):
     """
     actualise le nom du joueur.
     """
@@ -140,4 +140,4 @@ def UpdateName(name):
     db.commit()
 
 if __name__ == '__main__':
-    UpdateLife(-10)
+    AddLife(-10)

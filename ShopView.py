@@ -35,7 +35,7 @@ class ShopView(arcade.View):
 
         @self.buy_button.event("on_click")
         def on_click_buy_buttun(event):
-            UpdateLife(50)
+            AddLife(50)
             self.prix_vie = GetLife() + 50
             self.buy_button.text = str(self.prix_vie)
             print(self.buy_button.text)
