@@ -4,8 +4,16 @@ from random import randint
 from FightScene import FightScene
 
 class Map(arcade.View):
-    def __init__(self):
+    def __init__(self,cpt):
         super().__init__()
+
+        # Compteur cleared maps
+        self.compteur = cpt
+        self.text_compteur = arcade.create_text_sprite( "Cleared maps : " + str(self.compteur),arcade.csscolor.BLACK,17)
+        self.text_compteur.center_x = 75
+        self.text_compteur.center_y = 570
+        self.texts = arcade.SpriteList()
+        self.texts.append(self.text_compteur)
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
@@ -15,36 +23,82 @@ class Map(arcade.View):
         self.player_list.append(self.player_sprite)
 
         # Sprite icones map
-        self.icon_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
+        self.icon_start = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "start.png"), scale=0.3)
+        self.icon_sprite1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
         self.icon_sprite2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
         self.icon_sprite3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
-        self.icon_sprite4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
-        self.icon_sprite5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
+        self.icon_end = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "end.png"), scale=0.3)
 
-        self.icon_sprite.center_x = 100
-        self.icon_sprite.center_y = 450
+        self.icon_start.center_x = 95
+        self.icon_start.center_y = 500
+
+        self.icon_sprite1.center_x = 300
+        self.icon_sprite1.center_y = 450
 
         self.icon_sprite2.center_x = 300
-        self.icon_sprite2.center_y = 450
+        self.icon_sprite2.center_y = 250
 
         self.icon_sprite3.center_x = 300
-        self.icon_sprite3.center_y = 250
+        self.icon_sprite3.center_y = 50
 
-        self.icon_sprite4.center_x = 300
-        self.icon_sprite4.center_y = 50
-
-        self.icon_sprite5.center_x = 500
-        self.icon_sprite5.center_y = 50
+        self.icon_end.center_x = 495
+        self.icon_end.center_y = 100
 
 
         self.icon_list = arcade.SpriteList()
-        self.icon_list.append(self.icon_sprite)
+        self.icon_list.append(self.icon_start)
+        self.icon_list.append(self.icon_sprite1)
         self.icon_list.append(self.icon_sprite2)
         self.icon_list.append(self.icon_sprite3)
-        self.icon_list.append(self.icon_sprite4)
-        self.icon_list.append(self.icon_sprite5)
+        self.icon_list.append(self.icon_end)
 
         # Sprites décor
+        self.pelouse1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse1.center_x = 115
+        self.pelouse1.center_y = 115
+
+        self.pelouse2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse2.center_x = 350
+        self.pelouse2.center_y = 350
+
+        self.pelouse3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse3.center_x = 115
+        self.pelouse3.center_y = 350
+
+        self.pelouse4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse4.center_x = 350
+        self.pelouse4.center_y = 115
+
+        self.pelouse5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse5.center_x = 575
+        self.pelouse5.center_y = 115
+
+        self.pelouse6 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse6.center_x = 575
+        self.pelouse6.center_y = 350
+
+        self.pelouse7 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse7.center_x = 350
+        self.pelouse7.center_y = 575
+
+        self.pelouse8 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse8.center_x = 115
+        self.pelouse8.center_y = 575
+
+        self.pelouse9 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
+        self.pelouse9.center_x = 570
+        self.pelouse9.center_y = 575
+
+        self.trucs_tt_devant_list = arcade.SpriteList()
+        self.trucs_tt_devant_list.append(self.pelouse1)
+        self.trucs_tt_devant_list.append(self.pelouse2)
+        self.trucs_tt_devant_list.append(self.pelouse3)
+        self.trucs_tt_devant_list.append(self.pelouse4)
+        self.trucs_tt_devant_list.append(self.pelouse5)
+        self.trucs_tt_devant_list.append(self.pelouse6)
+        self.trucs_tt_devant_list.append(self.pelouse7)
+        self.trucs_tt_devant_list.append(self.pelouse8)
+        self.trucs_tt_devant_list.append(self.pelouse9)
 
         self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
         self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
@@ -110,7 +164,6 @@ class Map(arcade.View):
         path3 = arcade.shape_list.create_line(300,300,300,100,arcade.csscolor.BLACK,25)
         path4 = arcade.shape_list.create_line(300,100,500,100,arcade.csscolor.BLACK,25)
 
-
         self.batch.append(path1)
         self.batch.append(path2)
         self.batch.append(path3)
@@ -123,10 +176,12 @@ class Map(arcade.View):
         self.clear()
 
         # Dessiner les sprites
+        self.trucs_tt_devant_list.draw()
         self.batch.draw()
         self.icon_list.draw()
         self.player_list.draw()
         self.decor_list.draw()
+        self.texts.draw()
 
         # Définir la vue pour suivre le joueur
         self.camera.use()
@@ -177,14 +232,30 @@ class Map(arcade.View):
         elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
             if key == arcade.key.Q:  # Gauche
                 self.player_sprite.strafe(-200)
-        if key == arcade.key.ENTER:  # Lancer un combat
-            fight_scene_view = FightScene()
-            self.window.show_view(fight_scene_view)
+        if key == arcade.key.ENTER: # Lancer un combat
+            if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
+                pass
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
+                fight_scene_view = FightScene()
+                self.window.show_view(fight_scene_view)
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
+                fight_scene_view = FightScene()
+                self.window.show_view(fight_scene_view)
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
+                fight_scene_view = FightScene()
+                self.window.show_view(fight_scene_view)
+            elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
+                self.window.show_view(Map(self.compteur+1))
+                self.text_compteur = self.compteur
+
+
+
+
 
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Fights")
-    game = Map()
+    game = Map(0)
     window.show_view(game)
     arcade.run()
 

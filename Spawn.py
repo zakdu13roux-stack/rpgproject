@@ -140,7 +140,7 @@ class Spawn(arcade.View):
             self.player_sprite.change_y = -self.player_speed
         if self.teleport == True:
             from Map import Map
-            map_view = Map()
+            map_view = Map(0)
             self.window.show_view(map_view)
 
     def on_key_release(self, key, modifiers):

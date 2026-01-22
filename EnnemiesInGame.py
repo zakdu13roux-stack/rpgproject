@@ -39,4 +39,4 @@ if __name__ == '__main__':
     print(test.GetEnnemieStats(0))
     test.Heal(0,10000)
     print(test.GetEnnemieStats(0))
-    print(test.GetNbEnnemies())
+    print(test.GetAllEnnemies())
