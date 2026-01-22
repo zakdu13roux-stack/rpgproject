@@ -30,10 +30,12 @@ class FightScene(arcade.View):
 
 
         self.ennemies={}
-        nbEnemies=3
-        self.AllEnemy=SetUpEnemy(nbEnnemi=nbEnemies)
+        self.nbEnemies=3
+        self.AllEnemy=SetUpEnemy(nbEnnemi=self.nbEnemies)
 
-        for i in range(nbEnemies):
+        self.healthBars=arcade.SpriteList()
+
+        for i in range(self.nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0]=="Singe":
                 self.ennemies[i]=[self.AllEnemy.ennemies[i],arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "banana.png"), scale=0.5),False]
             elif self.AllEnemy.GetAllEnnemies()[i][0]=="Araignee":
@@ -44,6 +46,11 @@ class FightScene(arcade.View):
             self.ennemies[i][1].center_x=500-200*i
             self.ennemies[i][1].center_y=500
             self.listeSprite.append(self.ennemies[i][1])
+
+            healthBar = arcade.SpriteSolidColor(int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1]), 20, arcade.color.GREEN)
+            healthBar.center_x = 500 - 200 * i
+            healthBar.center_y = 400
+            self.healthBars.append(healthBar)
 
 
         # UI manager
@@ -65,7 +72,7 @@ class FightScene(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            Animations.Branche(self.plr,self.AllEnemy,0) #self.plr,self.ennemies,0 --> Attaque l'ennemie 0 /// self.ennemies[0],self.plr --> Attaque le joueur avec l'ennemie 0
+            Animations.Branche(self.plr,self.AllEnemy,"Branche",0) #self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 /// self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
 
 
 
@@ -85,6 +92,15 @@ class FightScene(arcade.View):
         self.batch.draw()
         self.listeSprite.draw()
         self.manager.draw()
+        for i in range(self.nbEnemies):
+            if self.ennemies[i][0][2] > 0:
+                vieTaille = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
+                self.healthBars[i].texture=arcade.make_soft_square_texture(20, arcade.color.GREEN, outer_alpha=255)
+                self.healthBars[i].width=vieTaille
+            else:
+                self.healthBars[i].alpha = 0
+                self.ennemies[i][1].alpha = 0
+        self.healthBars.draw()
 
 
 
