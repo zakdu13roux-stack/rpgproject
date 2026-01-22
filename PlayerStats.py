@@ -3,12 +3,6 @@ import uuid
 import os
 from CheckDB import seeDB
 
-def LookForDB():
-    """
-    Créer la base de données si elle n'existe pas sinon ne rien faire.
-    """
-    seeDB()
-
 
 db = mysql.connector.connect(
   host="localhost",
