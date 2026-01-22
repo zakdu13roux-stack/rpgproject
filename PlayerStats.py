@@ -1,8 +1,6 @@
 import mysql.connector
 import uuid
 import os
-from CheckDB import seeDB
-
 
 db = mysql.connector.connect(
   host="localhost",
