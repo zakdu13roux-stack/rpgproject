@@ -38,7 +38,9 @@ def Branche(user,target,weapon,num=0):
 
 def Move1(delta_time):
     if isPlayer == True:
+        scream=arcade.load_sound("Sounds/Scream.wav")
         sprite_ref.strafe(100)
+        scream.play()
         Attaquer()
     else:
         sprite_ref.strafe(-40)

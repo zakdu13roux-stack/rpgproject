@@ -97,9 +97,11 @@ class FightScene(arcade.View):
                 vieTaille = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
                 self.healthBars[i].texture=arcade.make_soft_square_texture(20, arcade.color.GREEN, outer_alpha=255)
                 self.healthBars[i].width=vieTaille
-            else:
+            elif self.healthBars[i].alpha!=0:
                 self.healthBars[i].alpha = 0
                 self.ennemies[i][1].alpha = 0
+                die=arcade.load_sound("Sounds/Die.wav")
+                die.play()
         self.healthBars.draw()
 
 
