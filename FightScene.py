@@ -4,14 +4,20 @@ import arcade.gui
 import Animations
 from EnnemiesInGame import *
 from PlayerInGame import *
+from Spawn import*
+
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 class FightScene(arcade.View):
-    def __init__(self):
+    def __init__(self, compteur_maps):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
+
+        self.compteur_maps = compteur_maps
+
+        self.enemySelected=0
 
         self.batch = arcade.shape_list.ShapeElementList()
         herbebottom = arcade.shape_list.create_rectangle_filled(0,0,1200,300, arcade.csscolor.GREEN)
@@ -31,7 +37,7 @@ class FightScene(arcade.View):
 
         self.ennemies={}
         self.nbEnemies=3
-        self.AllEnemy=SetUpEnemy(nbEnnemi=self.nbEnemies)
+        self.AllEnemy=SetUpEnemy(difficulte=self.compteur_maps,nbEnnemi=self.nbEnemies)
 
         self.healthBars=arcade.SpriteList()
 
@@ -70,9 +76,19 @@ class FightScene(arcade.View):
         anchor.add(child=self.grid, anchor_x="right", anchor_y="bottom")
 
 
+        self.abandon_button = arcade.gui.UIFlatButton(text="Abandon",width=200,height=50)
+        anchor_abandon = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor_abandon.add(child = self.abandon_button, align_x=0, align_y=-275)
+
+        @self.abandon_button.event("on_click")
+        def on_click_abandon_button(event):
+            vuespawn = Spawn(self.compteur_maps)
+            self.window.show_view(vuespawn)
+
+
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            Animations.Branche(self.plr,self.AllEnemy,"Branche",0) #self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 /// self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
+            Animations.Branche(self.plr,self.AllEnemy,"Branche",self.enemySelected) #self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 /// self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
 
 
 
@@ -104,10 +120,18 @@ class FightScene(arcade.View):
                 die.play()
         self.healthBars.draw()
 
+    def on_mouse_press(self,x,y,button,modifier):
+        if button == 1:
+            if x>410 and x<600 and y>410 and y<600:
+                self.enemySelected=0
+            if x>210 and x<400 and y>410 and y<600 and self.nbEnemies>=2:
+                self.enemySelected=1
+            if x>0 and x<200 and y>410 and y<600 and self.nbEnemies>=3:
+                self.enemySelected=2
 
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"FightScene")
-    FightScene_view = FightScene()
+    FightScene_view = FightScene(1)
     window.show_view(FightScene_view)
     arcade.run()

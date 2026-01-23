@@ -2,14 +2,35 @@ import arcade
 import os
 from random import randint
 from FightScene import FightScene
+from Spawn import Spawn
+import arcade.gui
 
 class Map(arcade.View):
     def __init__(self,cpt):
         super().__init__()
+        self.manager = arcade.gui.UIManager()
+
+        # Grille pour organiser les boutons
+        self.grid = arcade.gui.UIGridLayout(columns=1, vertical_spacing=0, horizontal_spacing=0)
+
+        # Boutons du menu
+        Spawn_button = arcade.gui.UIFlatButton(text="Return to Spawn", width=200, height=50)
+
+        # Ajouter les boutons à la grille
+        self.grid.add(Spawn_button, col_num=1, row_num=1)
+
+        # Ajouter la grille au manager avec un layout d'ancrage
+        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor.add(child=self.grid, anchor_x="left", anchor_y="bottom")
+
+        @Spawn_button.event("on_click")
+        def on_click_resume_button(event):
+            spawn_view = Spawn(self.compteur)
+            self.window.show_view(spawn_view)
 
         # Compteur cleared maps
         self.compteur = cpt
-        self.text_compteur = arcade.create_text_sprite( "Cleared maps : " + str(self.compteur),arcade.csscolor.BLACK,17)
+        self.text_compteur = arcade.create_text_sprite( "Cleared maps : " + str(self.compteur-1),arcade.csscolor.BLACK,17)
         self.text_compteur.center_x = 75
         self.text_compteur.center_y = 570
         self.texts = arcade.SpriteList()
@@ -24,22 +45,22 @@ class Map(arcade.View):
 
         # Sprite icones map
         self.icon_start = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "start.png"), scale=0.3)
-        self.icon_sprite1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
+        self.icon_sprite1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "battle.png"), scale=0.3)
         self.icon_sprite2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
-        self.icon_sprite3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "area.png"), scale=0.3)
+        self.icon_sprite3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "battle.png"), scale=0.3)
         self.icon_end = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "end.png"), scale=0.3)
 
         self.icon_start.center_x = 95
         self.icon_start.center_y = 500
 
         self.icon_sprite1.center_x = 300
-        self.icon_sprite1.center_y = 450
+        self.icon_sprite1.center_y = 500
 
         self.icon_sprite2.center_x = 300
-        self.icon_sprite2.center_y = 250
+        self.icon_sprite2.center_y = 290
 
         self.icon_sprite3.center_x = 300
-        self.icon_sprite3.center_y = 50
+        self.icon_sprite3.center_y = 90
 
         self.icon_end.center_x = 495
         self.icon_end.center_y = 100
@@ -52,7 +73,7 @@ class Map(arcade.View):
         self.icon_list.append(self.icon_sprite3)
         self.icon_list.append(self.icon_end)
 
-        # Sprites décor
+        # Sprites décor arrière plan
         self.pelouse1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale =0.5)
         self.pelouse1.center_x = 115
         self.pelouse1.center_y = 115
@@ -100,6 +121,7 @@ class Map(arcade.View):
         self.trucs_tt_devant_list.append(self.pelouse8)
         self.trucs_tt_devant_list.append(self.pelouse9)
 
+        # Sprites décor
         self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
         self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
         self.arbre3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Arbre.png"), scale = 0.3)
@@ -182,32 +204,24 @@ class Map(arcade.View):
         self.player_list.draw()
         self.decor_list.draw()
         self.texts.draw()
+        self.manager.draw()
 
         # Définir la vue pour suivre le joueur
         self.camera.use()
 
 
-    def center_camera_on_player(self):
-        screen_width = self.width
-        screen_height = self.height
-
-        camera_x = screen_width / 2
-        camera_y = screen_height / 2
-
-        self.camera.position = (camera_x, camera_y)
-
     def on_show_view(self):
-        arcade.set_background_color(arcade.csscolor.GREEN)
+        arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
+        self.manager.enable()
 
-
+    def on_hide_view(self):
+        self.manager.disable()
 
     def on_update(self, delta_time):
         # Mettre à jour les sprites
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
         self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.height))
-        # Pas de clamp sur y pour scrolling infini
-        self.center_camera_on_player()
 
 
     def on_key_press(self, key, modifiers):
@@ -236,17 +250,103 @@ class Map(arcade.View):
             if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
                 pass
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
-                fight_scene_view = FightScene()
+                fight_scene_view = FightScene(self.compteur)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
-                fight_scene_view = FightScene()
-                self.window.show_view(fight_scene_view)
+                bonus_lvl_view = Bonus_lvl(self.compteur)
+                self.window.show_view(bonus_lvl_view)
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
-                fight_scene_view = FightScene()
+                fight_scene_view = FightScene(self.compteur)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
                 self.window.show_view(Map(self.compteur+1))
                 self.text_compteur = self.compteur
+
+class Bonus_lvl(arcade.View):
+    def __init__(self,cpt):
+        super().__init__()
+        self.manager = arcade.gui.UIManager()
+
+        self.compteur = cpt
+
+        self.grille = arcade.gui.UIGridLayout(columns=1,vertical_spacing=0,horizontal_spacing=0)
+
+        return_button = arcade.gui.UIFlatButton(text="Return",width=100,height=50)
+        return_button.center_x=0
+        return_button.center_y=0
+
+        self.grille.add(return_button,0,0)
+
+        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor.add(child=self.grille, anchor_x="left", anchor_y="bottom")
+
+
+        self.text_list = arcade.SpriteList()
+
+        # Sprite du joueur
+        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
+        self.player_sprite.center_x = 100
+        self.player_sprite.center_y = 500
+        self.player_list = arcade.SpriteList()
+        self.player_list.append(self.player_sprite)
+
+        # Vitesse du joueur
+        self.player_speed = 5
+
+        # Sprites décor
+        self.decor_list = arcade.SpriteList()
+
+        self.statue = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "statue.png"), scale=0.8)
+
+        self.statue.center_x = 300
+        self.statue.center_y = 300
+
+        self.decor_list.append(self.statue)
+
+
+
+        @return_button.event("on_click")
+        def on_click_return_button(event):
+            map_view = Map(self.compteur)
+            self.window.show_view(map_view)
+
+    def on_draw(self):
+        self.clear()
+        self.player_list.draw()
+        self.text_list.draw()
+        self.manager.draw()
+        self.decor_list.draw()
+
+
+    def on_show_view(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
+        self.manager.enable()
+
+    def on_hide_view(self):
+        self.manager.disable()
+
+    def on_key_press(self, key, modifiers):
+        pas = arcade.load_sound("Sounds/pas.wav")
+        if key == arcade.key.Q :# Gauche
+            pas.play()
+            self.player_sprite.change_x = -self.player_speed
+        elif key == arcade.key.D:  # Droite
+            pas.play()
+            self.player_sprite.change_x = self.player_speed
+        elif key == arcade.key.Z:  # Haut
+            pas.play()
+            self.player_sprite.change_y = self.player_speed
+        elif key == arcade.key.S:  # Bas
+            pas.play()
+            self.player_sprite.change_y = -self.player_speed
+
+    def on_key_release(self, key, modifiers):
+        if key == arcade.key.Q or key == arcade.key.D:
+            self.player_sprite.change_x = 0
+        if key == arcade.key.Z or key == arcade.key.S:
+            self.player_sprite.change_y = 0
+
+
 
 
 
@@ -254,8 +354,8 @@ class Map(arcade.View):
 
 
 if __name__ == "__main__":
-    window = arcade.Window(600,600,"Fights")
-    game = Map(0)
+    window = arcade.Window(600,600,"Map")
+    game = Map(1)
     window.show_view(game)
     arcade.run()
 

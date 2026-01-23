@@ -9,7 +9,8 @@ class Ennemi():
         - La force de leur attaque basée sur la vie maximum du joueur conneté
         - Des effets aléatoires qu'ils sont capables d'infliger au joueur.
     """
-    def __init__(self):
+    def __init__(self,difficulte=1):
+        self.difficulte=difficulte
         self.ennemi_aléatoire()
 
 
@@ -26,7 +27,7 @@ class Ennemi():
         lst_types = ['Tank', 'Damage Dealer','Support']
         choix_type = choice(lst_types)
         if choix_type == 'Tank':
-            self.vie = GetLife() + randint(50,100)
+            self.vie = 50 + self.difficulte * 10 + randint(50,100)
             temp = round(random(),2)
             while temp > 0.5:
                 temp = round(random(),2)
@@ -34,7 +35,7 @@ class Ennemi():
             self.Random_Tank()
 
         elif choix_type == 'Damage Dealer':
-            self.vie = GetLife() - randint(20,30)
+            self.vie = 50 + self.difficulte * 10 - randint(20,30)
             temp = round(random(),2)
             while temp > 0.5:
                 temp = round(random(),2)
@@ -42,7 +43,7 @@ class Ennemi():
             self.Random_Damage_Dealer()
 
         else:
-            self.vie = GetLife() - randint(25,40)
+            self.vie = 50 + self.difficulte * 10 - randint(25,40)
             temp = round(random(),2)
             while temp > 0.5:
                 temp = round(random(),2)

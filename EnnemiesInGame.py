@@ -8,7 +8,7 @@ class SetUpEnemy():
     def __init__(self,difficulte=1,nbEnnemi=1):
         self.ennemies = {}
         for i in range(nbEnnemi):
-            enemy=Ennemi()
+            enemy=Ennemi(difficulte)
             self.ennemies[i]=[enemy.perso[0],enemy.vie,enemy.vie,enemy.attaque]
 
     def dealDamage(self,enemy,dmg):

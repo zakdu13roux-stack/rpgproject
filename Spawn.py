@@ -2,10 +2,16 @@ import arcade
 import arcade.gui
 import os
 
+
+
 class Spawn(arcade.View):
-    def __init__(self):
+    def __init__(self, compteur_maps):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
+        print(compteur_maps)
+
+        #compteur cleared_maps
+        self.compteur_maps = compteur_maps
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
@@ -57,16 +63,16 @@ class Spawn(arcade.View):
         self.manager = arcade.gui.UIManager()
 
         # Bouton Menu
-        self.bouton_menu = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=100)
-        @self.bouton_menu.event("on_click")
-        def on_click_bouton_menu(event):
+        self.spawn_button = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=100)
+        @self.spawn_button.event("on_click")
+        def on_click_resume_button(event):
             from Menu import MenuView
-            vue = MenuView()
-            self.window.show_view(vue)
+            menu_view = MenuView(self.compteur_maps)
+            self.window.show_view(menu_view)
 
         # Anchor pour positionner le bouton
         self.anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        self.anchor.add(anchor_x="right",anchor_y="top", child= self.bouton_menu)
+        self.anchor.add(anchor_x="right",anchor_y="top", child= self.spawn_button)
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)
@@ -88,7 +94,7 @@ class Spawn(arcade.View):
         # Entrer dans le magazin
         if self.hit:
             from ShopView import ShopView
-            shop_view = ShopView()
+            shop_view = ShopView(self.compteur_maps)
             self.window.show_view(shop_view)
 
         # Dessiner les sprites
@@ -127,21 +133,27 @@ class Spawn(arcade.View):
             self.teleport = True
         else:
             self.teleport = False
+        if self.teleport == True:
+            from Map import Map
+            map_view = Map(self.compteur_maps)
+            self.window.show_view(map_view)
 
 
     def on_key_press(self, key, modifiers):
+        pas = arcade.load_sound("Sounds/pas.wav")
         if key == arcade.key.Q :# Gauche
+            pas.play()
             self.player_sprite.change_x = -self.player_speed
         elif key == arcade.key.D:  # Droite
+            pas.play()
             self.player_sprite.change_x = self.player_speed
         elif key == arcade.key.Z:  # Haut
+            pas.play()
             self.player_sprite.change_y = self.player_speed
         elif key == arcade.key.S:  # Bas
+            pas.play()
             self.player_sprite.change_y = -self.player_speed
-        if self.teleport == True:
-            from Map import Map
-            map_view = Map(0)
-            self.window.show_view(map_view)
+
 
     def on_key_release(self, key, modifiers):
         if key == arcade.key.Q or key == arcade.key.D:
@@ -152,6 +164,6 @@ class Spawn(arcade.View):
 # Main application setup
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "RPG Game with Menu")
-    spawn_view = Spawn()
+    spawn_view = Spawn(1)
     window.show_view(spawn_view)
     arcade.run()

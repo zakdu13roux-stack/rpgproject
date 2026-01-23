@@ -4,9 +4,12 @@ from Spawn import Spawn
 from PlayerStats import *
 
 class ShopView(arcade.View):
-    def __init__(self):
+    def __init__(self,compteur_maps):
         super().__init__()
         self.manager = arcade.gui.UIManager()
+
+        self.compteur_maps = compteur_maps
+
 
         #Sprites
         potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "potionverte.png"), scale = 0.3)
@@ -17,11 +20,7 @@ class ShopView(arcade.View):
         self.list_items.append(potion_vie)
 
 
-        self.text_argent = arcade.create_text_sprite( "Portefeuille :  " + str(GetArgent()),arcade.csscolor.BLACK,17)
-        self.text_argent.center_x = 20
-        self.text_argent.center_y = 570
-        self.texts = arcade.SpriteList()
-        self.texts.append(self.text_argent)
+
 
 
 
@@ -62,7 +61,7 @@ class ShopView(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
-            spawn_view = Spawn()
+            spawn_view = Spawn(self.compteur_maps)
             self.window.show_view(spawn_view)
 
     def on_update(self,delta_time):
@@ -74,7 +73,7 @@ class ShopView(arcade.View):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.manager.draw()
         self.list_items.draw()
-        self.texts.draw()
+        arcade.draw_text("Portefeuille : " + str(GetArgent()),70,570, arcade.csscolor.BLACK,17)
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)
@@ -86,6 +85,6 @@ class ShopView(arcade.View):
 # Main application setup
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "RPG Game with Menu")
-    menu_view = ShopView()
+    menu_view = ShopView(1)
     window.show_view(menu_view)
     arcade.run()
