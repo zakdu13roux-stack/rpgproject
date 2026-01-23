@@ -29,8 +29,13 @@ class FightScene(arcade.View):
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 50
 
+        self.Target = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "Target.png"), scale=.7)
+        self.Target.center_x = 500
+        self.Target.center_y = 500
+
         self.listeSprite = arcade.SpriteList()
         self.listeSprite.append(self.player_sprite)
+        self.listeSprite.append(self.Target)
 
         self.plr = [player(),self.player_sprite,True]
 
@@ -40,6 +45,7 @@ class FightScene(arcade.View):
         self.AllEnemy=SetUpEnemy(difficulte=self.compteur_maps,nbEnnemi=self.nbEnemies)
 
         self.healthBars=arcade.SpriteList()
+        self.Healths=[]
 
         for i in range(self.nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0]=="Singe":
@@ -57,6 +63,7 @@ class FightScene(arcade.View):
             healthBar.center_x = 500 - 200 * i
             healthBar.center_y = 400
             self.healthBars.append(healthBar)
+            self.Healths.append(self.ennemies[i][0][2])
 
 
         # UI manager
@@ -89,6 +96,14 @@ class FightScene(arcade.View):
         @resume_button.event("on_click")
         def on_click_resume_button(event):
             Animations.Branche(self.plr,self.AllEnemy,"Branche",self.enemySelected) #self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 /// self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
+        
+        self.V = arcade.create_text_sprite("Victoire", arcade.csscolor.RED, 50)
+        self.V.center_x = 300
+        self.V.center_y = 300
+
+        self.text_list = arcade.SpriteList()
+
+        self.text_list.append(self.V)
 
 
 
@@ -101,6 +116,15 @@ class FightScene(arcade.View):
 
     def on_update(self,delta_time):
         self.listeSprite.update()
+        for i in range(self.nbEnemies):
+            self.Healths[i]=self.ennemies[i][0][2]
+        if self.Healths[self.enemySelected]==0:
+            for i in range(self.nbEnemies):
+                if self.Healths[i]!=0 and self.Healths[self.enemySelected]==0:
+                    self.enemySelected=i
+                    self.Target.center_x = 500-200*i
+        self.Target.angle += .2
+
 
 
     def on_draw(self):
@@ -110,24 +134,29 @@ class FightScene(arcade.View):
         self.manager.draw()
         for i in range(self.nbEnemies):
             if self.ennemies[i][0][2] > 0:
-                vieTaille = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
                 self.healthBars[i].texture=arcade.make_soft_square_texture(20, arcade.color.GREEN, outer_alpha=255)
-                self.healthBars[i].width=vieTaille
+                self.healthBars[i].width=int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
             elif self.healthBars[i].alpha!=0:
                 self.healthBars[i].alpha = 0
                 self.ennemies[i][1].alpha = 0
                 die=arcade.load_sound("Sounds/Die.wav")
                 die.play()
         self.healthBars.draw()
+        if self.Healths[self.enemySelected]==0:
+            self.text_list.draw()
+            self.Target.alpha = 0
 
     def on_mouse_press(self,x,y,button,modifier):
         if button == 1:
-            if x>410 and x<600 and y>410 and y<600:
+            if x>410 and x<600 and y>410 and y<600 and self.enemySelected != 0:
                 self.enemySelected=0
-            if x>210 and x<400 and y>410 and y<600 and self.nbEnemies>=2:
+                self.Target.center_x = 500
+            elif x>210 and x<400 and y>410 and y<600 and self.nbEnemies>=2 and self.enemySelected != 1:
                 self.enemySelected=1
-            if x>0 and x<200 and y>410 and y<600 and self.nbEnemies>=3:
+                self.Target.center_x = 500-200*1
+            elif x>0 and x<200 and y>410 and y<600 and self.nbEnemies>=3 and self.enemySelected != 2:
                 self.enemySelected=2
+                self.Target.center_x = 500-200*2
 
 
 if __name__ == "__main__":

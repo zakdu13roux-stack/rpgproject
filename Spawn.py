@@ -8,7 +8,9 @@ class Spawn(arcade.View):
     def __init__(self, compteur_maps):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
-        print(compteur_maps)
+
+        # Charger les sons
+        self.pas = arcade.load_sound("Sounds/pas.wav")
 
         #compteur cleared_maps
         self.compteur_maps = compteur_maps
@@ -120,9 +122,7 @@ class Spawn(arcade.View):
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
         self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.height))
-
-
-        self.center_camera_on_player()
+        
 
         if arcade.check_for_collision_with_list(self.player_sprite, self.deco_list):
             self.hit = True
@@ -138,21 +138,19 @@ class Spawn(arcade.View):
             map_view = Map(self.compteur_maps)
             self.window.show_view(map_view)
 
-
     def on_key_press(self, key, modifiers):
-        pas = arcade.load_sound("Sounds/pas.wav")
         if key == arcade.key.Q :# Gauche
-            pas.play()
             self.player_sprite.change_x = -self.player_speed
+            self.pas.play()
         elif key == arcade.key.D:  # Droite
-            pas.play()
             self.player_sprite.change_x = self.player_speed
+            self.pas.play()
         elif key == arcade.key.Z:  # Haut
-            pas.play()
             self.player_sprite.change_y = self.player_speed
+            self.pas.play()
         elif key == arcade.key.S:  # Bas
-            pas.play()
             self.player_sprite.change_y = -self.player_speed
+            self.pas.play()
 
 
     def on_key_release(self, key, modifiers):
