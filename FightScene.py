@@ -18,6 +18,10 @@ class FightScene(arcade.View):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.cleared_lvls = cleared_lvls
 
+        # Musique de fight
+        self.menu_music = arcade.Sound(os.path.join(os.path.dirname(__file__), "Sounds", "musicfight.mp3"), False)
+        self.musicjoue = self.menu_music.play(volume=0.3)
+
         self.victory = False
         self.victory_timer = 0
         self.compteur_maps = compteur_maps
@@ -113,6 +117,7 @@ class FightScene(arcade.View):
         self.manager.enable()
 
     def on_hide_view(self):
+        self.menu_music.stop(self.musicjoue)
         self.manager.disable()
 
     def on_update(self, delta_time):

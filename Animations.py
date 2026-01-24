@@ -54,7 +54,7 @@ def Move1(delta_time):
     if isPlayer == True:
         scream=arcade.load_sound("Sounds/Scream.wav")
         sprite_ref.strafe(100)
-        scream.play()
+        scream.play(volume=0.2)
         Attaquer()
     else:
         sprite_ref.strafe(-40)
