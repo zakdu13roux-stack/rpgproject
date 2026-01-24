@@ -5,6 +5,7 @@ import Animations
 from EnnemiesInGame import *
 from PlayerInGame import *
 from Spawn import*
+from time import sleep
 
 
 SCREEN_WIDTH = 600
@@ -14,6 +15,10 @@ class FightScene(arcade.View):
     def __init__(self, compteur_maps):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
+
+        self.victory = False
+        self.victory_timer = 0
+
 
         self.compteur_maps = compteur_maps
 
@@ -118,6 +123,19 @@ class FightScene(arcade.View):
         self.listeSprite.update()
         for i in range(self.nbEnemies):
             self.Healths[i]=self.ennemies[i][0][2]
+        
+
+        if not self.victory and all(h == 0 for h in self.Healths):
+            self.victory = True
+            self.victory_timer = 0
+
+        if self.victory:
+            self.victory_timer += delta_time
+            if self.victory_timer >= 2:
+                from Map import Map
+                self.window.show_view(Map(self.compteur_maps))
+        
+
         if self.Healths[self.enemySelected]==0:
             for i in range(self.nbEnemies):
                 if self.Healths[i]!=0 and self.Healths[self.enemySelected]==0:
