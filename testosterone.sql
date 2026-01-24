@@ -38,7 +38,7 @@ CREATE TABLE `enemies` (
 --
 
 INSERT INTO `enemies` (`Nom`, `Type`, `Atout`) VALUES
-('Araignée', 'Support', 'Poison'),
+('Araignee', 'Support', 'Poison'),
 ('Gorille', 'Tank', NULL),
 ('Singe', 'DamageDealer', NULL);
 
