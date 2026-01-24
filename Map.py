@@ -4,11 +4,13 @@ from random import randint
 from FightScene import FightScene
 from Spawn import Spawn
 import arcade.gui
+from PlayerInGame import player
 
 class Map(arcade.View):
-    def __init__(self,cpt):
+    def __init__(self,cpt,player):
         super().__init__()
-        self.manager = arcade.gui.UIManager()
+        self.manager = arcade.gui.UIManager()   
+        self.player = player
 
         # Grille pour organiser les boutons
         self.grid = arcade.gui.UIGridLayout(columns=1, vertical_spacing=0, horizontal_spacing=0)
@@ -250,112 +252,25 @@ class Map(arcade.View):
             if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
                 pass
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
-                fight_scene_view = FightScene(self.compteur)
+                fight_scene_view = FightScene(self.compteur,self.player)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
-                bonus_lvl_view = Bonus_lvl(self.compteur)
+                from Bonus_lvl import Bonus_lvl
+                bonus_lvl_view = Bonus_lvl(self.compteur,self.player)
                 self.window.show_view(bonus_lvl_view)
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
-                fight_scene_view = FightScene(self.compteur)
+                fight_scene_view = FightScene(self.compteur,self.player)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
-                self.window.show_view(Map(self.compteur+1))
+                self.window.show_view(Map(self.compteur+1,self.player))
                 self.text_compteur = self.compteur
-
-class Bonus_lvl(arcade.View):
-    def __init__(self,cpt):
-        super().__init__()
-        self.manager = arcade.gui.UIManager()
-
-        self.compteur = cpt
-
-        self.grille = arcade.gui.UIGridLayout(columns=1,vertical_spacing=0,horizontal_spacing=0)
-
-        return_button = arcade.gui.UIFlatButton(text="Return",width=100,height=50)
-        return_button.center_x=0
-        return_button.center_y=0
-
-        self.grille.add(return_button,0,0)
-
-        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor.add(child=self.grille, anchor_x="left", anchor_y="bottom")
-
-
-        self.text_list = arcade.SpriteList()
-
-        # Sprite du joueur
-        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
-        self.player_sprite.center_x = 100
-        self.player_sprite.center_y = 500
-        self.player_list = arcade.SpriteList()
-        self.player_list.append(self.player_sprite)
-
-        # Vitesse du joueur
-        self.player_speed = 5
-
-        # Sprites décor
-        self.decor_list = arcade.SpriteList()
-
-        self.statue = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "statue.png"), scale=0.8)
-
-        self.statue.center_x = 300
-        self.statue.center_y = 300
-
-        self.decor_list.append(self.statue)
-
-
-
-        @return_button.event("on_click")
-        def on_click_return_button(event):
-            map_view = Map(self.compteur)
-            self.window.show_view(map_view)
-
-    def on_draw(self):
-        self.clear()
-        self.player_list.draw()
-        self.text_list.draw()
-        self.manager.draw()
-        self.decor_list.draw()
-
-
-    def on_show_view(self):
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
-        self.manager.enable()
-
-    def on_hide_view(self):
-        self.manager.disable()
-
-    def on_key_press(self, key, modifiers):
-        pas = arcade.load_sound("Sounds/pas.wav")
-        if key == arcade.key.Q :# Gauche
-            pas.play()
-            self.player_sprite.change_x = -self.player_speed
-        elif key == arcade.key.D:  # Droite
-            pas.play()
-            self.player_sprite.change_x = self.player_speed
-        elif key == arcade.key.Z:  # Haut
-            pas.play()
-            self.player_sprite.change_y = self.player_speed
-        elif key == arcade.key.S:  # Bas
-            pas.play()
-            self.player_sprite.change_y = -self.player_speed
-
-    def on_key_release(self, key, modifiers):
-        if key == arcade.key.Q or key == arcade.key.D:
-            self.player_sprite.change_x = 0
-        if key == arcade.key.Z or key == arcade.key.S:
-            self.player_sprite.change_y = 0
-
-
-
-
 
 
 
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Map")
-    game = Map(1)
+    game = Map(1, player())
     window.show_view(game)
     arcade.run()
 
