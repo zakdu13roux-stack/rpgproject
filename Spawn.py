@@ -32,7 +32,7 @@ class Spawn(arcade.View):
         #Sprite Portail
         self.portal_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__),"Images","portal.png"),scale = 0.3)
         self.portal_sprite.center_x = 550
-        self.portal_sprite.center_y = 300
+        self.portal_sprite.center_y = 320
         self.portal_list = arcade.SpriteList()
         self.portal_list.append(self.portal_sprite)
 
@@ -43,13 +43,36 @@ class Spawn(arcade.View):
         # Vitesse du joueur
         self.player_speed = 5
 
-        self.batch = arcade.shape_list.ShapeElementList()
+        herbe_topleft = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale=1)
+        herbe_topleft.center_x = 0
+        herbe_topleft.center_y = 400
+        herbe_topright = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale=1)
+        herbe_topright.center_x = 400
+        herbe_topright.center_y = 400
+        herbe_bottomleft = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale=1)
+        herbe_bottomleft.center_x = 0
+        herbe_bottomleft.center_y = 0
+        herbe_bottomright = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "herbe.webp"), scale=1)
+        herbe_bottomright.center_x = 400
+        herbe_bottomright.center_y = 0
 
-        path1 = arcade.shape_list.create_rectangle_filled(0,self.map_height/4,self.map_width,self.map_height/7,arcade.csscolor.BLANCHED_ALMOND)
-        path2 = arcade.shape_list.create_rectangle_filled(self.map_width/4,0,self.map_width/7,self.map_height,arcade.csscolor.BLANCHED_ALMOND)
+        self.herbizare = arcade.SpriteList()
+        self.herbizare.append(herbe_topleft)
+        self.herbizare.append(herbe_topright)
+        self.herbizare.append(herbe_bottomleft)
+        self.herbizare.append(herbe_bottomright)
 
-        self.batch.append(path1)
-        self.batch.append(path2)
+
+        path1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "pathcomplet.png"), scale=1.3)
+        path1.center_x = 300
+        path1.center_y = 300
+
+        
+        
+        
+        self.pathlist = arcade.SpriteList()
+        self.pathlist.append(path1)
+
 
 
         # Camera
@@ -86,8 +109,9 @@ class Spawn(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.herbizare.draw()
 
-        self.batch.draw()
+        self.pathlist.draw()
 
 
         # Définir la vue pour suivre le joueur
