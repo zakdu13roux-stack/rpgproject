@@ -5,13 +5,14 @@ import Animations
 from EnnemiesInGame import *
 from PlayerInGame import *
 from Spawn import *
-from time import sleep
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
+tour = 0
+nbEnemies = 3
 
 class FightScene(arcade.View):
-    def __init__(self, compteur_maps):
+    def __init__(self, compteur_maps,plr):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
@@ -38,17 +39,20 @@ class FightScene(arcade.View):
         self.listeSprite.append(self.player_sprite)
         self.listeSprite.append(self.Target)
 
-        self.plr = [player(), self.player_sprite, True]
+        self.plr = [plr, self.player_sprite, True]
+
+        global tour
+        global nbEnemies
 
         self.ennemies = {}
-        self.nbEnemies = 3
-        self.AllEnemy = SetUpEnemy(difficulte=self.compteur_maps, nbEnnemi=self.nbEnemies)
+        nbEnemies = 3
+        self.AllEnemy = SetUpEnemy(difficulte=self.compteur_maps, nbEnnemi=nbEnemies)
 
         self.healthBars = arcade.SpriteList()
         self.Healths = []
         self.bordureVie=[]
 
-        for i in range(self.nbEnemies):
+        for i in range(nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0] == "Singe":
                 self.ennemies[i] = [self.AllEnemy.ennemies[i],
                                     arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "banana.png"), scale=0.5),
@@ -100,6 +104,9 @@ class FightScene(arcade.View):
             Animations.Branche(self.plr, self.AllEnemy, "Branche", self.enemySelected)
             # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0
             # self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
+            #self.tour=1
+            #arcade.schedule(SetUpTours, 1/60)
+
 
         self.V = arcade.create_text_sprite("Victoire", arcade.csscolor.RED, 50)
         self.V.center_x = 300
@@ -117,7 +124,7 @@ class FightScene(arcade.View):
     def on_update(self, delta_time):
         self.listeSprite.update()
 
-        for i in range(self.nbEnemies):
+        for i in range(nbEnemies):
             self.Healths[i] = self.ennemies[i][0][2]
 
         if not self.victory and all(h == 0 for h in self.Healths):
@@ -133,14 +140,14 @@ class FightScene(arcade.View):
                 self.window.show_view(Map(self.compteur_maps))
 
         if self.Healths[self.enemySelected] == 0:
-            for i in range(self.nbEnemies):
+            for i in range(nbEnemies):
                 if self.Healths[i] != 0 and self.Healths[self.enemySelected] == 0:
                     self.enemySelected = i
                     self.Target.center_x = 500 - 200 * i
                     self.Target.scale=.7,.7
 
         self.Target.angle += 0.2
-        if self.Target.scale[0]>.1:
+        if self.Target.scale[0]>.01:
             self.Target.add_scale(-.005)
 
     def on_draw(self):
@@ -148,7 +155,7 @@ class FightScene(arcade.View):
         self.batch.draw()
         self.listeSprite.draw()
 
-        for i in range(self.nbEnemies):
+        for i in range(nbEnemies):
             if self.ennemies[i][0][2] > 0:
                 self.healthBars[i].texture = arcade.make_soft_square_texture(20, arcade.csscolor.RED, outer_alpha=255)
                 self.healthBars[i].width = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
@@ -163,7 +170,7 @@ class FightScene(arcade.View):
 
         if self.victory:
             self.text_list.draw()
-        else:
+        elif tour == 0:
             self.manager.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
@@ -172,17 +179,29 @@ class FightScene(arcade.View):
                 self.enemySelected = 0
                 self.Target.center_x = 500
                 self.Target.scale=.7,.7
-            elif x > 210 and x < 400 and y > 410 and y < 600 and self.nbEnemies >= 2 and self.enemySelected != 1:
+            elif x > 210 and x < 400 and y > 410 and y < 600 and nbEnemies >= 2 and self.enemySelected != 1:
                 self.enemySelected = 1
                 self.Target.center_x = 500 - 200 * 1
                 self.Target.scale=.7,.7
-            elif x > 0 and x < 200 and y > 410 and y < 600 and self.nbEnemies >= 3 and self.enemySelected != 2:
+            elif x > 0 and x < 200 and y > 410 and y < 600 and nbEnemies >= 3 and self.enemySelected != 2:
                 self.enemySelected = 2
                 self.Target.center_x = 500 - 200 * 2
                 self.Target.scale=.7,.7
+    
+def SetUpTours(delta_time):
+    arcade.unschedule(SetUpTours)
+    arcade.schedule(EnemieTour, 1)
+
+def EnemieTour(delta_time):
+    if tour>nbEnemies:
+        arcade.unschedule(EnemieTour)
+    else:
+        Animations.Branche(window.ennemies[0],window.plr,"Branche")
+        tour+=1
+
 
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "FightScene")
-    FightScene_view = FightScene(1)
+    FightScene_view = FightScene(1,player())
     window.show_view(FightScene_view)
     arcade.run()
