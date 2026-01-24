@@ -13,9 +13,23 @@ def Attaquer():
     if isPlayer == True:
         if arme == "Branche":
             Weapons.branche(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == "H2F":
+            Weapons.H2F(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == "epeeRouille":
+            Weapons.epeeRouille(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == "banane":
+            Weapons.banane(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == "toile":
+            Weapons.toile(numero,Target,userStats.GetPlayerStats()[2])
     else:
         if arme == "Branche":
             Weapons.branche("player",Target[0],userStats[3])
+        elif arme == "H2F":
+            Weapons.H2F("player",Target[0],userStats[3])
+        elif arme == "epeeRouille":
+            Weapons.epeeRouille("player",Target[0],userStats[3])
+        elif arme == "banane":
+            Weapons.banane("player",Target[0],userStats[3])
 
 def Branche(user,target,weapon,num=0):
     global isPlayer

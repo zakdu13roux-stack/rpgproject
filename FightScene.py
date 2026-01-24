@@ -46,6 +46,7 @@ class FightScene(arcade.View):
 
         self.healthBars = arcade.SpriteList()
         self.Healths = []
+        self.bordureVie=[]
 
         for i in range(self.nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0] == "Singe":
@@ -70,6 +71,8 @@ class FightScene(arcade.View):
             healthBar.center_y = 400
             self.healthBars.append(healthBar)
             self.Healths.append(self.ennemies[i][0][2])
+            self.bordureVie.append(arcade.shape_list.create_rectangle_filled(500-200*i,400,104,24, arcade.csscolor.BLACK))
+            self.batch.append(self.bordureVie[i])
 
         # UI manager
         self.manager = arcade.gui.UIManager()
@@ -120,6 +123,7 @@ class FightScene(arcade.View):
         if not self.victory and all(h == 0 for h in self.Healths):
             self.victory = True
             self.victory_timer = 0
+            self.Target.alpha = 0
 
         if self.victory:
             self.manager.disable()
@@ -133,14 +137,16 @@ class FightScene(arcade.View):
                 if self.Healths[i] != 0 and self.Healths[self.enemySelected] == 0:
                     self.enemySelected = i
                     self.Target.center_x = 500 - 200 * i
+                    self.Target.scale=.7,.7
 
         self.Target.angle += 0.2
+        if self.Target.scale[0]>.1:
+            self.Target.add_scale(-.005)
 
     def on_draw(self):
         self.clear()
         self.batch.draw()
         self.listeSprite.draw()
-        self.manager.draw()
 
         for i in range(self.nbEnemies):
             if self.ennemies[i][0][2] > 0:
@@ -151,24 +157,29 @@ class FightScene(arcade.View):
                 self.ennemies[i][1].alpha = 0
                 die = arcade.load_sound("Sounds/Die.wav")
                 die.play()
+                self.batch.remove(self.bordureVie[i])
 
         self.healthBars.draw()
 
-        if self.Healths[self.enemySelected] == 0:
+        if self.victory:
             self.text_list.draw()
-            self.Target.alpha = 0
+        else:
+            self.manager.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
         if button == 1:
             if x > 410 and x < 600 and y > 410 and y < 600 and self.enemySelected != 0:
                 self.enemySelected = 0
                 self.Target.center_x = 500
+                self.Target.scale=.7,.7
             elif x > 210 and x < 400 and y > 410 and y < 600 and self.nbEnemies >= 2 and self.enemySelected != 1:
                 self.enemySelected = 1
                 self.Target.center_x = 500 - 200 * 1
+                self.Target.scale=.7,.7
             elif x > 0 and x < 200 and y > 410 and y < 600 and self.nbEnemies >= 3 and self.enemySelected != 2:
                 self.enemySelected = 2
                 self.Target.center_x = 500 - 200 * 2
+                self.Target.scale=.7,.7
 
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "FightScene")
