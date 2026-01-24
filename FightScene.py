@@ -131,7 +131,7 @@ class FightScene(arcade.View):
 
         if self.victory:
             self.victory_timer += delta_time
-            if self.victory_timer >= 2:
+            if self.victory_timer >= 1:
                 from Map import Map
                 self.window.show_view(Map(self.compteur_maps))
         
