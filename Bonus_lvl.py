@@ -3,12 +3,14 @@ import os
 import arcade.gui
 import Map
 import StatueView
+from PlayerInGame import player
 
 
 class Bonus_lvl(arcade.View):
-    def __init__(self,cpt):
+    def __init__(self,cpt,player):
         super().__init__()
         self.manager = arcade.gui.UIManager()
+        self.player = player
 
         self.compteur = cpt
 
@@ -77,7 +79,7 @@ class Bonus_lvl(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
-            map_view = Map.Map(self.compteur)
+            map_view = Map.Map(self.compteur,self.player)
             self.window.show_view(map_view)
 
     def on_draw(self):
@@ -87,12 +89,6 @@ class Bonus_lvl(arcade.View):
         self.player_list.draw()
         self.text_list.draw()
         self.manager.draw()
-
-        # Utiliser la statue pour interagir
-        if self.hit:
-            from StatueView import StatueView
-            statue_view = StatueView(self.compteur)
-            self.window.show_view(statue_view)
 
 
     def on_update(self, delta_time):
@@ -112,7 +108,7 @@ class Bonus_lvl(arcade.View):
             self.teleport = False
         if self.teleport == True:
             from StatueView import StatueView
-            statue_view = StatueView(self.compteur)
+            statue_view = StatueView(self.compteur, self.player)
             self.window.show_view(statue_view)
 
 
@@ -147,6 +143,6 @@ class Bonus_lvl(arcade.View):
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Bonus Level")
-    game = Bonus_lvl(1)
+    game = Bonus_lvl(1, player())
     window.show_view(game)
     arcade.run()
