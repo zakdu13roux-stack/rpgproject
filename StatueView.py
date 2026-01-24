@@ -4,9 +4,10 @@ from Spawn import Spawn
 from PlayerStats import *
 
 class StatueView(arcade.View):
-    def __init__(self):
+    def __init__(self,compteur_maps):
         super().__init__()
         self.manager = arcade.gui.UIManager()
+        self.compteur_maps = compteur_maps
 
 
         #Sprites
