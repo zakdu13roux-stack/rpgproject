@@ -99,11 +99,16 @@ class Spawn(arcade.View):
         self.anchor = self.manager.add(arcade.gui.UIAnchorLayout())
         self.anchor.add(anchor_x="right",anchor_y="top", child= self.spawn_button)
 
+        # Musique de fond
+        self.menu_music = arcade.Sound(os.path.join(os.path.dirname(__file__), "Sounds", "musicmenu.mp3"), False)
+        self.sonjoue = self.menu_music.play(volume=0.2)
+
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)
         self.manager.enable()
 
     def on_hide_view(self):
+        self.menu_music.stop(self.sonjoue)
         self.manager.disable()
 
 
@@ -165,16 +170,16 @@ class Spawn(arcade.View):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.Q :# Gauche
             self.player_sprite.change_x = -self.player_speed
-            self.pas.play()
+            self.pas.play(volume=0.1)
         elif key == arcade.key.D:  # Droite
             self.player_sprite.change_x = self.player_speed
-            self.pas.play()
+            self.pas.play(volume=0.1)
         elif key == arcade.key.Z:  # Haut
             self.player_sprite.change_y = self.player_speed
-            self.pas.play()
+            self.pas.play(volume=0.1)
         elif key == arcade.key.S:  # Bas
             self.player_sprite.change_y = -self.player_speed
-            self.pas.play()
+            self.pas.play(volume=0.1)
 
 
     def on_key_release(self, key, modifiers):
