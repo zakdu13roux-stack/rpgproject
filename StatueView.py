@@ -5,15 +5,16 @@ from PlayerStats import *
 from PlayerInGame import *
 
 class StatueView(arcade.View):
-    def __init__(self,compteur_maps, player):
+    def __init__(self,compteur_maps, player, cleared_lvls):
         super().__init__()
         self.manager = arcade.gui.UIManager()
         self.compteur_maps = compteur_maps
         self.player = player
+        self.cleared_lvls = cleared_lvls
         
         #Sprites
         potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "potionverte.png"), scale = 0.3)
-        potion_vie.center_x=150
+        potion_vie.center_x= 150
         potion_vie.center_y= 375    
 
         Argent = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "coins.png"), scale = 0.3)
@@ -34,23 +35,16 @@ class StatueView(arcade.View):
         self.prix_vie = self.stat_vie + 50
 
         # Boutons du menu
-        return_button = arcade.gui.UIFlatButton(text="Return", width=200, height=50)
         self.life_button = arcade.gui.UIFlatButton(text="Life", width=100, height=50)
         self.coins_button = arcade.gui.UIFlatButton(text="Coins", width=100, height=50)
 
-        # Ajouter les boutons à la grille
-        self.grid.add(return_button, col_num=1, row_num=0)
-
-
         # Ajouter la grille au manager avec un layout d'ancrage
-        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor.add(child=self.grid, anchor_x="left", anchor_y="bottom")
 
         anchor_buy = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor_buy.add(child = self.life_button, align_x=-150, align_y=0)
+        anchor_buy.add(child = self.life_button, align_x=-150, align_y=-40)
 
         anchor_buy = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor_buy.add(child = self.coins_button, align_x=0, align_y=0)
+        anchor_buy.add(child = self.coins_button, align_x=+100, align_y=-40)
 
 
         @self.life_button.event("on_click")
@@ -58,20 +52,15 @@ class StatueView(arcade.View):
             self.life_button.text = "Life"
             self.player.heal(50)
             from Map import Map
-            Map_view = Map(self.compteur_maps, self.player)
+            Map_view = Map(self.compteur_maps, self.player, self.cleared_lvls)
             self.window.show_view(Map_view)
 
         @self.coins_button.event("on_click")
         def on_click_coins_button(event):
+            self.coins_button.text = "Coins"
             AddArgent(100)
             from Map import Map
-            Map_view = Map(self.compteur_maps, self.player)
-            self.window.show_view(Map_view)
-
-        @return_button.event("on_click")
-        def on_click_return_button(event):
-            from Map import Map
-            Map_view = Map(self.compteur_maps, self.player)
+            Map_view = Map(self.compteur_maps, self.player, self.cleared_lvls)
             self.window.show_view(Map_view)
 
     def on_update(self,delta_time):
@@ -94,7 +83,7 @@ class StatueView(arcade.View):
 
 # Main application setup
 if __name__ == "__main__":
-    window = arcade.Window(600, 600, "RPG Game with Menu")
-    menu_view = StatueView(1,player())
-    window.show_view(menu_view)
+    window = arcade.Window(600, 600, "bonus_statue")
+    statue_view = StatueView(1,player(), 1)
+    window.show_view(statue_view)
     arcade.run()

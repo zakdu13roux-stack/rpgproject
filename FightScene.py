@@ -3,6 +3,7 @@ import os
 import arcade.gui
 import Animations
 from EnnemiesInGame import *
+from Map import Map
 from PlayerInGame import *
 from Spawn import *
 
@@ -12,9 +13,10 @@ tour = 0
 nbEnemies = 3
 
 class FightScene(arcade.View):
-    def __init__(self, compteur_maps,plr):
+    def __init__(self, compteur_maps,plr,cleared_lvls):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
+        self.cleared_lvls = cleared_lvls
 
         self.victory = False
         self.victory_timer = 0
@@ -90,14 +92,6 @@ class FightScene(arcade.View):
         anchor = self.manager.add(arcade.gui.UIAnchorLayout())
         anchor.add(child=self.grid, anchor_x="right", anchor_y="bottom")
 
-        self.abandon_button = arcade.gui.UIFlatButton(text="Abandon", width=200, height=50)
-        anchor_abandon = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor_abandon.add(child=self.abandon_button, align_x=0, align_y=-275)
-
-        @self.abandon_button.event("on_click")
-        def on_click_abandon_button(event):
-            vuespawn = Spawn(self.compteur_maps)
-            self.window.show_view(vuespawn)
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
@@ -137,7 +131,7 @@ class FightScene(arcade.View):
             self.victory_timer += delta_time
             if self.victory_timer >= 1:
                 from Map import Map
-                self.window.show_view(Map(self.compteur_maps))
+                self.window.show_view(Map(self.compteur_maps, self.plr[0], self.cleared_lvls))
 
         if self.Healths[self.enemySelected] == 0:
             for i in range(nbEnemies):
@@ -202,6 +196,6 @@ def EnemieTour(delta_time):
 
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "FightScene")
-    FightScene_view = FightScene(1,player())
+    FightScene_view = FightScene(1,player(),1)
     window.show_view(FightScene_view)
     arcade.run()

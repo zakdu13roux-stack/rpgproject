@@ -4,12 +4,9 @@ from Spawn import Spawn
 from PlayerStats import *
 
 class ShopView(arcade.View):
-    def __init__(self,compteur_maps):
+    def __init__(self):
         super().__init__()
         self.manager = arcade.gui.UIManager()
-
-        self.compteur_maps = compteur_maps
-
 
         #Sprites
         potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "potionverte.png"), scale = 0.3)
@@ -18,10 +15,6 @@ class ShopView(arcade.View):
 
         self.list_items = arcade.SpriteList()
         self.list_items.append(potion_vie)
-
-
-
-
 
 
         # Grille pour organiser les boutons
@@ -61,7 +54,7 @@ class ShopView(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
-            spawn_view = Spawn(self.compteur_maps)
+            spawn_view = Spawn()
             self.window.show_view(spawn_view)
 
     def on_update(self,delta_time):
@@ -85,6 +78,6 @@ class ShopView(arcade.View):
 # Main application setup
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "RPG Game with Menu")
-    menu_view = ShopView(1)
+    menu_view = ShopView()
     window.show_view(menu_view)
     arcade.run()

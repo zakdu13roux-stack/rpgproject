@@ -1,34 +1,14 @@
 import arcade
 import os
 from random import randint
-from FightScene import FightScene
-from Spawn import Spawn
 import arcade.gui
 from PlayerInGame import player
 
 class Map(arcade.View):
-    def __init__(self,cpt,player):
+    def __init__(self,cpt=1,player=player(),cleared_lvls=0):
         super().__init__()
         self.manager = arcade.gui.UIManager()   
         self.player = player
-
-        # Grille pour organiser les boutons
-        self.grid = arcade.gui.UIGridLayout(columns=1, vertical_spacing=0, horizontal_spacing=0)
-
-        # Boutons du menu
-        Spawn_button = arcade.gui.UIFlatButton(text="Return to Spawn", width=200, height=50)
-
-        # Ajouter les boutons à la grille
-        self.grid.add(Spawn_button, col_num=1, row_num=1)
-
-        # Ajouter la grille au manager avec un layout d'ancrage
-        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor.add(child=self.grid, anchor_x="left", anchor_y="bottom")
-
-        @Spawn_button.event("on_click")
-        def on_click_resume_button(event):
-            spawn_view = Spawn(self.compteur)
-            self.window.show_view(spawn_view)
 
         # Compteur cleared maps
         self.compteur = cpt
@@ -37,6 +17,9 @@ class Map(arcade.View):
         self.text_compteur.center_y = 570
         self.texts = arcade.SpriteList()
         self.texts.append(self.text_compteur)
+
+        # Compteur cleared levels
+        self.cleared_lvls= cleared_lvls
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
@@ -251,18 +234,23 @@ class Map(arcade.View):
         if key == arcade.key.ENTER: # Lancer un combat
             if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
                 pass
-            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500:
-                fight_scene_view = FightScene(self.compteur,self.player)
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500 and self.cleared_lvls==0:
+                self.cleared_lvls = 1
+                from FightScene import FightScene
+                fight_scene_view = FightScene(self.compteur,self.player, self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
-            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300:
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300 and self.cleared_lvls==1:
                 from Bonus_lvl import Bonus_lvl
-                bonus_lvl_view = Bonus_lvl(self.compteur,self.player)
+                self.cleared_lvls = 2
+                bonus_lvl_view = Bonus_lvl(self.compteur,self.player, self.cleared_lvls)
                 self.window.show_view(bonus_lvl_view)
-            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100:
-                fight_scene_view = FightScene(self.compteur,self.player)
+            elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100 and (self.cleared_lvls==1 or self.cleared_lvls==2):
+                self.cleared_lvls = 3
+                from FightScene import FightScene
+                fight_scene_view = FightScene(self.compteur,self.player, self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
-            elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
-                self.window.show_view(Map(self.compteur+1,self.player))
+            elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100 and self.cleared_lvls==3:
+                self.window.show_view(Map(self.compteur+1,self.player,0))
                 self.text_compteur = self.compteur
 
 
@@ -270,7 +258,7 @@ class Map(arcade.View):
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Map")
-    game = Map(1, player())
+    game = Map(1, player(),0)
     window.show_view(game)
     arcade.run()
 

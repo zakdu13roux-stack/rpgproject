@@ -7,12 +7,13 @@ from PlayerInGame import player
 
 
 class Bonus_lvl(arcade.View):
-    def __init__(self,cpt,player):
+    def __init__(self,cpt,player,cleared_lvls):
         super().__init__()
         self.manager = arcade.gui.UIManager()
         self.player = player
 
         self.compteur = cpt
+        self.cleared_lvls = cleared_lvls
 
         self.grille = arcade.gui.UIGridLayout(columns=1,vertical_spacing=0,horizontal_spacing=0)
 
@@ -79,7 +80,7 @@ class Bonus_lvl(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
-            map_view = Map.Map(self.compteur,self.player)
+            map_view = Map.Map(self.compteur,self.player, self.cleared_lvls)
             self.window.show_view(map_view)
 
     def on_draw(self):
@@ -108,7 +109,7 @@ class Bonus_lvl(arcade.View):
             self.teleport = False
         if self.teleport == True:
             from StatueView import StatueView
-            statue_view = StatueView(self.compteur, self.player)
+            statue_view = StatueView(self.compteur, self.player, self.cleared_lvls)
             self.window.show_view(statue_view)
 
 
@@ -143,6 +144,6 @@ class Bonus_lvl(arcade.View):
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Bonus Level")
-    game = Bonus_lvl(1, player())
+    game = Bonus_lvl(1, player(), 1)
     window.show_view(game)
     arcade.run()
