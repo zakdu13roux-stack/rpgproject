@@ -1,11 +1,12 @@
 import arcade
 import arcade.gui
 import os
+from PlayerInGame import player
 
 
 
 class Spawn(arcade.View):
-    def __init__(self, compteur_maps):
+    def __init__(self, compteur_maps, player):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
 
@@ -14,6 +15,7 @@ class Spawn(arcade.View):
 
         #compteur cleared_maps
         self.compteur_maps = compteur_maps
+        self.player = player
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
@@ -164,7 +166,7 @@ class Spawn(arcade.View):
             self.teleport = False
         if self.teleport == True:
             from Map import Map
-            map_view = Map(self.compteur_maps)
+            map_view = Map(self.compteur_maps,self.player)
             self.window.show_view(map_view)
 
     def on_key_press(self, key, modifiers):
@@ -191,6 +193,6 @@ class Spawn(arcade.View):
 # Main application setup
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "RPG Game with Menu")
-    spawn_view = Spawn(1)
+    spawn_view = Spawn(1,player())
     window.show_view(spawn_view)
     arcade.run()
