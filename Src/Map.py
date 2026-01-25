@@ -237,7 +237,7 @@ class Map(arcade.View):
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500 and self.cleared_lvls==0:
                 self.cleared_lvls = 1
                 from FightScene import FightScene
-                fight_scene_view = FightScene(self.compteur, self.player)
+                fight_scene_view = FightScene(self.compteur, self.player,self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 300 and self.cleared_lvls==1:
                 from Bonus_lvl import Bonus_lvl
@@ -247,7 +247,7 @@ class Map(arcade.View):
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 100 and (self.cleared_lvls==1 or self.cleared_lvls==2):
                 self.cleared_lvls = 3
                 from FightScene import FightScene
-                fight_scene_view = FightScene(self.compteur, self.player)
+                fight_scene_view = FightScene(self.compteur, self.player,self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100 and self.cleared_lvls==3:
                 self.window.show_view(Map(self.compteur+1,self.player,0))

@@ -4,19 +4,19 @@ import arcade.gui
 import Animations
 from EnnemiesInGame import *
 from PlayerInGame import *
-from Spawn import *
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 
 class FightScene(arcade.View):
-    def __init__(self, compteur_maps,plr):
+    def __init__(self, compteur_maps,plr,Cleared_Levels):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
         self.victory = False
         self.victory_timer = 0
         self.compteur_maps = compteur_maps
+        self.Cleared_Levels = Cleared_Levels
         self.enemySelected = 0
 
         self.batch = arcade.shape_list.ShapeElementList()
@@ -104,11 +104,13 @@ class FightScene(arcade.View):
 
         @self.abandon_button.event("on_click")
         def on_click_abandon_button(event):
-            vuespawn = Spawn(self.compteur_maps)
+            from Map import Map
+            vuespawn = Map(self.compteur_maps,self.plr[0],self.Cleared_Levels)
             self.window.show_view(vuespawn)
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
+            self.manager.disable()
             Animations.Branche(self.plr, self.AllEnemy, "Branche", self.enemySelected)
             # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0
             # self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0
@@ -145,7 +147,7 @@ class FightScene(arcade.View):
             self.victory_timer += delta_time
             if self.victory_timer >= 1:
                 from Map import Map
-                self.window.show_view(Map(self.compteur_maps))
+                self.window.show_view(Map(self.compteur_maps,self.plr[0],self.Cleared_Levels))
 
         if self.Healths[self.enemySelected] == 0:
             for i in range(self.nbEnemies):
@@ -202,25 +204,30 @@ class FightScene(arcade.View):
                 self.Target.scale=.7,.7
     
     def SetUpTours(self,delta_time):
-        self.n = 0
-        for vie in self.Healths:
-            if vie != 0:
-                self.n+=1
         arcade.unschedule(self.SetUpTours)
         arcade.schedule(self.enemyTour, 1)
 
     def enemyTour(self,delta_time):
+        self.n = 0
+        for vie in self.Healths:
+            if vie != 0:
+                self.n+=1
+        print(self.tour,self.n)
         if self.tour>self.n:
             arcade.unschedule(self.enemyTour)
             self.tour = 0
+            self.manager.enable()
         else:
-            if self.Healths[self.tour-1]==0:
-                self.tour+=1
-            Animations.Branche(self.ennemies[self.tour-1],self.plr,"Branche")
+            self.decalage = 0
+            for i in range(self.nbEnemies):
+                print(self.tour)
+                if self.Healths[self.decalage]==0:
+                    self.decalage+=1
+            Animations.Branche(self.ennemies[self.tour-1+self.decalage],self.plr,"Branche")
             self.tour+=1
 
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "FightScene")
-    FightScene_view = FightScene(1,player())
+    FightScene_view = FightScene(1,player(),1)
     window.show_view(FightScene_view)
     arcade.run()
