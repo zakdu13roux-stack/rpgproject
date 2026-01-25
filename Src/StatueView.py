@@ -13,11 +13,11 @@ class StatueView(arcade.View):
         self.cleared_lvls = cleared_lvls
         
         #Sprites
-        potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "potionverte.png"), scale = 0.3)
+        potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "potionverte.png"), scale = 0.3)
         potion_vie.center_x= 150
         potion_vie.center_y= 375    
 
-        Argent = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "coins.png"), scale = 0.3)
+        Argent = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "coins.png"), scale = 0.3)
         Argent.center_x= 400
         Argent.center_y= 375
 

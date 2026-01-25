@@ -30,7 +30,7 @@ class Bonus_lvl(arcade.View):
         self.text_list = arcade.SpriteList()
 
         # Sprite du joueur
-        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "perso.png"), scale=0.3)
+        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=0.3)
         self.player_sprite.center_x = 300
         self.player_sprite.center_y = 100
         self.player_list = arcade.SpriteList()
@@ -44,7 +44,7 @@ class Bonus_lvl(arcade.View):
         # Sprites décor
         self.decor_list = arcade.SpriteList()
 
-        self.statue = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "statue.png"), scale=0.8)
+        self.statue = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "statue.png"), scale=0.8)
 
         self.statue.center_x = 300
         self.statue.center_y = 365
@@ -52,10 +52,10 @@ class Bonus_lvl(arcade.View):
         self.statue_list = arcade.SpriteList() 
         self.statue_list.append(self.statue)
 
-        self.sol = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "bonus_floor.jpg"), scale=0.5)
-        self.sol2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "bonus_floor.jpg"), scale=0.5)
-        self.sol3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "bonus_floor.jpg"), scale=0.5)
-        self.sol4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "Images", "bonus_floor.jpg"), scale=0.5)
+        self.sol = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bonus_floor.jpg"), scale=0.5)
+        self.sol2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bonus_floor.jpg"), scale=0.5)
+        self.sol3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bonus_floor.jpg"), scale=0.5)
+        self.sol4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bonus_floor.jpg"), scale=0.5)
 
         self.sol.center_x = -60
         self.sol.center_y = 450
@@ -121,7 +121,7 @@ class Bonus_lvl(arcade.View):
         self.manager.disable()
 
     def on_key_press(self, key, modifiers):
-        pas = arcade.load_sound("Sounds/pas.wav")
+        pas = arcade.load_sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "pas.wav"))
         if key == arcade.key.Q :# Gauche
             pas.play()
             self.player_sprite.change_x = -self.player_speed

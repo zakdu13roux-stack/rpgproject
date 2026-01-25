@@ -32,7 +32,7 @@ class MenuView(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            spawn_view = Spawn()
+            spawn_view = Spawn(1)
             self.window.show_view(spawn_view)
 
         @options_button.event("on_click")
