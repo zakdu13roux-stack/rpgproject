@@ -24,55 +24,26 @@ class FightScene(arcade.View):
 
         # Sprites décor arrière plan
 
-        self.pelouse1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse1.center_x = 115
-        self.pelouse1.center_y = 35
-
-        self.pelouse2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse2.center_x = 350
-        self.pelouse2.center_y = 35
-
-        self.pelouse5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse5.center_x = 575
-        self.pelouse5.center_y = 35
-
-        self.pelouse7 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse7.center_x = 350
-        self.pelouse7.center_y = 560
-
-        self.pelouse8 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse8.center_x = 115
-        self.pelouse8.center_y = 560
-
-        self.pelouse9 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse9.center_x = 570
-        self.pelouse9.center_y = 560
+        self.pelouse={}
+        for h in range(2):
+            for l in range(3):
+                self.pelouse[h*10+l] = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
+                self.pelouse[h*10+l].center_x = 115+235*l
+                self.pelouse[h*10+l].center_y = 35+525*h
 
         self.dirt_path = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "stonepath.png"), scale =1.1)
         self.dirt_path.center_x = 200
         self.dirt_path.center_y = 300
 
         self.dirt_path2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "stonepath.png"), scale =1.1)
-        self.dirt_path2.center_x = 721
+        self.dirt_path2.center_x = 722
         self.dirt_path2.center_y = 300
 
         self.trucs_tt_devant_list = arcade.SpriteList()
         self.trucs_tt_devant_list.append(self.dirt_path)
         self.trucs_tt_devant_list.append(self.dirt_path2)
-        self.trucs_tt_devant_list.append(self.pelouse1)
-        self.trucs_tt_devant_list.append(self.pelouse2)
-        self.trucs_tt_devant_list.append(self.pelouse5)
-        self.trucs_tt_devant_list.append(self.pelouse7)
-        self.trucs_tt_devant_list.append(self.pelouse8)
-        self.trucs_tt_devant_list.append(self.pelouse9)
-
-
-
-        self.batch = arcade.shape_list.ShapeElementList()
-        herbebottom = arcade.shape_list.create_rectangle_filled(0,0,1200,300, arcade.csscolor.GREEN)
-        herbetop = arcade.shape_list.create_rectangle_filled(0,SCREEN_HEIGHT,1200,300, arcade.csscolor.GREEN)
-        self.batch.append(herbetop)
-        self.batch.append(herbebottom)
+        for p in self.pelouse:
+            self.trucs_tt_devant_list.append(self.pelouse[p])
 
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=3)
         self.player_sprite.center_x = 100
@@ -102,7 +73,7 @@ class FightScene(arcade.View):
         self.tour=0
 
         self.ennemies = {}
-        self.nbEnemies = 2
+        self.nbEnemies = 1
         self.AllEnemy = SetUpEnemy(difficulte=self.compteur_maps, nbEnnemi=self.nbEnemies)
 
         self.healthBars = arcade.SpriteList()
@@ -112,7 +83,8 @@ class FightScene(arcade.View):
         self.fight_music = arcade.Sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "musicfight.mp3"), False)
         self.sonjoue = self.fight_music.play(volume=0.2)
 
-
+        self.batch = arcade.shape_list.ShapeElementList()
+        
         for i in range(self.nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0] == "Singe":
                 self.ennemies[i] = [self.AllEnemy.ennemies[i],
@@ -223,8 +195,8 @@ class FightScene(arcade.View):
 
     def on_draw(self):
         self.clear()
-        self.batch.draw()
         self.trucs_tt_devant_list.draw()
+        self.batch.draw()
         self.listeSprite.draw()
 
         for i in range(self.nbEnemies):

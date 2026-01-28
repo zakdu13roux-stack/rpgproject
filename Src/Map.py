@@ -12,7 +12,7 @@ class Map(arcade.View):
 
         # Compteur cleared maps
         self.compteur = cpt
-        self.text_compteur = arcade.create_text_sprite( "Cleared maps : " + str(self.compteur-1),arcade.csscolor.BLACK,17)
+        self.text_compteur = arcade.create_text_sprite("Cleared maps : " + str(self.compteur-1),arcade.csscolor.BLACK,17)
         self.text_compteur.center_x = 75
         self.text_compteur.center_y = 570
         self.texts = arcade.SpriteList()
@@ -23,8 +23,18 @@ class Map(arcade.View):
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=0.3)
-        self.player_sprite.center_x = 100
-        self.player_sprite.center_y = 500
+        if cleared_lvls == 0:
+            self.player_sprite.center_x = 100
+            self.player_sprite.center_y = 500
+        elif cleared_lvls == 1:
+            self.player_sprite.center_x = 300
+            self.player_sprite.center_y = 500
+        elif cleared_lvls == 2:
+            self.player_sprite.center_x = 300
+            self.player_sprite.center_y = 300
+        else:
+            self.player_sprite.center_x = 300
+            self.player_sprite.center_y = 100
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player_sprite)
 
@@ -58,104 +68,125 @@ class Map(arcade.View):
         self.icon_list.append(self.icon_sprite3)
         self.icon_list.append(self.icon_end)
 
+        # Chemins
+        self.path = arcade.shape_list.ShapeElementList()
+
+        path1 = arcade.shape_list.create_line(100,500,300,500,arcade.csscolor.BLACK,25)
+        path2 = arcade.shape_list.create_line(300,500,300,300,arcade.csscolor.BLACK,25)
+        path3 = arcade.shape_list.create_line(300,300,300,100,arcade.csscolor.BLACK,25)
+        path4 = arcade.shape_list.create_line(300,100,500,100,arcade.csscolor.BLACK,25)
+
+        self.path.append(path1)
+        self.path.append(path2)
+        self.path.append(path3)
+        self.path.append(path4)
+
+        self.colPath = arcade.SpriteList()
+        p1 = arcade.SpriteSolidColor(120,50,arcade.csscolor.BLACK)
+        p1.center_x = 200
+        p1.center_y = 500
+        p1.alpha = 0
+        p2 = arcade.SpriteSolidColor(50,330,arcade.csscolor.BLACK)
+        p2.center_x = 300
+        p2.center_y = 300
+        p2.alpha = 0
+        self.colPath = arcade.SpriteList()
+        p3 = arcade.SpriteSolidColor(120,50,arcade.csscolor.BLACK)
+        p3.center_x = 400
+        p3.center_y = 100
+        p3.alpha = 0
+        self.colPath.append(p1)
+        self.colPath.append(p2)
+        self.colPath.append(p3)
+
         # Sprites décor arrière plan
-        self.pelouse1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse1.center_x = 115
-        self.pelouse1.center_y = 115
+        self.pelouse = {}
+        for h in range(3):
+            for l in range(3):
+                self.pelouse[h*10+l]=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
+                self.pelouse[h*10+l].center_x = 115+235*l
+                self.pelouse[h*10+l].center_y = 115+235*h
 
-        self.pelouse2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse2.center_x = 350
-        self.pelouse2.center_y = 350
-
-        self.pelouse3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse3.center_x = 115
-        self.pelouse3.center_y = 350
-
-        self.pelouse4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse4.center_x = 350
-        self.pelouse4.center_y = 115
-
-        self.pelouse5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse5.center_x = 575
-        self.pelouse5.center_y = 115
-
-        self.pelouse6 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse6.center_x = 575
-        self.pelouse6.center_y = 350
-
-        self.pelouse7 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse7.center_x = 350
-        self.pelouse7.center_y = 575
-
-        self.pelouse8 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse8.center_x = 115
-        self.pelouse8.center_y = 575
-
-        self.pelouse9 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "herbe.webp"), scale =0.5)
-        self.pelouse9.center_x = 570
-        self.pelouse9.center_y = 575
-
-        self.trucs_tt_devant_list = arcade.SpriteList()
-        self.trucs_tt_devant_list.append(self.pelouse1)
-        self.trucs_tt_devant_list.append(self.pelouse2)
-        self.trucs_tt_devant_list.append(self.pelouse3)
-        self.trucs_tt_devant_list.append(self.pelouse4)
-        self.trucs_tt_devant_list.append(self.pelouse5)
-        self.trucs_tt_devant_list.append(self.pelouse6)
-        self.trucs_tt_devant_list.append(self.pelouse7)
-        self.trucs_tt_devant_list.append(self.pelouse8)
-        self.trucs_tt_devant_list.append(self.pelouse9)
+        self.Herbe = arcade.SpriteList()
+        for p in self.pelouse:
+            self.Herbe.append(self.pelouse[p])
 
         # Sprites décor
-        self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        self.arbre3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        self.arbre4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        self.arbre5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-
-        self.arbre1.center_x = randint(40,250)
-        self.arbre1.center_y = randint(40,350)
-
-        self.arbre2.center_x = randint(40,250)
-        self.arbre2.center_y = randint(40,350)
-
-        self.arbre3.center_x = randint(350,560)
-        self.arbre3.center_y = randint(250,560)
-
-        self.arbre4.center_x = randint(350,560)
-        self.arbre4.center_y = randint(250,560)
-
-        self.arbre5.center_x = randint(50,550)
-        self.arbre5.center_y = randint(50,550)
-
-        self.rock1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        self.rock2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        self.rock3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        self.rock4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-
-        self.rock1.center_x = randint(40,250)
-        self.rock1.center_y = randint(40,350)
-
-        self.rock2.center_x = randint(40,250)
-        self.rock2.center_y = randint(40,350)
-
-        self.rock3.center_x = randint(350,560)
-        self.rock3.center_y = randint(250,560)
-
-        self.rock4.center_x = randint(350,560)
-        self.rock4.center_y = randint(250,560)
-
-
         self.decor_list = arcade.SpriteList()
-        self.decor_list.append(self.rock1)
-        self.decor_list.append(self.rock2)
-        self.decor_list.append(self.rock3)
-        self.decor_list.append(self.rock4)
-        self.decor_list.append(self.arbre1)
-        self.decor_list.append(self.arbre2)
-        self.decor_list.append(self.arbre3)
-        self.decor_list.append(self.arbre4)
-        self.decor_list.append(self.arbre5)
+
+        self.arbres={}
+        self.rock = {}
+        for i in range(4):
+            # Partie Arbre
+            self.arbres[i] = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+            self.arbres[i].center_x = randint(50,550)
+            self.arbres[i].center_y = randint(50,550)
+            if self.arbres != {}:
+                tries = 0
+                while (arcade.check_for_collision_with_list(self.arbres[i],self.decor_list) != [] or arcade.check_for_collision_with_list(self.arbres[i],self.icon_list) != [] or arcade.check_for_collision_with_list(self.arbres[i],self.colPath) != []) and tries < 10:
+                    self.arbres[i].center_x = randint(50,550)
+                    self.arbres[i].center_y = randint(50,550)
+                    tries+=1
+                if tries < 5:
+                    self.decor_list.append(self.arbres[i])
+            # Partie Rocher
+            self.rock[i] = self.rock1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
+            self.rock[i].center_x = randint(50,550)
+            self.rock[i].center_y = randint(50,550)
+            if self.rock != {}:
+                tries = 0
+                while (arcade.check_for_collision_with_list(self.rock[i],self.decor_list) != [] or arcade.check_for_collision_with_list(self.rock[i],self.icon_list) != [] or arcade.check_for_collision_with_list(self.rock[i],self.colPath) != []) and tries < 10:
+                    self.rock[i].center_x = randint(50,550)
+                    self.rock[i].center_y = randint(50,550)
+                    tries+=1
+                if tries < 5:
+                    self.decor_list.append(self.rock[i])
+
+
+        #self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+        #self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+        #self.arbre3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+        #self.arbre4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+        #self.arbre5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
+#
+        #self.arbre1.center_x = randint(40,250)
+        #self.arbre1.center_y = randint(40,350)
+#
+        #self.arbre2.center_x = randint(40,250)
+        #self.arbre2.center_y = randint(40,350)
+#
+        #self.arbre3.center_x = randint(350,560)
+        #self.arbre3.center_y = randint(250,560)
+#
+        #self.arbre4.center_x = randint(350,560)
+        #self.arbre4.center_y = randint(250,560)
+#
+        #self.arbre5.center_x = randint(50,550)
+        #self.arbre5.center_y = randint(50,550)
+#
+        #self.rock1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
+        #self.rock2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
+        #self.rock3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
+        #self.rock4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
+#
+        #self.rock1.center_x = randint(40,250)
+        #self.rock1.center_y = randint(40,350)
+#
+        #self.rock2.center_x = randint(40,250)
+        #self.rock2.center_y = randint(40,350)
+#
+        #self.rock3.center_x = randint(350,560)
+        #self.rock3.center_y = randint(250,560)
+#
+        #self.rock4.center_x = randint(350,560)
+        #self.rock4.center_y = randint(250,560)
+#
+#
+        #self.decor_list.append(self.rock1)
+        #self.decor_list.append(self.rock2)
+        #self.decor_list.append(self.rock3)
+        #self.decor_list.append(self.rock4)
+
 
         # Limite de la map
         self.map_width = 1200
@@ -164,18 +195,6 @@ class Map(arcade.View):
         # Vitesse du joueur
         self.player_speed = 5
 
-        self.batch = arcade.shape_list.ShapeElementList()
-
-        path1 = arcade.shape_list.create_line(100,500,300,500,arcade.csscolor.BLACK,25)
-        path2 = arcade.shape_list.create_line(300,500,300,300,arcade.csscolor.BLACK,25)
-        path3 = arcade.shape_list.create_line(300,300,300,100,arcade.csscolor.BLACK,25)
-        path4 = arcade.shape_list.create_line(300,100,500,100,arcade.csscolor.BLACK,25)
-
-        self.batch.append(path1)
-        self.batch.append(path2)
-        self.batch.append(path3)
-        self.batch.append(path4)
-
         # Camera
         self.camera = arcade.Camera2D()
 
@@ -183,8 +202,8 @@ class Map(arcade.View):
         self.clear()
 
         # Dessiner les sprites
-        self.trucs_tt_devant_list.draw()
-        self.batch.draw()
+        self.Herbe.draw()
+        self.path.draw()
         self.icon_list.draw()
         self.player_list.draw()
         self.decor_list.draw()
@@ -258,7 +277,7 @@ class Map(arcade.View):
 
 if __name__ == "__main__":
     window = arcade.Window(600,600,"Map")
-    game = Map(1, player(),0)
+    game = Map(player())
     window.show_view(game)
     arcade.run()
 
