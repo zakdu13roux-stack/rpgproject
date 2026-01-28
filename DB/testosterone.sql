@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 12 jan. 2026 à 08:50
+-- Généré le : lun. 26 jan. 2026 à 08:59
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -55,16 +55,17 @@ CREATE TABLE `players` (
   `ReducDegat` int(11) NOT NULL DEFAULT 0,
   `Argent` int(11) NOT NULL DEFAULT 0,
   `Name` varchar(10) NOT NULL,
-  `MDP` varchar(30) NOT NULL
+  `MDP` varchar(30) NOT NULL,
+  `Volume` float NOT NULL DEFAULT 0.2
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `players`
 --
 
-INSERT INTO `players` (`PlayerID`, `Vie`, `AtkDeBase`, `ReducDegat`, `Argent`, `Name`, `MDP`) VALUES
-('368b4e87-fd2c-4f06-aa56-a8ee6fa9a42f', 100, 1, 0, 0, 'Bernard', 'Patate10'),
-('7e176586-3829-4c65-8df8-528faeb87beb', 100, 1, 0, 0, 'Orneige', 'emojiSmegma');
+INSERT INTO `players` (`PlayerID`, `Vie`, `AtkDeBase`, `ReducDegat`, `Argent`, `Name`, `MDP`, `Volume`) VALUES
+('368b4e87-fd2c-4f06-aa56-a8ee6fa9a42f', 100, 1, 0, 0, 'Bernard', 'Patate10', 0.2),
+('7e176586-3829-4c65-8df8-528faeb87beb', 100, 1, 0, 0, 'Orneige', 'emojiSmegma', 1);
 
 -- --------------------------------------------------------
 

@@ -5,9 +5,9 @@ import arcade.gui
 from PlayerInGame import player
 
 class Map(arcade.View):
-    def __init__(self,cpt=1,player=player(),cleared_lvls=0):
+    def __init__(self,player,cpt=1,cleared_lvls=0):
         super().__init__()
-        self.manager = arcade.gui.UIManager()   
+        self.manager = arcade.gui.UIManager()
         self.player = player
 
         # Compteur cleared maps
@@ -250,7 +250,7 @@ class Map(arcade.View):
                 fight_scene_view = FightScene(self.compteur, self.player,self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100 and self.cleared_lvls==3:
-                self.window.show_view(Map(self.compteur+1,self.player,0))
+                self.window.show_view(Map(self.player,self.compteur+1,0))
                 self.text_compteur = self.compteur
 
 

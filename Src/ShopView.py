@@ -54,7 +54,7 @@ class ShopView(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
-            spawn_view = Spawn(1)
+            spawn_view = Spawn()
             self.window.show_view(spawn_view)
 
     def on_update(self,delta_time):

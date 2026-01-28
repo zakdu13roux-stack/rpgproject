@@ -11,19 +11,29 @@ class StatueView(arcade.View):
         self.compteur_maps = compteur_maps
         self.player = player
         self.cleared_lvls = cleared_lvls
-        
+
         #Sprites
         potion_vie = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "potionverte.png"), scale = 0.3)
-        potion_vie.center_x= 150
-        potion_vie.center_y= 375    
+        potion_vie.center_x = 200
+        potion_vie.center_y = 375
 
         Argent = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "coins.png"), scale = 0.3)
-        Argent.center_x= 400
-        Argent.center_y= 375
+        Argent.center_x = 400
+        Argent.center_y = 375
 
         self.list_items = arcade.SpriteList()
         self.list_items.append(Argent)
         self.list_items.append(potion_vie)
+
+        # Background
+
+        Background = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "church.webp"), scale = 1.3)
+        Background.center_x = 300
+        Background.center_y = 300
+
+        self.background_list = arcade.SpriteList()
+        self.background_list.append(Background)
+
 
         # Grille pour organiser les boutons
         self.grid = arcade.gui.UIGridLayout(columns=2, vertical_spacing=0, horizontal_spacing=0)
@@ -41,7 +51,7 @@ class StatueView(arcade.View):
         # Ajouter la grille au manager avec un layout d'ancrage
 
         anchor_buy = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor_buy.add(child = self.life_button, align_x=-150, align_y=-40)
+        anchor_buy.add(child = self.life_button, align_x=-100, align_y=-40)
 
         anchor_buy = self.manager.add(arcade.gui.UIAnchorLayout())
         anchor_buy.add(child = self.coins_button, align_x=+100, align_y=-40)
@@ -52,7 +62,7 @@ class StatueView(arcade.View):
             self.life_button.text = "Life"
             self.player.heal(50)
             from Map import Map
-            Map_view = Map(self.compteur_maps, self.player, self.cleared_lvls)
+            Map_view = Map(self.player, self.compteur_maps, self.cleared_lvls)
             self.window.show_view(Map_view)
 
         @self.coins_button.event("on_click")
@@ -60,7 +70,7 @@ class StatueView(arcade.View):
             self.coins_button.text = "Coins"
             AddArgent(100)
             from Map import Map
-            Map_view = Map(self.compteur_maps, self.player, self.cleared_lvls)
+            Map_view = Map(self.player, self.compteur_maps, self.cleared_lvls)
             self.window.show_view(Map_view)
 
     def on_update(self,delta_time):
@@ -69,10 +79,11 @@ class StatueView(arcade.View):
 
     def on_draw(self):
         self.clear()
+        self.background_list.draw()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.manager.draw()
         self.list_items.draw()
-        arcade.draw_text("Portefeuille : " + str(GetArgent()),70,570, arcade.csscolor.BLACK,17)
+        arcade.draw_text("Portefeuille : " + str(GetArgent()),70,550, arcade.csscolor.WHITE,17)
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)

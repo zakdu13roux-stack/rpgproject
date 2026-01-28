@@ -1,19 +1,18 @@
 import arcade
 import arcade.gui
 import os
+from PlayerStats import*
+from PlayerInGame import*
 
 
 
 class Spawn(arcade.View):
-    def __init__(self, compteur_maps):
+    def __init__(self):
         super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
 
         # Charger les sons
         self.pas = arcade.load_sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "pas.wav"))
-
-        #compteur cleared_maps
-        self.compteur_maps = compteur_maps
 
         # Sprite du joueur
         self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=0.3)
@@ -67,9 +66,9 @@ class Spawn(arcade.View):
         path1.center_x = 300
         path1.center_y = 300
 
-        
-        
-        
+
+
+
         self.pathlist = arcade.SpriteList()
         self.pathlist.append(path1)
 
@@ -101,7 +100,7 @@ class Spawn(arcade.View):
 
         # Musique de fond
         self.menu_music = arcade.Sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "musicmenu.mp3"), False)
-        self.sonjoue = self.menu_music.play(volume=0.2)
+        self.sonjoue = self.menu_music.play(volume=GetVolume())
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)
@@ -151,7 +150,7 @@ class Spawn(arcade.View):
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
         self.player_sprite.center_y = max(0, min(self.player_sprite.center_y, self.height))
-        
+
 
         if arcade.check_for_collision_with_list(self.player_sprite, self.deco_list):
             self.hit = True
@@ -164,7 +163,7 @@ class Spawn(arcade.View):
             self.teleport = False
         if self.teleport == True:
             from Map import Map
-            map_view = Map(self.compteur_maps)
+            map_view = Map(player=player())
             self.window.show_view(map_view)
 
     def on_key_press(self, key, modifiers):
@@ -191,6 +190,6 @@ class Spawn(arcade.View):
 # Main application setup
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "RPG Game with Menu")
-    spawn_view = Spawn(1)
+    spawn_view = Spawn()
     window.show_view(spawn_view)
     arcade.run()

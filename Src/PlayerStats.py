@@ -128,8 +128,23 @@ def ChangeName(name):
     """
     actualise le nom du joueur.
     """
-    cursor.execute(f"Update players Set Argent = name Where PlayerID = '{uuid}'")
+    cursor.execute(f"Update players Set Nom = {name} Where PlayerID = '{uuid}'")
     db.commit()
 
+def GetVolume():
+    """
+    Donne le nom du joueur.
+    """
+    cursor.execute(f"Select Volume From players Where PlayerID = '{uuid}'")
+    return cursor.fetchall()[0][0]
+def ChangeVolume(vol):
+    """
+    actualise le nom du joueur.
+    """
+    cursor.execute(f"Update players Set Volume = {vol} Where PlayerID = '{uuid}'")
+    db.commit()
+
+
 if __name__ == '__main__':
-    AddLife(-10)
+    ChangeVolume(1)
+    print(GetVolume())

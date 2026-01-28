@@ -10,7 +10,7 @@ Target = None
 arme = None
 
 
-def Attaquer():
+def UseWeapon():
     if isPlayer == True:
         if arme == "Branche":
             Weapons.branche(numero,Target,userStats.GetPlayerStats()[2])
@@ -31,8 +31,10 @@ def Attaquer():
             Weapons.epeeRouille("player",Target[0],userStats[3])
         elif arme == "banane":
             Weapons.banane("player",Target[0],userStats[3])
+        elif arme == "toile":
+            Weapons.toile("player",Target[0],userStats[3])
 
-def Branche(user,target,weapon,num=0):
+def Attaquer(user,target,weapon,num=0):
     global isPlayer
     isPlayer = user[2]
     global sprite_ref
@@ -56,10 +58,10 @@ def Move1(delta_time):
         scream=arcade.load_sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "Scream.wav"))
         sprite_ref.strafe(100)
         scream.play(volume=0.2)
-        Attaquer()
+        UseWeapon()
     else:
         sprite_ref.strafe(-40)
-        Attaquer()
+        UseWeapon()
 
     arcade.unschedule(Move1)
     arcade.schedule(Move2, .125)

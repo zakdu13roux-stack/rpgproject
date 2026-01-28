@@ -49,7 +49,7 @@ class Bonus_lvl(arcade.View):
         self.statue.center_x = 300
         self.statue.center_y = 365
 
-        self.statue_list = arcade.SpriteList() 
+        self.statue_list = arcade.SpriteList()
         self.statue_list.append(self.statue)
 
         self.sol = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bonus_floor.jpg"), scale=0.5)
@@ -69,14 +69,12 @@ class Bonus_lvl(arcade.View):
         self.sol4.center_x = 200
         self.sol4.center_y = 150
 
-
-
         self.decor_list.append(self.sol)
         self.decor_list.append(self.sol2)
         self.decor_list.append(self.sol3)
-        self.decor_list.append(self.sol4) 
+        self.decor_list.append(self.sol4)
 
-        
+
 
         @return_button.event("on_click")
         def on_click_return_button(event):

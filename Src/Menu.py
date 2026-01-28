@@ -1,6 +1,6 @@
 import arcade
 import arcade.gui
-
+from PlayerStats import*
 from Spawn import*
 
 class MenuView(arcade.View):
@@ -32,7 +32,7 @@ class MenuView(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
-            spawn_view = Spawn(1)
+            spawn_view = Spawn()
             self.window.show_view(spawn_view)
 
         @options_button.event("on_click")
@@ -68,18 +68,22 @@ class Options(arcade.View):
         return_button.center_x=0
         return_button.center_y=0
 
+        self.volume_button = arcade.gui.UIFlatButton(text="Volume", width=80, height=50)
+        anchor_volume = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor_volume.add(child=self.volume_button,align_x=0,align_y=0)
+
+        @self.volume_button.event("on_click")
+        def on_click_volume_button(event):
+            volume_vue = VolumeView()
+            self.window.show_view(volume_vue)
+
+
         self.grille.add(return_button,0,0)
 
         anchor = self.manager.add(arcade.gui.UIAnchorLayout())
         anchor.add(child=self.grille, anchor_x="left", anchor_y="bottom")
 
-        self.WIP = arcade.create_text_sprite("Work In Progress", arcade.csscolor.RED, 50)
-        self.WIP.center_x = 300
-        self.WIP.center_y = 300
 
-        self.text_list = arcade.SpriteList()
-
-        self.text_list.append(self.WIP)
 
 
 
@@ -88,9 +92,10 @@ class Options(arcade.View):
             vue_menu = MenuView()
             self.window.show_view(vue_menu)
 
+
+
     def on_draw(self):
         self.clear()
-        self.text_list.draw()
         self.manager.draw()
 
 
@@ -100,6 +105,73 @@ class Options(arcade.View):
 
     def on_hide_view(self):
         self.manager.disable()
+
+class VolumeView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.manager = arcade.gui.UIManager()
+
+        return_button = arcade.gui.UIFlatButton(text="Return",width=100,height=50)
+
+        self.grille = arcade.gui.UIGridLayout(columns=1,vertical_spacing=0,horizontal_spacing=0)
+
+        @return_button.event("on_click")
+        def on_click_return_button(event):
+            vue_option = Options()
+            self.window.show_view(vue_option)
+
+        self.grille.add(return_button,0,0)
+
+        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor.add(child=self.grille, anchor_x="left", anchor_y="bottom")
+
+
+
+
+
+
+
+
+        self.v1_button = arcade.gui.UIFlatButton(text="+1", width=80, height=50)
+        self.v2_button = arcade.gui.UIFlatButton(text="-1", width=80, height=50)
+
+
+
+        anchor_volumes = self.manager.add(arcade.gui.UIAnchorLayout())
+        anchor_volumes.add(child=self.v1_button,align_x=50,align_y=50)
+        anchor_volumes.add(child=self.v2_button,align_x=-50,align_y=50)
+
+        @self.v1_button.event("on_click")
+        def on_click_return_button(event):
+            if GetVolume() <1.0:
+                ChangeVolume(GetVolume()+0.1)
+
+        @self.v2_button.event("on_click")
+        def on_click_return_button(event):
+            if GetVolume() >0.0:
+                ChangeVolume(GetVolume()-0.1)
+
+    def on_draw(self):
+        self.clear()
+        self.manager.draw()
+        arcade.draw_text("Volume Actuel : " + str(GetVolume()),200,300, arcade.csscolor.RED,17)
+
+
+    def on_update(self,delta_time):
+        pass
+
+
+
+
+
+    def on_show_view(self):
+        arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
+        self.manager.enable()
+
+    def on_hide_view(self):
+        self.manager.disable()
+
+
 
 # Main application setup
 if __name__ == "__main__":
