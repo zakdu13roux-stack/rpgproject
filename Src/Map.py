@@ -18,11 +18,17 @@ class Map(arcade.View):
         self.texts = arcade.SpriteList()
         self.texts.append(self.text_compteur)
 
+        # Indication commandes
+        self.text_tuto = arcade.create_text_sprite("Enter Level :    Entrer",arcade.csscolor.BLACK,17)
+        self.text_tuto.center_x= 450
+        self.text_tuto.center_y = 570
+        self.texts.append(self.text_tuto)
+
         # Compteur cleared levels
         self.cleared_lvls= cleared_lvls
 
         # Sprite du joueur
-        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=0.3)
+        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=0.28)
         if cleared_lvls == 0:
             self.player_sprite.center_x = 100
             self.player_sprite.center_y = 500
@@ -38,12 +44,32 @@ class Map(arcade.View):
         self.player_list = arcade.SpriteList()
         self.player_list.append(self.player_sprite)
 
+
+        self.rectangle = arcade.shape_list.ShapeElementList()
+
+        barre1 = arcade.shape_list.create_rectangle_filled(548,570,5,28,arcade.csscolor.BLACK)
+        barre2 = arcade.shape_list.create_rectangle_filled(514,585,68,5,arcade.csscolor.BLACK)
+        barre3 = arcade.shape_list.create_rectangle_filled(480,570,5,28,arcade.csscolor.BLACK)
+        barre4 = arcade.shape_list.create_rectangle_filled(514,555,68,5,arcade.csscolor.BLACK)
+
+
+
+        self.rectangle.append(barre1)
+        self.rectangle.append(barre2)
+        self.rectangle.append(barre3)
+        self.rectangle.append(barre4)
+
+
         # Sprite icones map
         self.icon_start = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "start.png"), scale=0.3)
         self.icon_sprite1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "battle.png"), scale=0.3)
         self.icon_sprite2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "area.png"), scale=0.3)
         self.icon_sprite3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "battle.png"), scale=0.3)
-        self.icon_end = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "end.png"), scale=0.3)
+        if self.compteur%10!=0:
+            self.icon_end = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "end.png"), scale=0.3)
+        else:
+            self.icon_end = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "bossmort.png"), scale=0.3)
+
 
         self.icon_start.center_x = 95
         self.icon_start.center_y = 500
@@ -99,6 +125,8 @@ class Map(arcade.View):
         self.colPath.append(p2)
         self.colPath.append(p3)
 
+
+
         # Sprites décor arrière plan
         self.pelouse = {}
         for h in range(3):
@@ -116,7 +144,7 @@ class Map(arcade.View):
 
         self.arbres={}
         self.rock = {}
-        for i in range(4):
+        for i in range(5):
             # Partie Arbre
             self.arbres[i] = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
             self.arbres[i].center_x = randint(50,550)
@@ -143,50 +171,6 @@ class Map(arcade.View):
                     self.decor_list.append(self.rock[i])
 
 
-        #self.arbre1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        #self.arbre2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        #self.arbre3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        #self.arbre4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-        #self.arbre5 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Arbre.png"), scale = 0.3)
-#
-        #self.arbre1.center_x = randint(40,250)
-        #self.arbre1.center_y = randint(40,350)
-#
-        #self.arbre2.center_x = randint(40,250)
-        #self.arbre2.center_y = randint(40,350)
-#
-        #self.arbre3.center_x = randint(350,560)
-        #self.arbre3.center_y = randint(250,560)
-#
-        #self.arbre4.center_x = randint(350,560)
-        #self.arbre4.center_y = randint(250,560)
-#
-        #self.arbre5.center_x = randint(50,550)
-        #self.arbre5.center_y = randint(50,550)
-#
-        #self.rock1 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        #self.rock2 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        #self.rock3 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-        #self.rock4 = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "Rock.png"), scale = 0.2)
-#
-        #self.rock1.center_x = randint(40,250)
-        #self.rock1.center_y = randint(40,350)
-#
-        #self.rock2.center_x = randint(40,250)
-        #self.rock2.center_y = randint(40,350)
-#
-        #self.rock3.center_x = randint(350,560)
-        #self.rock3.center_y = randint(250,560)
-#
-        #self.rock4.center_x = randint(350,560)
-        #self.rock4.center_y = randint(250,560)
-#
-#
-        #self.decor_list.append(self.rock1)
-        #self.decor_list.append(self.rock2)
-        #self.decor_list.append(self.rock3)
-        #self.decor_list.append(self.rock4)
-
 
         # Limite de la map
         self.map_width = 1200
@@ -209,6 +193,7 @@ class Map(arcade.View):
         self.decor_list.draw()
         self.texts.draw()
         self.manager.draw()
+        self.rectangle.draw()
 
         # Définir la vue pour suivre le joueur
         self.camera.use()
@@ -269,8 +254,15 @@ class Map(arcade.View):
                 fight_scene_view = FightScene(self.compteur, self.player,self.cleared_lvls)
                 self.window.show_view(fight_scene_view)
             elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100 and self.cleared_lvls==3:
-                self.window.show_view(Map(self.player,self.compteur+1,0))
-                self.text_compteur = self.compteur
+                if self.compteur%10 !=0 :
+                    self.window.show_view(Map(self.player,self.compteur+1,0))
+                    self.text_compteur = self.compteur
+                else:
+                    from BossFight import BossFight
+                    BossFight_View = BossFight(self.player,self.compteur+1,0)
+                    self.window.show_view(BossFight_View)
+                    self.text_compteur = self.compteur
+
 
 
 

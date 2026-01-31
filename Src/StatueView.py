@@ -60,7 +60,7 @@ class StatueView(arcade.View):
         @self.life_button.event("on_click")
         def on_click_life_button(event):
             self.life_button.text = "Life"
-            self.player.heal(50)
+            self.player.heal(self.stat_vie/4)
             from Map import Map
             Map_view = Map(self.player, self.compteur_maps, self.cleared_lvls)
             self.window.show_view(Map_view)
@@ -68,7 +68,7 @@ class StatueView(arcade.View):
         @self.coins_button.event("on_click")
         def on_click_coins_button(event):
             self.coins_button.text = "Coins"
-            AddArgent(100)
+            AddArgent(100 + self.compteur_maps*2)
             from Map import Map
             Map_view = Map(self.player, self.compteur_maps, self.cleared_lvls)
             self.window.show_view(Map_view)

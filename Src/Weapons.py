@@ -32,3 +32,9 @@ def toile(tipe,target,mul):
         target.takeDamage(11*mul)
     else:
         target.dealDamage(tipe,11*mul)
+
+def lance(tipe,target,mul):
+    if tipe == "player":
+        target.takeDamage(22*mul)
+    else:
+        target.dealDamage(tipe,11*mul)

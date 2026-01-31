@@ -28,6 +28,13 @@ def GetSupports():
     cursor.execute("Select * From enemies Where Type = 'Support'")
     return cursor.fetchall()
 
+def GetBoss():
+    """
+    Donne tout les ennemies et leurs statistiques du type 'Damage Dealer'.
+    """
+    cursor.execute("Select * From enemies Where Type = 'Boss'")
+    return cursor.fetchall()
+
 def GetEnemyStats(enemy):
     """
     Donne toutes les statistiques (nom, type, atout) de l'ennemie donné.
@@ -42,4 +49,5 @@ if __name__ == '__main__':
     print(GetDamageDealers())
     print(GetTanks())
     print(GetSupports())
+    print(GetBoss())
     print(GetEnemyStats("Gorille"))

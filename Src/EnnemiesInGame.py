@@ -5,11 +5,16 @@ class SetUpEnemy():
     """
     Créer une variable ennemies de self qui est un dictionnaire contenant tout les énnemies (nom, vie, dégats).
     """
-    def __init__(self,difficulte=1,nbEnnemi=1):
-        self.ennemies = {}
-        for i in range(nbEnnemi):
-            enemy=Ennemi(difficulte)
-            self.ennemies[i]=[enemy.perso[0],enemy.vie,enemy.vie,enemy.attaque]
+    def __init__(self,difficulte=1,nbEnnemi=1, boss=False):
+        if boss == False:
+            self.ennemies = {}
+            for i in range(nbEnnemi):
+                enemy=Ennemi(difficulte)
+                self.ennemies[i]=[enemy.perso[0],enemy.vie,enemy.vie,enemy.attaque]
+        else:
+            enemy = Ennemi(difficulte, boss)
+            self.ennemies={}
+            self.ennemies[0]=[enemy.perso[0],enemy.vie,enemy.vie,enemy.attaque]
 
     def dealDamage(self,enemy,dmg):
         if self.ennemies[enemy][2]-dmg<=0:
@@ -33,7 +38,7 @@ class SetUpEnemy():
 
 
 if __name__ == '__main__':
-    test = SetUpEnemy()
+    test = SetUpEnemy(boss = True)
     print(test.GetEnnemieStats(0))
     test.dealDamage(0,23)
     print(test.GetEnnemieStats(0))

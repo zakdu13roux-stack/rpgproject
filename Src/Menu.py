@@ -30,6 +30,33 @@ class MenuView(arcade.View):
         anchor.add(child=self.grid, anchor_x="center", anchor_y="center")
 
 
+        #commandes
+        self.text_Z = arcade.create_text_sprite(("Up : Z"),arcade.csscolor.WHITE,15)
+        self.text_S = arcade.create_text_sprite(("Down : S "),arcade.csscolor.WHITE,15)
+        self.text_Q = arcade.create_text_sprite(("Left : Q"),arcade.csscolor.WHITE,15)
+        self.text_D = arcade.create_text_sprite(("Right : D"),arcade.csscolor.WHITE,15)
+        self.text_Portal = arcade.create_text_sprite(("Walk toward portal to teleport to map (Can't go back to spawn until you die)."),arcade.csscolor.WHITE,13)
+        self.text_Shop = arcade.create_text_sprite(("Walk toward Shop to buy items and get better stats. "),arcade.csscolor.WHITE,13)
+        self.text_Z.center_x = 55
+        self.text_Z.center_y = 570
+        self.text_S.center_x = 68
+        self.text_S.center_y = 540
+        self.text_Q.center_x = 60
+        self.text_Q.center_y = 510
+        self.text_D.center_x = 65
+        self.text_D.center_y = 480
+        self.text_Portal.center_x = 295
+        self.text_Portal.center_y = 420
+        self.text_Shop.center_x = 211
+        self.text_Shop.center_y = 390
+        self.texts = arcade.SpriteList()
+        self.texts.append(self.text_Z)
+        self.texts.append(self.text_S)
+        self.texts.append(self.text_Q)
+        self.texts.append(self.text_D)
+        self.texts.append(self.text_Shop)
+        self.texts.append(self.text_Portal)
+
         @resume_button.event("on_click")
         def on_click_resume_button(event):
             spawn_view = Spawn()
@@ -49,6 +76,7 @@ class MenuView(arcade.View):
         self.clear()
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
         self.manager.draw()
+        self.texts.draw()
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.GREEN)

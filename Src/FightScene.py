@@ -60,12 +60,14 @@ class FightScene(arcade.View):
         self.plr = [plr, self.player_sprite, True]
 
         self.ViePlayer = arcade.SpriteList()
-        self.BarreViePlayer=arcade.SpriteSolidColor(100, 20, arcade.csscolor.GREEN)
+        self.BarreViePlayer=arcade.SpriteSolidColor(100, 20)
         self.BarreViePlayer.center_x = 100
         self.BarreViePlayer.center_y = 20
-        self.bordureViePlayer=arcade.SpriteSolidColor(104, 24, arcade.csscolor.GREEN)
+        self.bordureViePlayer=arcade.SpriteSolidColor(104, 24)
         self.bordureViePlayer.center_x = 100
         self.bordureViePlayer.center_y = 20
+        self.bordureViePlayer.texture = arcade.make_soft_square_texture(24, arcade.csscolor.BLACK, outer_alpha=255)
+        self.bordureViePlayer.width = 104
 
         self.ViePlayer.append(self.bordureViePlayer)
         self.ViePlayer.append(self.BarreViePlayer)
@@ -84,7 +86,7 @@ class FightScene(arcade.View):
         self.sonjoue = self.fight_music.play(volume=0.2)
 
         self.batch = arcade.shape_list.ShapeElementList()
-        
+
         for i in range(self.nbEnemies):
             if self.AllEnemy.GetAllEnnemies()[i][0] == "Singe":
                 self.ennemies[i] = [self.AllEnemy.ennemies[i],
@@ -98,6 +100,19 @@ class FightScene(arcade.View):
                 self.ennemies[i] = [self.AllEnemy.ennemies[i],
                                     arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "gorilla.png"), scale=0.4),
                                     False]
+            elif self.AllEnemy.GetAllEnnemies()[i][0] == "Oazo":
+                self.ennemies[i] = [self.AllEnemy.ennemies[i],
+                                    arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "ouaso.png"), scale=0.4),
+                                    False]
+            elif self.AllEnemy.GetAllEnnemies()[i][0] == "Gro-oazo":
+                self.ennemies[i] = [self.AllEnemy.ennemies[i],
+                                    arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "groazo.png"), scale=0.6),
+                                    False]
+            elif self.AllEnemy.GetAllEnnemies()[i][0] == "Ours":
+                self.ennemies[i] = [self.AllEnemy.ennemies[i],
+                                    arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "ours.png"), scale=0.4),
+                                    False]
+
 
             self.ennemies[i][1].center_x = 500 - 200 * i
             self.ennemies[i][1].center_y = 500
@@ -123,16 +138,6 @@ class FightScene(arcade.View):
         anchor = self.manager.add(arcade.gui.UIAnchorLayout())
         anchor.add(child=self.grid, anchor_x="right", anchor_y="bottom")
 
-        self.abandon_button = arcade.gui.UIFlatButton(text="Abandon", width=200, height=50)
-        anchor_abandon = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor_abandon.add(child=self.abandon_button, align_x=0, align_y=-275)
-
-        @self.abandon_button.event("on_click")
-        def on_click_abandon_button(event):
-            from Map import Map
-            vuespawn = Map(self.compteur_maps,self.plr[0],self.Cleared_Levels)
-            self.window.show_view(vuespawn)
-
         @resume_button.event("on_click")
         def on_click_resume_button(event):
             self.manager.disable()
@@ -148,6 +153,26 @@ class FightScene(arcade.View):
         self.V.center_y = 300
         self.text_list = arcade.SpriteList()
         self.text_list.append(self.V)
+
+        # Cartable
+        self.SacGraphique=arcade.SpriteList()
+        # Images
+        self.BrancheImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "banane.png"), scale=0.25)
+
+        # Forme du sac
+        self.SacStorage=[[0 for i in range(3)] for i in range(2)]
+        self.SacStorage[0][2]=1
+        for h in range(len(self.SacStorage)):
+            for l in range(len(self.SacStorage[0])):
+                case=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "fond_sac.png"), scale=0.227)
+                case.center_x=300+100*l
+                case.center_y=100+100*h
+                self.SacGraphique.append(case)
+                if self.SacStorage[h][l]==1:
+                    self.BrancheImage.center_x=300+100*l
+                    self.BrancheImage.center_y=200+100*h
+                    self.SacGraphique.append(self.BrancheImage)
+
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
@@ -212,8 +237,6 @@ class FightScene(arcade.View):
 
         self.BarreViePlayer.texture = arcade.make_soft_square_texture(20, arcade.csscolor.GREEN, outer_alpha=255)
         self.BarreViePlayer.width = self.plr[0].GetPlayerStats()[1]*100/self.plr[0].GetPlayerStats()[0]
-        self.bordureViePlayer.texture = arcade.make_soft_square_texture(24, arcade.csscolor.BLACK, outer_alpha=255)
-        self.bordureViePlayer.width = 104
         self.ViePlayer.draw()
         self.healthBars.draw()
 
@@ -221,6 +244,7 @@ class FightScene(arcade.View):
             self.text_list.draw()
         elif self.tour == 0:
             self.manager.draw()
+            self.SacGraphique.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
         if button == 1:
