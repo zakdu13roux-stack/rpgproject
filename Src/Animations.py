@@ -12,7 +12,7 @@ arme = None
 
 def UseWeapon():
     if isPlayer == True:
-        if arme == "Branche":
+        if arme == "branche":
             Weapons.branche(numero,Target,userStats.GetPlayerStats()[2])
         elif arme == "H2F":
             Weapons.H2F(numero,Target,userStats.GetPlayerStats()[2])
@@ -23,7 +23,7 @@ def UseWeapon():
         elif arme == "toile":
             Weapons.toile(numero,Target,userStats.GetPlayerStats()[2])
     else:
-        if arme == "Branche":
+        if arme == "branche":
             Weapons.branche("player",Target[0],userStats[3])
         elif arme == "H2F":
             Weapons.H2F("player",Target[0],userStats[3])

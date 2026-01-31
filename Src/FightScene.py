@@ -45,7 +45,7 @@ class FightScene(arcade.View):
         for p in self.pelouse:
             self.trucs_tt_devant_list.append(self.pelouse[p])
 
-        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=3)
+        self.player_sprite = arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "perso.png"), scale=1)
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 50
 
@@ -75,7 +75,7 @@ class FightScene(arcade.View):
         self.tour=0
 
         self.ennemies = {}
-        self.nbEnemies = 1
+        self.nbEnemies = 3
         self.AllEnemy = SetUpEnemy(difficulte=self.compteur_maps, nbEnnemi=self.nbEnemies)
 
         self.healthBars = arcade.SpriteList()
@@ -118,35 +118,13 @@ class FightScene(arcade.View):
             self.ennemies[i][1].center_y = 500
             self.listeSprite.append(self.ennemies[i][1])
 
-            healthBar = arcade.SpriteSolidColor(int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1]), 20, arcade.csscolor.RED)
+            healthBar = arcade.SpriteSolidColor(int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1]), 20)
             healthBar.center_x = 500 - 200 * i
             healthBar.center_y = 400
             self.healthBars.append(healthBar)
             self.Healths.append(self.ennemies[i][0][2])
             self.bordureVie.append(arcade.shape_list.create_rectangle_filled(500-200*i,400,104,24, arcade.csscolor.BLACK))
             self.batch.append(self.bordureVie[i])
-
-        # UI manager
-        self.manager = arcade.gui.UIManager()
-
-        # Grille pour organiser les boutons
-        self.grid = arcade.gui.UIGridLayout(columns=1, vertical_spacing=0, horizontal_spacing=0)
-
-        # Boutons du menu
-        resume_button = arcade.gui.UIFlatButton(text="Attack", width=200, height=50)
-        self.grid.add(resume_button, col_num=1, row_num=1)
-        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor.add(child=self.grid, anchor_x="right", anchor_y="bottom")
-
-        @resume_button.event("on_click")
-        def on_click_resume_button(event):
-            self.manager.disable()
-            Animations.Attaquer(self.plr, self.AllEnemy, "H2F", self.enemySelected)
-            # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 avec la branche
-            # self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0 avec la branche
-            self.tour=1
-            arcade.schedule(self.SetUpTours, 1/60)
-
 
         self.V = arcade.create_text_sprite("Victoire", arcade.csscolor.RED, 50)
         self.V.center_x = 300
@@ -156,12 +134,14 @@ class FightScene(arcade.View):
 
         # Cartable
         self.SacGraphique=arcade.SpriteList()
-        # Images
-        self.BrancheImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "banane.png"), scale=0.25)
+        self.SacItems=arcade.SpriteList()
+        self.clicked=False
 
         # Forme du sac
         self.SacStorage=[[0 for i in range(3)] for i in range(2)]
-        self.SacStorage[0][2]=1
+        self.SacStorage[0][0]=3
+        self.SacStorage[1][1]=3
+        self.SacStorage[0][2]=3
         for h in range(len(self.SacStorage)):
             for l in range(len(self.SacStorage[0])):
                 case=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "fond_sac.png"), scale=0.227)
@@ -169,18 +149,31 @@ class FightScene(arcade.View):
                 case.center_y=100+100*h
                 self.SacGraphique.append(case)
                 if self.SacStorage[h][l]==1:
-                    self.BrancheImage.center_x=300+100*l
-                    self.BrancheImage.center_y=200+100*h
-                    self.SacGraphique.append(self.BrancheImage)
+                    BrancheImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "branche.png"), scale=0.5)
+                    BrancheImage.center_x=297+100*l
+                    BrancheImage.center_y=105+100*h
+                    BrancheImage.name="branche"
+                    self.SacItems.append(BrancheImage)
+                elif self.SacStorage[h][l]==2:
+                    BananeImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "banane.png"), scale=0.25)
+                    BananeImage.center_x=300+100*l
+                    BananeImage.center_y=100+100*h
+                    BananeImage.name="banane"
+                    self.SacItems.append(BananeImage)
+                elif self.SacStorage[h][l]==3:
+                    H2FImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "H2F.png"), scale=0.25)
+                    H2FImage.center_x=300+100*l
+                    H2FImage.center_y=150
+                    H2FImage.name="H2F"
+                    self.SacItems.append(H2FImage)
+
 
 
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
-        self.manager.enable()
 
     def on_hide_view(self):
         self.fight_music.stop(self.sonjoue)
-        self.manager.disable()
 
     def on_update(self, delta_time):
         self.listeSprite.update()
@@ -194,14 +187,12 @@ class FightScene(arcade.View):
             self.Target.alpha = 0
 
         if self.victory:
-            self.manager.disable()
             self.victory_timer += delta_time
             if self.victory_timer >= 1:
                 from Map import Map
                 self.window.show_view(Map(self.plr[0],self.compteur_maps,self.Cleared_Levels))
 
         if self.plr[0].vie == 0:
-            self.manager.disable()
             self.victory_timer += delta_time
             if self.victory_timer >= 1:
                 from Spawn import Spawn
@@ -243,11 +234,11 @@ class FightScene(arcade.View):
         if self.victory:
             self.text_list.draw()
         elif self.tour == 0:
-            self.manager.draw()
             self.SacGraphique.draw()
+            self.SacItems.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
-        if button == 1:
+        if button == 1 and self.clicked==False:
             if x > 410 and x < 600 and y > 410 and y < 600 and self.enemySelected != 0:
                 self.enemySelected = 0
                 self.Target.center_x = 500
@@ -260,6 +251,15 @@ class FightScene(arcade.View):
                 self.enemySelected = 2
                 self.Target.center_x = 500 - 200 * 2
                 self.Target.scale=.7,.7
+            
+            ItemClicked=arcade.get_sprites_at_point((x,y),self.SacItems)
+            if ItemClicked!=[]:
+                self.clicked=True
+                Animations.Attaquer(self.plr, self.AllEnemy, ItemClicked[0].name, self.enemySelected)
+                # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 avec la branche
+                # self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0 avec la branche
+                self.tour=1
+                arcade.schedule(self.SetUpTours, 1/60)
 
     def SetUpTours(self,delta_time):
         self.decalage = 0
@@ -274,13 +274,13 @@ class FightScene(arcade.View):
         if self.tour>self.EnnemieEnVie:
             arcade.unschedule(self.enemyTour)
             self.tour = 0
-            self.manager.enable()
+            self.clicked=False
         else:
             for i in range(self.nbEnemies):
                 if self.Healths[self.tour-1+self.decalage]==0:
                     self.decalage+=1
             if self.Healths[self.tour-1+self.decalage]!=0:
-                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,"Branche")
+                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,"branche")
             self.tour+=1
 
 if __name__ == "__main__":
