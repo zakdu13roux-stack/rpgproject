@@ -32,8 +32,14 @@ def seeDB():
 
         f = open('testosterone.sql', 'r')
         mycursor.execute(" ".join(f.readlines()))
+        try:
+            for result in mycursor.execute(f, multi=True):
+                pass
+        except mysql.connector.errors.InterfaceError:
+            pass
+
         f.close()
         return False
-    
+
 if __name__ == '__main__':
     seeDB()
