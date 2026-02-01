@@ -19,7 +19,7 @@ class Map(arcade.View):
         self.texts.append(self.text_compteur)
 
         # Indication commandes
-        self.text_tuto = arcade.create_text_sprite("Enter Level :    Entrer",arcade.csscolor.BLACK,17)
+        self.text_tuto = arcade.create_text_sprite("Enter Level :    Enter",arcade.csscolor.BLACK,17)
         self.text_tuto.center_x= 450
         self.text_tuto.center_y = 570
         self.texts.append(self.text_tuto)
