@@ -22,6 +22,8 @@ def UseWeapon():
             Weapons.banane(numero,Target,userStats.GetPlayerStats()[2])
         elif arme == "toile":
             Weapons.toile(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == "lance":
+            Weapons.lance(numero,Target,userStats.GetPlayerStats()[2])
     else:
         if arme == "branche":
             Weapons.branche("player",Target[0],userStats[3])
@@ -33,6 +35,8 @@ def UseWeapon():
             Weapons.banane("player",Target[0],userStats[3])
         elif arme == "toile":
             Weapons.toile("player",Target[0],userStats[3])
+        elif arme == "lance":
+            Weapons.lance("player",Target[0],userStats[3])
 
 def Attaquer(user,target,weapon,num=0):
     global isPlayer

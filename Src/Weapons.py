@@ -37,4 +37,4 @@ def lance(tipe,target,mul):
     if tipe == "player":
         target.takeDamage(22*mul)
     else:
-        target.dealDamage(tipe,11*mul)
+        target.dealDamage(tipe,22*mul)

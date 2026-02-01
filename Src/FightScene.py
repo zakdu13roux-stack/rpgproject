@@ -139,9 +139,9 @@ class FightScene(arcade.View):
 
         # Forme du sac
         self.SacStorage=[[0 for i in range(3)] for i in range(2)]
-        self.SacStorage[0][0]=3
-        self.SacStorage[1][1]=3
-        self.SacStorage[0][2]=3
+        self.SacStorage[0][0]=2
+        self.SacStorage[1][1]=5
+        self.SacStorage[0][2]=2
         for h in range(len(self.SacStorage)):
             for l in range(len(self.SacStorage[0])):
                 case=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "fond_sac.png"), scale=0.227)
@@ -166,9 +166,20 @@ class FightScene(arcade.View):
                     H2FImage.center_y=150
                     H2FImage.name="H2F"
                     self.SacItems.append(H2FImage)
-
-
-
+                elif self.SacStorage[h][l]==4:
+                    EpeerouilleeImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "epee rouillee.png"), scale=0.2190)
+                    EpeerouilleeImage.center_x=300+100*l
+                    EpeerouilleeImage.center_y=100+100*h
+                    EpeerouilleeImage.name="epeeRouille"
+                    self.SacItems.append(EpeerouilleeImage)    
+                elif self.SacStorage[h][l]==5:
+                    LanceImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "lance.png"), scale=0.25)
+                    LanceImage.center_x=300+100*l
+                    LanceImage.center_y=100+100*h
+                    LanceImage.name="lance"
+                    self.SacItems.append(LanceImage)    
+                    
+                                
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
