@@ -75,7 +75,13 @@ class FightScene(arcade.View):
         self.tour=0
 
         self.ennemies = {}
-        self.nbEnemies = 3
+        if self.compteur_maps < 6:
+            self.nbEnemies = 1
+        elif self.compteur_maps < 11:
+            self.nbEnemies = 2
+        else:
+            self.nbEnemies = 3
+
         self.AllEnemy = SetUpEnemy(difficulte=self.compteur_maps, nbEnnemi=self.nbEnemies)
 
         self.healthBars = arcade.SpriteList()
@@ -178,8 +184,8 @@ class FightScene(arcade.View):
                     LanceImage.center_y=100+100*h
                     LanceImage.name="lance"
                     self.SacItems.append(LanceImage)    
-                    
-                                
+
+
     def on_show_view(self):
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
