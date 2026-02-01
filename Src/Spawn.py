@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de départ avec déplacement, shop et portail vers la carte.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import arcade.gui
 import os
@@ -8,6 +17,14 @@ from PlayerInGame import*
 
 class Spawn(arcade.View):
     def __init__(self):
+        """
+        Description:
+            Initialise la zone de départ.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         arcade.set_background_color(arcade.csscolor.GREEN)
 
@@ -90,6 +107,14 @@ class Spawn(arcade.View):
         self.spawn_button = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=100)
         @self.spawn_button.event("on_click")
         def on_click_resume_button(event):
+            """
+            Description:
+                Ouvre le menu principal.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             from Menu import MenuView
             menu_view = MenuView()
             self.window.show_view(menu_view)
@@ -103,15 +128,39 @@ class Spawn(arcade.View):
         self.sonjoue = self.menu_music.play(volume=GetVolume())
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de spawn.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.GREEN)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager et stoppe la musique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.menu_music.stop(self.sonjoue)
         self.manager.disable()
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la zone de départ.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.herbizare.draw()
 
@@ -135,6 +184,14 @@ class Spawn(arcade.View):
 
 
     def center_camera_on_player(self):
+        """
+        Description:
+            Centre la caméra sur le joueur.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         screen_width = self.width
         screen_height = self.height
 
@@ -146,6 +203,14 @@ class Spawn(arcade.View):
 
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour le joueur et gère les collisions.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         # Mettre à jour les sprites
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
@@ -167,6 +232,15 @@ class Spawn(arcade.View):
             self.window.show_view(map_view)
 
     def on_key_press(self, key, modifiers):
+        """
+        Description:
+            Gère les déplacements au clavier.
+        Entrées:
+            key: touche pressée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if key == arcade.key.Q :# Gauche
             self.player_sprite.change_x = -self.player_speed
             self.pas.play(volume=0.1)
@@ -182,6 +256,15 @@ class Spawn(arcade.View):
 
 
     def on_key_release(self, key, modifiers):
+        """
+        Description:
+            Arrête le déplacement au relâchement des touches.
+        Entrées:
+            key: touche relâchée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if key == arcade.key.Q or key == arcade.key.D:
             self.player_sprite.change_x = 0
         if key == arcade.key.Z or key == arcade.key.S:

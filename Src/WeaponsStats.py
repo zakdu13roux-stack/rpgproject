@@ -1,3 +1,12 @@
+"""
+Description:
+    Accès aux statistiques des armes via la base de données.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import mysql.connector
 
 db = mysql.connector.connect(
@@ -9,28 +18,48 @@ cursor = db.cursor()
 
 def GetWeapons():
     """
-    Donne toutes les armes.
+    Description:
+        Donne toutes les armes.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From weapons")
     return cursor.fetchall()
 
-def GetPourieWeapons():
+def GetPourrieWeapons():
     """
-    Donne toutes les armes de rareté 'Pourie'.
+    Description:
+        Donne les armes de rareté Pourrie.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
-    cursor.execute("Select * From weapons Where Rarete = 'Pourie'")
+    cursor.execute("Select * From weapons Where Rarete = 'Pourrie'")
     return cursor.fetchall()
 
 def GetOkWeapons():
     """
-    Donne toutes les armes de rareté 'Ok'.
+    Description:
+        Donne les armes de rareté Ok.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From weapons Where Rarete = 'Ok'")
     return cursor.fetchall()
 
 def GetLegendaireWeapons():
     """
-    Donne toutes les armes de rareté 'Légendaire'.
+    Description:
+        Donne les armes de rareté Légendaire.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From weapons Where Rarete = 'Légendaire'")
     return cursor.fetchall()

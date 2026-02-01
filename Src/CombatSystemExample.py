@@ -1,8 +1,25 @@
+"""
+Description:
+    Exemple console du système de combat entre joueur et ennemis.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 from PlayerInGame import *
 from EnnemiesInGame import *
 from Weapons import *
 
 def Start():
+    """
+    Description:
+        Lance un combat d'exemple en console.
+    Entrées:
+        Aucune.
+    Sorties:
+        Aucune.
+    """
     plr = player()
     ennemies = SetUpEnemy()
     enemiesLife = []

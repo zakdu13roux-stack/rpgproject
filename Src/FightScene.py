@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de combat standard contre des ennemis avec sélection de cible.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import os
 import arcade.gui
@@ -11,6 +20,16 @@ SCREEN_HEIGHT = 600
 
 class FightScene(arcade.View):
     def __init__(self, compteur_maps,plr,Cleared_Levels):
+        """
+        Description:
+            Initialise la scène de combat standard.
+        Entrées:
+            compteur_maps: progression des cartes.
+            plr: instance du joueur.
+            Cleared_Levels: niveaux déjà nettoyés.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
@@ -180,12 +199,36 @@ class FightScene(arcade.View):
 
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de combat.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
     def on_hide_view(self):
+        """
+        Description:
+            Stoppe la musique lors de la sortie.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.fight_music.stop(self.sonjoue)
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour les états du combat et les transitions.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.listeSprite.update()
 
         for i in range(self.nbEnemies):
@@ -220,6 +263,14 @@ class FightScene(arcade.View):
             self.Target.add_scale(-.005)
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la scène de combat et l'inventaire.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.trucs_tt_devant_list.draw()
         self.batch.draw()
@@ -248,6 +299,17 @@ class FightScene(arcade.View):
             self.SacItems.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
+        """
+        Description:
+            Gère la sélection de cible et l'utilisation d'objets.
+        Entrées:
+            x: position x de la souris.
+            y: position y de la souris.
+            button: bouton pressé.
+            modifier: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if button == 1 and not self.clicked and not self.victory:
             if x > 410 and x < 600 and y > 410 and y < 600 and self.enemySelected != 0:
                 self.enemySelected = 0
@@ -273,11 +335,27 @@ class FightScene(arcade.View):
                     arcade.schedule(self.SetUpTours, 1/60)
 
     def SetUpTours(self,delta_time):
+        """
+        Description:
+            Prépare l'alternance des tours.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.decalage = 0
         arcade.unschedule(self.SetUpTours)
         arcade.schedule(self.enemyTour, .2)
 
     def enemyTour(self,delta_time):
+        """
+        Description:
+            Exécute le tour des ennemis.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.EnnemieEnVie = 0
         for vie in self.Healths:
             if vie != 0:

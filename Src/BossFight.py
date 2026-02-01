@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de combat contre un boss avec tours et interface d'attaque.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import os
 import arcade.gui
@@ -11,6 +20,16 @@ SCREEN_HEIGHT = 600
 
 class BossFight(arcade.View):
     def __init__(self, plr,compteur_maps,Cleared_Levels):
+        """
+        Description:
+            Initialise la vue de combat contre le boss.
+        Entrées:
+            plr: instance du joueur.
+            compteur_maps: progression des cartes.
+            Cleared_Levels: niveaux déjà nettoyés.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
@@ -148,6 +167,14 @@ class BossFight(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
+            """
+            Description:
+                Lance l'attaque du joueur.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             self.manager.disable()
             Animations.Attaquer(self.plr, self.AllEnemy, "H2F", self.enemySelected)
             # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 avec la branche
@@ -163,14 +190,38 @@ class BossFight(arcade.View):
         self.text_list.append(self.V)
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue et l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI et stoppe la musique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.fight_music.stop(self.sonjoue)
         self.manager.disable()
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour le combat, la victoire et les transitions.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.listeSprite.update()
 
         for i in range(self.nbEnemies):
@@ -204,6 +255,14 @@ class BossFight(arcade.View):
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine le combat, les barres de vie et l'UI.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.trucs_tt_devant_list.draw()
         self.batch.draw()
@@ -235,11 +294,27 @@ class BossFight(arcade.View):
 
 
     def SetUpTours(self,delta_time):
+        """
+        Description:
+            Prépare l'alternance des tours.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.decalage = 0
         arcade.unschedule(self.SetUpTours)
         arcade.schedule(self.enemyTour, .2)
 
     def enemyTour(self,delta_time):
+        """
+        Description:
+            Exécute le tour des ennemis.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         self.EnnemieEnVie = 0
         for vie in self.Healths:
             if vie != 0:

@@ -1,7 +1,10 @@
 """
-Menu.
-
-Shows the usage of almost every gui widget, switching views and making a modal.
+Description:
+    Démonstration de menus Arcade GUI et de changements de vues.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
 """
 from typing import List
 
@@ -18,6 +21,14 @@ class MainView(arcade.View):
     """This is the class where your normal game would go."""
 
     def __init__(self):
+        """
+        Description:
+            Initialise la vue principale de démonstration.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
 
         self.manager = arcade.gui.UIManager()
@@ -27,6 +38,14 @@ class MainView(arcade.View):
         # Initialise the button with an on_click event.
         @switch_menu_button.event("on_click")
         def on_click_switch_button(event):
+            """
+            Description:
+                Ouvre le menu de démonstration.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             # Passing the main view into menu view as an argument.
             menu_view = MenuView(self)
             self.window.show_view(menu_view)
@@ -41,18 +60,40 @@ class MainView(arcade.View):
         )
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager lors de la sortie de vue.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         # Disable the UIManager when the view is hidden.
         self.manager.disable()
 
     def on_show_view(self):
-        """ This is run once when we switch to this view """
+        """
+        Description:
+            Active la vue principale.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.color.DARK_BLUE_GRAY)
 
         # Enable the UIManager when the view is showm.
         self.manager.enable()
 
     def on_draw(self):
-        """ Render the screen. """
+        """
+        Description:
+            Dessine la vue principale.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         # Clear the screen
         self.clear()
 
@@ -64,6 +105,14 @@ class MenuView(arcade.View):
     """Main menu view class."""
 
     def __init__(self, main_view):
+        """
+        Description:
+            Initialise la vue de menu de démonstration.
+        Entrées:
+            main_view: vue principale à reprendre.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
 
         self.manager = arcade.gui.UIManager()
@@ -97,21 +146,53 @@ class MenuView(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
+            """
+            Description:
+                Reprend la vue principale.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             # Pass already created view because we are resuming.
             self.window.show_view(self.main_view)
 
         @start_new_game_button.event("on_click")
         def on_click_start_new_game_button(event):
+            """
+            Description:
+                Démarre une nouvelle vue principale.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             # Create a new view because we are starting a new game.
             main_view = MainView()
             self.window.show_view(main_view)
 
         @exit_button.event("on_click")
         def on_click_exit_button(event):
+            """
+            Description:
+                Ferme l'application.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             arcade.exit()
 
         @volume_button.event("on_click")
         def on_click_volume_button(event):
+            """
+            Description:
+                Ouvre le sous-menu de volume.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             volume_menu = SubMenu(
                 "Volume Menu", "How do you like your volume?", "Enable Sound",
                 ["Play: Rock", "Play: Punk", "Play: Pop"],
@@ -124,6 +205,14 @@ class MenuView(arcade.View):
 
         @options_button.event("on_click")
         def on_click_options_button(event):
+            """
+            Description:
+                Ouvre le sous-menu d'options.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             options_menu = SubMenu(
                 "Funny Menu", "Too much fun here", "Fun?",
                 ["Make Fun", "Enjoy Fun", "Like Fun"],
@@ -135,11 +224,26 @@ class MenuView(arcade.View):
             )
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager lors de la sortie de vue.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         # Disable the UIManager when the view is hidden.
         self.manager.disable()
 
     def on_show_view(self):
-        """ This is run once when we switch to this view """
+        """
+        Description:
+            Active la vue de menu.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
 
         # Makes the background darker
         arcade.set_background_color([rgb - 50 for rgb in arcade.color.DARK_BLUE_GRAY])
@@ -148,7 +252,14 @@ class MenuView(arcade.View):
         self.manager.enable()
 
     def on_draw(self):
-        """ Render the screen. """
+        """
+        Description:
+            Dessine la vue de menu.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         # Clear the screen
         self.clear()
         self.manager.draw()
@@ -157,6 +268,14 @@ class MenuView(arcade.View):
 
 
 def main():
+    """
+    Description:
+        Lance l'application de démonstration.
+    Entrées:
+        Aucune.
+    Sorties:
+        Aucune.
+    """
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=True)
     main_view = MainView()
     window.show_view(main_view)

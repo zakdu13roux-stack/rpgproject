@@ -1,3 +1,12 @@
+"""
+Description:
+    Accès et mise à jour des statistiques du joueur dans la base.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import mysql.connector
 import uuid
 import os
@@ -12,10 +21,12 @@ cursor = db.cursor()
 
 def get_computer_uuid(curseur):
     """
-    Donne l'UUID déjà enregistré si il y en à déjà un et sinon en créer un jusqu'à qu'il n'y en ai pas d'identique dans la base de données.
-
-    Entrée:
-        curseur: La base de données visée
+    Description:
+        Récupère ou génère l'UUID unique de la machine.
+    Entrées:
+        curseur: curseur de la base de données.
+    Sorties:
+        str: UUID du joueur.
     """
     UUID_FILE = "game_uuid.txt"
     if os.path.exists(UUID_FILE):
@@ -36,11 +47,13 @@ uuid = get_computer_uuid(cursor)
 
 def OG(curseur,id):
     """
-    Vérifier si l'utilisateur à déjà joué, sinon lancer l'enregistrement.
-
-    Entrée:
-        curseur: La base de données visée
-        id: L'UUID enregistrée plus tôt
+    Description:
+        Vérifie l'existence du joueur et l'enregistre si besoin.
+    Entrées:
+        curseur: curseur de la base de données.
+        id: UUID du joueur.
+    Sorties:
+        Aucune.
     """
     curseur.execute(f"Select PlayerID From players Where PlayerID = '{id}'")
     if curseur.fetchall() == []:
@@ -51,11 +64,13 @@ def OG(curseur,id):
 
 def SignIn(curseur, id):
     """
-    S'enregistrer dans la base de données en choisissant un nom et un mot de passe.
-
-    Entrée:
-        curseur: La base de données visée
-        id: L'UUID enregistrée plus tôt
+    Description:
+        Enregistre un nouveau joueur dans la base.
+    Entrées:
+        curseur: curseur de la base de données.
+        id: UUID du joueur.
+    Sorties:
+        Aucune.
     """
     Nom = str()
     MDP = str()
@@ -68,78 +83,138 @@ def SignIn(curseur, id):
 
 def GetLife():
     """
-    Donne la vie du joueur.
+    Description:
+        Donne la vie actuelle du joueur.
+    Entrées:
+        Aucune.
+    Sorties:
+        int: points de vie.
     """
     cursor.execute(f"Select Vie From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def AddLife(vie):
     """
-    actualise la vie du joueur.
+    Description:
+        Ajoute de la vie au joueur en base.
+    Entrées:
+        vie: quantité de vie à ajouter.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set Vie = Vie+{vie} Where PlayerID = '{uuid}'")
     db.commit()
 
 def GetAtk():
     """
-    Donne l'attaque du joueur.
+    Description:
+        Donne l'attaque de base du joueur.
+    Entrées:
+        Aucune.
+    Sorties:
+        int: valeur d'attaque.
     """
     cursor.execute(f"Select AtkDeBase From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def AddAtk(dg):
     """
-    actualise l'attaque du joueur.
+    Description:
+        Ajoute de l'attaque au joueur en base.
+    Entrées:
+        dg: quantité d'attaque à ajouter.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set AtkDeBase = AtkDeBase+{dg} Where PlayerID = '{uuid}'")
     db.commit()
 
 def GetReducDegat():
     """
-    Donne la réduction des dégâts du joueur.
+    Description:
+        Donne la réduction de dégâts du joueur.
+    Entrées:
+        Aucune.
+    Sorties:
+        int: réduction de dégâts.
     """
     cursor.execute(f"Select ReducDegat From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def AddReducDegat(dg):
     """
-    actualise la réduction des dégâts du joueur.
+    Description:
+        Ajoute une réduction de dégâts en base.
+    Entrées:
+        dg: quantité de réduction.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set ReducDegat = ReducDegat+{dg} Where PlayerID = '{uuid}'")
     db.commit()
 
 def GetArgent():
     """
-    Donne l'argent du joueur.
+    Description:
+        Donne l'argent du joueur.
+    Entrées:
+        Aucune.
+    Sorties:
+        int: argent du joueur.
     """
     cursor.execute(f"Select Argent From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def AddArgent(arg):
     """
-    actualise l'argent du joueur.
+    Description:
+        Ajoute de l'argent au joueur en base.
+    Entrées:
+        arg: quantité d'argent.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set Argent = Argent+{arg} Where PlayerID = '{uuid}'")
     db.commit()
 
 def GetName():
     """
-    Donne le nom du joueur.
+    Description:
+        Donne le nom du joueur.
+    Entrées:
+        Aucune.
+    Sorties:
+        str: nom du joueur.
     """
     cursor.execute(f"Select Name From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def ChangeName(name):
     """
-    actualise le nom du joueur.
+    Description:
+        Met à jour le nom du joueur en base.
+    Entrées:
+        name: nouveau nom.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set Nom = {name} Where PlayerID = '{uuid}'")
     db.commit()
 
 def GetVolume():
     """
-    Donne le nom du joueur.
+    Description:
+        Donne le volume enregistré.
+    Entrées:
+        Aucune.
+    Sorties:
+        float: volume.
     """
     cursor.execute(f"Select Volume From players Where PlayerID = '{uuid}'")
     return cursor.fetchall()[0][0]
 def ChangeVolume(vol):
     """
-    actualise le nom du joueur.
+    Description:
+        Met à jour le volume en base.
+    Entrées:
+        vol: nouveau volume.
+    Sorties:
+        Aucune.
     """
     cursor.execute(f"Update players Set Volume = {vol} Where PlayerID = '{uuid}'")
     db.commit()

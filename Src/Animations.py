@@ -1,3 +1,12 @@
+"""
+Description:
+    Gère les animations d'attaque et l'exécution des armes.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import Weapons
 import os
@@ -11,6 +20,14 @@ arme = None
 
 
 def UseWeapon():
+    """
+    Description:
+        Exécute l'attaque correspondant à l'arme sélectionnée.
+    Entrées:
+        Aucune.
+    Sorties:
+        Aucune.
+    """
     if isPlayer == True:
         print(arme)
         if arme == 1:#Branche
@@ -40,6 +57,17 @@ def UseWeapon():
             Weapons.toile("player",Target[0],userStats[3])
 
 def Attaquer(user,target,weapon,num=0):
+    """
+    Description:
+        Initialise l'attaque et planifie l'animation.
+    Entrées:
+        user: données du lanceur d'attaque.
+        target: cible de l'attaque.
+        weapon: arme utilisée.
+        num: index de la cible.
+    Sorties:
+        Aucune.
+    """
     global isPlayer
     isPlayer = user[2]
     global sprite_ref
@@ -59,6 +87,14 @@ def Attaquer(user,target,weapon,num=0):
 
 
 def Move1(delta_time):
+    """
+    Description:
+        Première phase d'animation d'attaque.
+    Entrées:
+        delta_time: pas de temps.
+    Sorties:
+        Aucune.
+    """
     if isPlayer == True:
         scream=arcade.load_sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "Scream.wav"))
         sprite_ref.strafe(100)
@@ -72,6 +108,14 @@ def Move1(delta_time):
     arcade.schedule(Move2, .125)
 
 def Move2(delta_time):
+    """
+    Description:
+        Deuxième phase d'animation d'attaque.
+    Entrées:
+        delta_time: pas de temps.
+    Sorties:
+        Aucune.
+    """
     arcade.unschedule(Move2)
     if isPlayer == True:
         sprite_ref.strafe(-100)

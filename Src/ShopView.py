@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue boutique pour acheter des améliorations et revenir au spawn.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import arcade.gui
 from Spawn import Spawn
@@ -5,6 +14,14 @@ from PlayerStats import *
 
 class ShopView(arcade.View):
     def __init__(self):
+        """
+        Description:
+            Initialise la boutique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
 
@@ -44,6 +61,14 @@ class ShopView(arcade.View):
 
         @self.buy_button.event("on_click")
         def on_click_buy_buttun(event):
+            """
+            Description:
+                Achète l'amélioration si possible.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             self.buy_button.text = str(self.prix_vie)
             if self.prix_vie<=GetArgent():
                 AddLife(50)
@@ -53,14 +78,38 @@ class ShopView(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Retourne au spawn.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             spawn_view = Spawn()
             self.window.show_view(spawn_view)
 
     def on_update(self,delta_time):
+        """
+        Description:
+            Met à jour la boutique.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         pass
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la boutique et le portefeuille.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.manager.draw()
@@ -68,10 +117,26 @@ class ShopView(arcade.View):
         arcade.draw_text("Portefeuille : " + str(GetArgent()),70,570, arcade.csscolor.BLACK,17)
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de boutique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.GREEN)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
 # Main application setup

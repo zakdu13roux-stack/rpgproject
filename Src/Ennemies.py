@@ -1,3 +1,12 @@
+"""
+Description:
+    Définition des ennemis et génération aléatoire selon la difficulté.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 from random import randint, random, choice
 from PlayerStats import GetLife, GetAtk
 from EnnemiesStats import GetDamageDealers, GetTanks, GetSupports, GetBoss
@@ -10,6 +19,15 @@ class Ennemi():
         - Des effets aléatoires qu'ils sont capables d'infliger au joueur.
     """
     def __init__(self,difficulte=1, boss=False):
+        """
+        Description:
+            Initialise un ennemi selon la difficulté et le mode boss.
+        Entrées:
+            difficulte: niveau de difficulté.
+            boss: indique si l'ennemi est un boss.
+        Sorties:
+            Aucune.
+        """
         self.boss = boss
         self.difficulte=difficulte
         self.ennemi_aléatoire()
@@ -17,13 +35,12 @@ class Ennemi():
 
     def ennemi_aléatoire(self):
         """
-        Choisis un type aléatoire parmis les 3 existants :
-            - Tank
-            - Damage Dealer
-            - Support
-
-        Sortie : - Les PV de l'ennemi (INT)
-                 - Les multiplicateur des dégats de l'ennemi
+        Description:
+            Sélectionne un type d'ennemi et calcule ses stats.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
         """
         if self.boss == False:
             lst_types = ['Tank', 'Damage Dealer','Support']
@@ -63,23 +80,47 @@ class Ennemi():
             self.Random_Boss()
 
     def Random_Damage_Dealer(self):
-        """Récupère un ennemi aléatoire de la catégorie "DamageDealer"
-         dans la table "enemies" de la base de données """
+        """
+        Description:
+            Récupère un ennemi aléatoire de type DamageDealer.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.perso = choice(GetDamageDealers())
 
     def Random_Tank(self):
-        """Récupère un ennemi aléatoire de la catégorie ""
-         dans la table "enemies" de la base de données """
+        """
+        Description:
+            Récupère un ennemi aléatoire de type Tank.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.perso = choice(GetTanks())
 
     def Random_Support(self):
-        """Récupère un ennemi aléatoire de la catégorie "Support"
-         dans la table "enemies" de la base de données """
+        """
+        Description:
+            Récupère un ennemi aléatoire de type Support.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.perso = choice(GetSupports())
 
     def Random_Boss(self):
-        """Récupère un ennemi aléatoire de la catégorie "Boss"
-         dans la table "enemies" de la base de données """
+        """
+        Description:
+            Récupère un ennemi aléatoire de type Boss.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.perso = choice(GetBoss())
 
 

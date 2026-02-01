@@ -1,3 +1,12 @@
+"""
+Description:
+    Menu principal du jeu avec options et réglage du volume.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import arcade.gui
 from PlayerStats import*
@@ -5,6 +14,14 @@ from Spawn import*
 
 class MenuView(arcade.View):
     def __init__(self):
+        """
+        Description:
+            Initialise le menu principal.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
 
@@ -59,11 +76,27 @@ class MenuView(arcade.View):
 
         @resume_button.event("on_click")
         def on_click_resume_button(event):
+            """
+            Description:
+                Retourne au spawn.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             spawn_view = Spawn()
             self.window.show_view(spawn_view)
 
         @options_button.event("on_click")
         def on_click_option_button(event):
+            """
+            Description:
+                Ouvre la vue des options.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             option_view = Options()
             self.window.show_view(option_view)
         """
@@ -73,20 +106,52 @@ class MenuView(arcade.View):
         """
 
     def on_draw(self):
+        """
+        Description:
+            Dessine le menu principal.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
         self.manager.draw()
         self.texts.draw()
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue du menu.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.GREEN)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
 class Options(arcade.View):
     def __init__(self):
+        """
+        Description:
+            Initialise la vue des options.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
 
@@ -102,6 +167,14 @@ class Options(arcade.View):
 
         @self.volume_button.event("on_click")
         def on_click_volume_button(event):
+            """
+            Description:
+                Ouvre la vue de volume.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             volume_vue = VolumeView()
             self.window.show_view(volume_vue)
 
@@ -117,25 +190,65 @@ class Options(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Retourne au menu principal.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             vue_menu = MenuView()
             self.window.show_view(vue_menu)
 
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la vue des options.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.manager.draw()
 
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue des options.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
 class VolumeView(arcade.View):
     def __init__(self):
+        """
+        Description:
+            Initialise la vue de réglage du volume.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
 
@@ -145,6 +258,14 @@ class VolumeView(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Retourne à la vue des options.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             vue_option = Options()
             self.window.show_view(vue_option)
 
@@ -171,21 +292,53 @@ class VolumeView(arcade.View):
 
         @self.v1_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Augmente le volume.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             if GetVolume() <1.0:
                 ChangeVolume(GetVolume()+0.1)
 
         @self.v2_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Diminue le volume.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             if GetVolume() >0.0:
                 ChangeVolume(GetVolume()-0.1)
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la vue de réglage du volume.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.manager.draw()
         arcade.draw_text("Volume Actuel : " + str(GetVolume()),200,300, arcade.csscolor.RED,17)
 
 
     def on_update(self,delta_time):
+        """
+        Description:
+            Met à jour la vue de volume.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         pass
 
 
@@ -193,10 +346,26 @@ class VolumeView(arcade.View):
 
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de volume.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
 

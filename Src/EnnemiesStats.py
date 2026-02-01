@@ -1,3 +1,12 @@
+"""
+Description:
+    Accès aux statistiques des ennemis via la base de données.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import mysql.connector
 
 db = mysql.connector.connect(
@@ -9,38 +18,60 @@ cursor = db.cursor()
 
 def GetDamageDealers():
     """
-    Donne tout les ennemies et leurs statistiques du type 'Damage Dealer'.
+    Description:
+        Donne les ennemis de type Damage Dealer.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From enemies Where Type = 'DamageDealer'")
     return cursor.fetchall()
 
 def GetTanks():
     """
-    Donne tout les ennemies et leurs statistiques du type 'Tank'.
+    Description:
+        Donne les ennemis de type Tank.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From enemies Where Type = 'Tank'")
     return cursor.fetchall()
 
 def GetSupports():
     """
-    Donne tout les ennemies et leurs statistiques du type 'Support'.
+    Description:
+        Donne les ennemis de type Support.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From enemies Where Type = 'Support'")
     return cursor.fetchall()
 
 def GetBoss():
     """
-    Donne tout les ennemies et leurs statistiques du type 'Damage Dealer'.
+    Description:
+        Donne les ennemis de type Boss.
+    Entrées:
+        Aucune.
+    Sorties:
+        list: lignes de la base de données.
     """
     cursor.execute("Select * From enemies Where Type = 'Boss'")
     return cursor.fetchall()
 
 def GetEnemyStats(enemy):
     """
-    Donne toutes les statistiques (nom, type, atout) de l'ennemie donné.
-
-    Entrée:
-        enemy: le nom de l'ennemie
+    Description:
+        Donne toutes les statistiques d'un ennemi.
+    Entrées:
+        enemy: nom de l'ennemi.
+    Sorties:
+        tuple: statistiques de l'ennemi.
     """
     cursor.execute(f"Select * From enemies Where Nom = '{enemy}'")
     return cursor.fetchall()[0]

@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de carte avec parcours de niveaux et transitions de scènes.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import os
 from random import randint
@@ -6,6 +15,16 @@ from PlayerInGame import player
 
 class Map(arcade.View):
     def __init__(self,player,cpt=1,cleared_lvls=0):
+        """
+        Description:
+            Initialise la carte de progression.
+        Entrées:
+            player: instance du joueur.
+            cpt: compteur de cartes.
+            cleared_lvls: niveaux déjà nettoyés.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
         self.player = player
@@ -183,6 +202,14 @@ class Map(arcade.View):
         self.camera = arcade.Camera2D()
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la carte et ses éléments.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
 
         # Dessiner les sprites
@@ -200,13 +227,37 @@ class Map(arcade.View):
 
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de la carte.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour la position du joueur.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         # Mettre à jour les sprites
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
@@ -214,6 +265,15 @@ class Map(arcade.View):
 
 
     def on_key_press(self, key, modifiers):
+        """
+        Description:
+            Gère les déplacements et l'entrée en niveau.
+        Entrées:
+            key: touche pressée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
             if key == arcade.key.D:  # Droite
                 self.player_sprite.strafe(200)

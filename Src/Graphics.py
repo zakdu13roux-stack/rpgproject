@@ -1,8 +1,25 @@
+"""
+Description:
+    Prototype de carte avec scrolling vertical et décor répétitif.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import os
 
 class MyGame(arcade.Window):
     def __init__(self):
+        """
+        Description:
+            Initialise la fenêtre et les éléments du prototype.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__(600, 600, "Main Fenêtre", False, False)
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
 
@@ -24,6 +41,14 @@ class MyGame(arcade.Window):
         self.camera = arcade.Camera2D()
 
     def on_draw(self):
+        """
+        Description:
+            Dessine le décor et le joueur.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
 
         # Définir la vue pour suivre le joueur
@@ -62,6 +87,14 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
     def center_camera_on_player(self):
+        """
+        Description:
+            Centre la caméra sur le joueur.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         screen_width = self.width
         screen_height = self.height
 
@@ -73,6 +106,14 @@ class MyGame(arcade.Window):
 
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour le joueur et la caméra.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         # Mettre à jour les sprites
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
@@ -80,6 +121,15 @@ class MyGame(arcade.Window):
         self.center_camera_on_player()
 
     def on_key_press(self, key, modifiers):
+        """
+        Description:
+            Gère le déplacement du joueur au clavier.
+        Entrées:
+            key: touche pressée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if key == arcade.key.Q:  # Gauche
             self.player_sprite.change_x = -self.player_speed
         elif key == arcade.key.D:  # Droite
@@ -90,6 +140,15 @@ class MyGame(arcade.Window):
             self.player_sprite.change_y = -self.player_speed
 
     def on_key_release(self, key, modifiers):
+        """
+        Description:
+            Arrête le déplacement au relâchement des touches.
+        Entrées:
+            key: touche relâchée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if key == arcade.key.Q or key == arcade.key.D:
             self.player_sprite.change_x = 0
         if key == arcade.key.Z or key == arcade.key.S:

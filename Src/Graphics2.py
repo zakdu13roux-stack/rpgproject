@@ -1,3 +1,12 @@
+"""
+Description:
+    Prototype de décor fixe avec herbe et trottoirs.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 
 window = arcade.Window(600,600,"Titre beau",False,False)
@@ -5,6 +14,14 @@ window = arcade.Window(600,600,"Titre beau",False,False)
 class GameView(arcade.View):
 
     def __init__(self):
+        """
+        Description:
+            Initialise la vue de décor statique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
 
         self.batch=arcade.shape_list.ShapeElementList()
@@ -27,6 +44,14 @@ class GameView(arcade.View):
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine le décor statique.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
 
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)

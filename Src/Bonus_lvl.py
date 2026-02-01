@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de niveau bonus avec statue, décor et retour à la carte.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import os
 import arcade.gui
@@ -8,6 +17,16 @@ from PlayerInGame import player
 
 class Bonus_lvl(arcade.View):
     def __init__(self,cpt,player,cleared_lvls):
+        """
+        Description:
+            Initialise la vue du niveau bonus.
+        Entrées:
+            cpt: compteur de cartes.
+            player: instance du joueur.
+            cleared_lvls: niveaux déjà nettoyés.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
         self.player = player
@@ -78,10 +97,26 @@ class Bonus_lvl(arcade.View):
 
         @return_button.event("on_click")
         def on_click_return_button(event):
+            """
+            Description:
+                Retourne à la carte.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             map_view = Map.Map(self.compteur,self.player, self.cleared_lvls)
             self.window.show_view(map_view)
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la scène du niveau bonus.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.decor_list.draw()
         self.statue_list.draw()
@@ -91,6 +126,14 @@ class Bonus_lvl(arcade.View):
 
 
     def on_update(self, delta_time):
+        """
+        Description:
+            Met à jour l'état de la scène et gère les collisions.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         # Mettre à jour les sprites
         self.player_list.update()
         self.player_sprite.center_x = max(0, min(self.player_sprite.center_x, self.width))
@@ -112,13 +155,38 @@ class Bonus_lvl(arcade.View):
 
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue et l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager lors de la sortie de la vue.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
     def on_key_press(self, key, modifiers):
+        """
+        Description:
+            Gère les déplacements du joueur au clavier.
+        Entrées:
+            key: touche pressée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         pas = arcade.load_sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "pas.wav"))
         if key == arcade.key.Q :# Gauche
             pas.play()
@@ -134,6 +202,15 @@ class Bonus_lvl(arcade.View):
             self.player_sprite.change_y = -self.player_speed
 
     def on_key_release(self, key, modifiers):
+        """
+        Description:
+            Arrête le déplacement lors du relâchement des touches.
+        Entrées:
+            key: touche relâchée.
+            modifiers: modificateurs.
+        Sorties:
+            Aucune.
+        """
         if key == arcade.key.Q or key == arcade.key.D:
             self.player_sprite.change_x = 0
         if key == arcade.key.Z or key == arcade.key.S:

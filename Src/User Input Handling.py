@@ -1,11 +1,38 @@
+"""
+Description:
+    Exemple simple de gestion des entrées clavier avec Arcade.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 
 
 def on_key_press(key, modifiers):
+    """
+    Description:
+        Affiche la touche pressée.
+    Entrées:
+        key: touche pressée.
+        modifiers: modificateurs.
+    Sorties:
+        Aucune.
+    """
     print(f"Key {key} was pressed")
 
 
 def on_key_release(key, modifiers):
+    """
+    Description:
+        Affiche la touche relâchée.
+    Entrées:
+        key: touche relâchée.
+        modifiers: modificateurs.
+    Sorties:
+        Aucune.
+    """
     print(f"Key {key} was released")
 
 

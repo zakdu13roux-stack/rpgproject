@@ -1,3 +1,12 @@
+"""
+Description:
+    Vue de récompense de statue avec choix vie ou pièces.
+Entrées:
+    Aucune.
+Sorties:
+    Aucune.
+"""
+
 import arcade
 import arcade.gui
 from Spawn import Spawn
@@ -6,6 +15,16 @@ from PlayerInGame import *
 
 class StatueView(arcade.View):
     def __init__(self,compteur_maps, player, cleared_lvls):
+        """
+        Description:
+            Initialise la vue de récompense de la statue.
+        Entrées:
+            compteur_maps: progression des cartes.
+            player: instance du joueur.
+            cleared_lvls: niveaux déjà nettoyés.
+        Sorties:
+            Aucune.
+        """
         super().__init__()
         self.manager = arcade.gui.UIManager()
         self.compteur_maps = compteur_maps
@@ -59,6 +78,14 @@ class StatueView(arcade.View):
 
         @self.life_button.event("on_click")
         def on_click_life_button(event):
+            """
+            Description:
+                Donne une récompense de vie et retourne à la carte.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             self.life_button.text = "Life"
             self.player.heal(self.stat_vie/4)
             from Map import Map
@@ -67,6 +94,14 @@ class StatueView(arcade.View):
 
         @self.coins_button.event("on_click")
         def on_click_coins_button(event):
+            """
+            Description:
+                Donne des pièces et retourne à la carte.
+            Entrées:
+                event: événement de clic.
+            Sorties:
+                Aucune.
+            """
             self.coins_button.text = "Coins"
             AddArgent(100 + self.compteur_maps*2)
             from Map import Map
@@ -74,10 +109,26 @@ class StatueView(arcade.View):
             self.window.show_view(Map_view)
 
     def on_update(self,delta_time):
+        """
+        Description:
+            Met à jour la vue de statue.
+        Entrées:
+            delta_time: pas de temps.
+        Sorties:
+            Aucune.
+        """
         pass
 
 
     def on_draw(self):
+        """
+        Description:
+            Dessine la vue de statue et les récompenses.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.clear()
         self.background_list.draw()
         arcade.set_background_color(arcade.csscolor.BLANCHED_ALMOND)
@@ -86,10 +137,26 @@ class StatueView(arcade.View):
         arcade.draw_text("Portefeuille : " + str(GetArgent()),70,550, arcade.csscolor.WHITE,17)
 
     def on_show_view(self):
+        """
+        Description:
+            Active la vue de statue.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         arcade.set_background_color(arcade.csscolor.GREEN)
         self.manager.enable()
 
     def on_hide_view(self):
+        """
+        Description:
+            Désactive l'UI manager.
+        Entrées:
+            Aucune.
+        Sorties:
+            Aucune.
+        """
         self.manager.disable()
 
 # Main application setup
