@@ -12,31 +12,32 @@ arme = None
 
 def UseWeapon():
     if isPlayer == True:
-        if arme == "branche":
+        print(arme)
+        if arme == 1:#Branche
             Weapons.branche(numero,Target,userStats.GetPlayerStats()[2])
-        elif arme == "H2F":
-            Weapons.H2F(numero,Target,userStats.GetPlayerStats()[2])
-        elif arme == "epeeRouille":
-            Weapons.epeeRouille(numero,Target,userStats.GetPlayerStats()[2])
-        elif arme == "banane":
+        elif arme == 2:#Banane
             Weapons.banane(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == 3:#Hache de Fer
+            Weapons.H2F(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == 4:#Epée rouillée
+            Weapons.epeeRouille(numero,Target,userStats.GetPlayerStats()[2])
+        elif arme == 5:#Lance
+            Weapons.lance(numero,Target,userStats.GetPlayerStats()[2])
         elif arme == "toile":
             Weapons.toile(numero,Target,userStats.GetPlayerStats()[2])
-        elif arme == "lance":
-            Weapons.lance(numero,Target,userStats.GetPlayerStats()[2])
     else:
-        if arme == "branche":
+        if arme == 1: #Branche
             Weapons.branche("player",Target[0],userStats[3])
-        elif arme == "H2F":
-            Weapons.H2F("player",Target[0],userStats[3])
-        elif arme == "epeeRouille":
-            Weapons.epeeRouille("player",Target[0],userStats[3])
-        elif arme == "banane":
+        elif arme == 2: #Banane
             Weapons.banane("player",Target[0],userStats[3])
+        elif arme == 3: #Hache de Fer
+            Weapons.H2F("player",Target[0],userStats[3])
+        elif arme == 4: #Epée rouillée
+            Weapons.epeeRouille("player",Target[0],userStats[3])
+        elif arme == 5: #Lance
+            Weapons.lance("player",Target[0],userStats[3])
         elif arme == "toile":
             Weapons.toile("player",Target[0],userStats[3])
-        elif arme == "lance":
-            Weapons.lance("player",Target[0],userStats[3])
 
 def Attaquer(user,target,weapon,num=0):
     global isPlayer

@@ -144,45 +144,38 @@ class FightScene(arcade.View):
         self.clicked=False
 
         # Forme du sac
-        self.SacStorage=[[0 for i in range(3)] for i in range(2)]
-        self.SacStorage[0][0]=2
-        self.SacStorage[1][1]=5
-        self.SacStorage[0][2]=2
+        self.SacStorage=self.plr[0].GetPlayerWeapons()
         for h in range(len(self.SacStorage)):
             for l in range(len(self.SacStorage[0])):
                 case=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "fond_sac.png"), scale=0.227)
                 case.center_x=300+100*l
                 case.center_y=100+100*h
+                case.pos=f"{h}{l}"
                 self.SacGraphique.append(case)
                 if self.SacStorage[h][l]==1:
                     BrancheImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "branche.png"), scale=0.5)
                     BrancheImage.center_x=297+100*l
                     BrancheImage.center_y=105+100*h
-                    BrancheImage.name="branche"
                     self.SacItems.append(BrancheImage)
                 elif self.SacStorage[h][l]==2:
                     BananeImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "banane.png"), scale=0.25)
                     BananeImage.center_x=300+100*l
                     BananeImage.center_y=100+100*h
-                    BananeImage.name="banane"
                     self.SacItems.append(BananeImage)
-                elif self.SacStorage[h][l]==3:
+                elif self.SacStorage[0][l]==3:
                     H2FImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "H2F.png"), scale=0.25)
                     H2FImage.center_x=300+100*l
                     H2FImage.center_y=150
-                    H2FImage.name="H2F"
                     self.SacItems.append(H2FImage)
                 elif self.SacStorage[h][l]==4:
                     EpeerouilleeImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "epee rouillee.png"), scale=0.2190)
                     EpeerouilleeImage.center_x=300+100*l
                     EpeerouilleeImage.center_y=100+100*h
-                    EpeerouilleeImage.name="epeeRouille"
                     self.SacItems.append(EpeerouilleeImage)    
                 elif self.SacStorage[h][l]==5:
                     LanceImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "lance.png"), scale=0.25)
                     LanceImage.center_x=300+100*l
                     LanceImage.center_y=100+100*h
-                    LanceImage.name="lance"
                     self.SacItems.append(LanceImage)    
 
 
@@ -255,7 +248,7 @@ class FightScene(arcade.View):
             self.SacItems.draw()
 
     def on_mouse_press(self, x, y, button, modifier):
-        if button == 1 and self.clicked==False:
+        if button == 1 and not self.clicked and not self.victory:
             if x > 410 and x < 600 and y > 410 and y < 600 and self.enemySelected != 0:
                 self.enemySelected = 0
                 self.Target.center_x = 500
@@ -269,14 +262,15 @@ class FightScene(arcade.View):
                 self.Target.center_x = 500 - 200 * 2
                 self.Target.scale=.7,.7
             
-            ItemClicked=arcade.get_sprites_at_point((x,y),self.SacItems)
+            ItemClicked=arcade.get_sprites_at_point((x,y),self.SacGraphique)
             if ItemClicked!=[]:
-                self.clicked=True
-                Animations.Attaquer(self.plr, self.AllEnemy, ItemClicked[0].name, self.enemySelected)
-                # self.plr,self.AllEnemy,"Branche",0 --> Attaque l'ennemie 0 avec la branche
-                # self.ennemies[0],self.plr,"Branche" --> Attaque le joueur avec l'ennemie 0 avec la branche
-                self.tour=1
-                arcade.schedule(self.SetUpTours, 1/60)
+                if self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] !=0:
+                    self.clicked=True
+                    Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
+                    # self.plr,self.AllEnemy,1,0 --> Attaque l'ennemie 0 avec la branche
+                    # self.ennemies[0],self.plr,1 --> Attaque le joueur avec l'ennemie 0 avec la branche
+                    self.tour=1
+                    arcade.schedule(self.SetUpTours, 1/60)
 
     def SetUpTours(self,delta_time):
         self.decalage = 0
@@ -297,7 +291,7 @@ class FightScene(arcade.View):
                 if self.Healths[self.tour-1+self.decalage]==0:
                     self.decalage+=1
             if self.Healths[self.tour-1+self.decalage]!=0:
-                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,"branche")
+                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,1)
             self.tour+=1
 
 if __name__ == "__main__":
