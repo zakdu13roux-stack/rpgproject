@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : jeu. 29 jan. 2026 à 15:15
+-- Généré le : lun. 02 fév. 2026 à 09:16
 -- Version du serveur : 10.4.28-MariaDB
 -- Version de PHP : 8.2.4
 
@@ -60,16 +60,17 @@ CREATE TABLE `players` (
   `Argent` int(11) NOT NULL DEFAULT 0,
   `Name` varchar(10) NOT NULL,
   `MDP` varchar(30) NOT NULL,
-  `Volume` float NOT NULL DEFAULT 0.2
+  `Volume` float NOT NULL DEFAULT 0.2,
+  `Weapons` varchar(24) NOT NULL DEFAULT '[[2, 0, 0], [1, 0, 0]]'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Déchargement des données de la table `players`
 --
 
-INSERT INTO `players` (`PlayerID`, `Vie`, `AtkDeBase`, `ReducDegat`, `Argent`, `Name`, `MDP`, `Volume`) VALUES
-('368b4e87-fd2c-4f06-aa56-a8ee6fa9a42f', 100, 1, 0, 0, 'Bernard', 'Patate10', 0.2),
-('7e176586-3829-4c65-8df8-528faeb87beb', 100, 1, 0, 200, 'Orneige', 'emojiSmegma', 1);
+INSERT INTO `players` (`PlayerID`, `Vie`, `AtkDeBase`, `ReducDegat`, `Argent`, `Name`, `MDP`, `Volume`, `Weapons`) VALUES
+('368b4e87-fd2c-4f06-aa56-a8ee6fa9a42f', 100, 1, 0, 0, 'Bernard', 'Patate10', 0.2, '[[2, 0, 0], [1, 0, 0]]'),
+('7e176586-3829-4c65-8df8-528faeb87beb', 100, 1, 0, 200, 'Orneige', 'emojiSmegma', 1, '[[2, 0, 0], [1, 0, 2]]');
 
 -- --------------------------------------------------------
 
