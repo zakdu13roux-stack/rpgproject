@@ -7,14 +7,14 @@ Sorties:
     Aucune.
 """
 
-from PlayerStats import GetLife, GetAtk, GetReducDegat, GetName
+from PlayerStats import GetLife, GetAtk, GetReducDegat, GetName, GetItems
 from copy import copy
 
 class player():
     """
     Créer le joueur et ses stats et donne la possibilité de changer ces stats.
     """
-    def __init__(self,sac=[[0 for i in range(3)] for i in range(2)]):
+    def __init__(self):
         """
         Description:
             Initialise le joueur et son inventaire.
@@ -29,7 +29,7 @@ class player():
         self.attaque = GetAtk()
         self.ReducDegat = GetReducDegat()
         self.Name = GetName()
-        self.sac=sac
+        self.sac=GetItems()
         if self.sac==[[0 for i in range(3)] for i in range(2)]:
             self.sac[1][0]=1
             self.sac[0][0]=2
@@ -71,7 +71,7 @@ class player():
             tuple: statistiques du joueur.
         """
         return self.maxVie,self.vie,self.attaque,self.ReducDegat
-    
+
     def GetPlayerWeapons(self):
         """
         Description:

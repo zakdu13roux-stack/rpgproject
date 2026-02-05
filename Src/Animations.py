@@ -29,11 +29,10 @@ def UseWeapon():
         Aucune.
     """
     if isPlayer == True:
-        print(arme)
         if arme == 1:#Branche
             Weapons.branche(numero,Target,userStats.GetPlayerStats()[2])
         elif arme == 2:#Banane
-            Weapons.banane(numero,Target,userStats.GetPlayerStats()[2])
+            Weapons.banane(numero,Target,userStats.GetPlayerStats()[2],userStats)
         elif arme == 3:#Hache de Fer
             Weapons.H2F(numero,Target,userStats.GetPlayerStats()[2])
         elif arme == 4:#Epée rouillée

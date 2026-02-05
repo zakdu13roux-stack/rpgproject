@@ -157,11 +157,14 @@ class FightScene(arcade.View):
         self.text_list = arcade.SpriteList()
         self.text_list.append(self.V)
 
-        # Cartable
+        self.sac_cree()
+
+
+
+    def sac_cree(self):
         self.SacGraphique=arcade.SpriteList()
         self.SacItems=arcade.SpriteList()
         self.clicked=False
-
         # Forme du sac
         self.SacStorage=self.plr[0].GetPlayerWeapons()
         for h in range(len(self.SacStorage)):
@@ -190,12 +193,12 @@ class FightScene(arcade.View):
                     EpeerouilleeImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "epee rouillee.png"), scale=0.2190)
                     EpeerouilleeImage.center_x=300+100*l
                     EpeerouilleeImage.center_y=100+100*h
-                    self.SacItems.append(EpeerouilleeImage)    
+                    self.SacItems.append(EpeerouilleeImage)
                 elif self.SacStorage[h][l]==5:
                     LanceImage=arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "lance.png"), scale=0.25)
                     LanceImage.center_x=300+100*l
                     LanceImage.center_y=100+100*h
-                    self.SacItems.append(LanceImage)    
+                    self.SacItems.append(LanceImage)
 
 
     def on_show_view(self):
@@ -323,9 +326,18 @@ class FightScene(arcade.View):
                 self.enemySelected = 2
                 self.Target.center_x = 500 - 200 * 2
                 self.Target.scale=.7,.7
-            
+
             ItemClicked=arcade.get_sprites_at_point((x,y),self.SacGraphique)
             if ItemClicked!=[]:
+                if self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] == 2:
+                    self.clicked=True
+                    Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
+                    self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] =0
+                    self.sac_cree()
+                    self.tour=1
+                    arcade.schedule(self.SetUpTours, 1/60)
+
+
                 if self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] !=0:
                     self.clicked=True
                     Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)

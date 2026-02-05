@@ -28,23 +28,10 @@ class Bonus_lvl(arcade.View):
             Aucune.
         """
         super().__init__()
-        self.manager = arcade.gui.UIManager()
         self.player = player
 
         self.compteur = cpt
         self.cleared_lvls = cleared_lvls
-
-        self.grille = arcade.gui.UIGridLayout(columns=1,vertical_spacing=0,horizontal_spacing=0)
-
-        return_button = arcade.gui.UIFlatButton(text="Return",width=100,height=50)
-        return_button.center_x=0
-        return_button.center_y=0
-
-        self.grille.add(return_button,0,0)
-
-        anchor = self.manager.add(arcade.gui.UIAnchorLayout())
-        anchor.add(child=self.grille, anchor_x="left", anchor_y="bottom")
-
 
         self.text_list = arcade.SpriteList()
 
@@ -95,18 +82,6 @@ class Bonus_lvl(arcade.View):
 
 
 
-        @return_button.event("on_click")
-        def on_click_return_button(event):
-            """
-            Description:
-                Retourne à la carte.
-            Entrées:
-                event: événement de clic.
-            Sorties:
-                Aucune.
-            """
-            map_view = Map.Map(self.compteur,self.player, self.cleared_lvls)
-            self.window.show_view(map_view)
 
     def on_draw(self):
         """
@@ -122,7 +97,6 @@ class Bonus_lvl(arcade.View):
         self.statue_list.draw()
         self.player_list.draw()
         self.text_list.draw()
-        self.manager.draw()
 
 
     def on_update(self, delta_time):
@@ -164,18 +138,7 @@ class Bonus_lvl(arcade.View):
             Aucune.
         """
         arcade.set_background_color(arcade.csscolor.DARK_SLATE_GRAY)
-        self.manager.enable()
 
-    def on_hide_view(self):
-        """
-        Description:
-            Désactive l'UI manager lors de la sortie de la vue.
-        Entrées:
-            Aucune.
-        Sorties:
-            Aucune.
-        """
-        self.manager.disable()
 
     def on_key_press(self, key, modifiers):
         """

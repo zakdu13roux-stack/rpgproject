@@ -10,6 +10,7 @@ Sorties:
 import mysql.connector
 import uuid
 import os
+import ast
 
 db = mysql.connector.connect(
   host="localhost",
@@ -219,7 +220,45 @@ def ChangeVolume(vol):
     cursor.execute(f"Update players Set Volume = {vol} Where PlayerID = '{uuid}'")
     db.commit()
 
+def GetItems():
+    """
+    Description:
+        Donne les armes enregistrées.
+    Entrées:
+        Aucune.
+    Sorties:
+        List: Armes.
+    """
+    cursor.execute(f"Select Weapons From players Where PlayerID = '{uuid}'")
+    return ast.literal_eval(cursor.fetchall()[0][0])
+
+def GiveItem(item,x,y):
+    """
+    Description:
+        Met à jour les armes.
+    Entrées:
+        item: l'objet donné.
+        x: la coordonnée x
+        y: la coordonnée y
+    Sorties:
+        Aucune.
+    """
+    itms=GetItems()
+    if item==0:
+        if itms[y][x]==3:
+            itms[0][x],itms[1][x] = 0,0
+        else:
+            itms[y][x]=0
+    elif item==3:
+        itms[0][x],itms[1][x] = 3,3
+    elif itms[y][x]==0:
+        itms[y][x]=item
+    if itms!=GetItems():
+        cursor.execute(f"Update players Set Weapons = '{itms}' Where PlayerID = '{uuid}'")
+        db.commit()
+
 
 if __name__ == '__main__':
-    ChangeVolume(1)
-    print(GetVolume())
+    print(GetItems())
+    GiveItem(2,2,1)
+    print(GetItems())

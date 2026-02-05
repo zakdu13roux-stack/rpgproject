@@ -60,7 +60,7 @@ def epeeRouille(tipe,target,mul):
     else:
         target.dealDamage(tipe,17*mul)
 
-def banane(tipe,target,mul):
+def banane(tipe,target,mul,plr=None):
     """
     Description:
         Applique les dégâts de la banane.
@@ -72,9 +72,13 @@ def banane(tipe,target,mul):
         Aucune.
     """
     if tipe == "player":
-        target.takeDamage(15*mul)
+        target.takeDamage(7*mul)
+        target.Heal(tipe,7)
     else:
-        target.dealDamage(tipe,15*mul)
+        target.dealDamage(tipe,7*mul)
+        plr.heal(10)
+
+
 
 def toile(tipe,target,mul):
     """
