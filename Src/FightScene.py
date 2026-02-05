@@ -91,6 +91,8 @@ class FightScene(arcade.View):
         self.ViePlayer.append(self.bordureViePlayer)
         self.ViePlayer.append(self.BarreViePlayer)
 
+        self.joueurLife = arcade.Text(f"{int(self.plr[0].vie)}/{self.plr[0].maxVie}",(self.bordureViePlayer.center_x+40)//2,12, arcade.csscolor.RED, 15)
+
         self.tour=0
 
         self.ennemies = {}
@@ -248,7 +250,7 @@ class FightScene(arcade.View):
                 from Map import Map
                 self.window.show_view(Map(self.plr[0],self.compteur_maps,self.Cleared_Levels))
 
-        if self.plr[0].vie == 0:
+        if int(self.plr[0].vie) == 0:
             self.victory_timer += delta_time
             if self.victory_timer >= 1:
                 from Spawn import Spawn
@@ -278,11 +280,12 @@ class FightScene(arcade.View):
         self.trucs_tt_devant_list.draw()
         self.batch.draw()
         self.listeSprite.draw()
-
+        vieEnnemies=[]
         for i in range(self.nbEnemies):
             if self.ennemies[i][0][2] > 0:
                 self.healthBars[i].texture = arcade.make_soft_square_texture(20, arcade.csscolor.RED, outer_alpha=255)
                 self.healthBars[i].width = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
+                vieEnnemies.append(arcade.Text(f"{int(self.ennemies[i][0][2])}/{self.ennemies[i][0][1]}",467-200*i,392, arcade.csscolor.GREEN, 15))
             elif self.healthBars[i].alpha != 0:
                 self.healthBars[i].alpha = 0
                 self.ennemies[i][1].alpha = 0
@@ -294,10 +297,14 @@ class FightScene(arcade.View):
         self.BarreViePlayer.width = self.plr[0].GetPlayerStats()[1]*100/self.plr[0].GetPlayerStats()[0]
         self.ViePlayer.draw()
         self.healthBars.draw()
+        for vie in vieEnnemies:
+            vie.draw()
+        self.joueurLife.text = f"{int(self.plr[0].vie)}/{self.plr[0].maxVie}"
+        self.joueurLife.draw()
 
         if self.victory:
             self.text_list.draw()
-        elif self.tour == 0:
+        elif self.tour == 0 and self.plr[0].vie != 0:
             self.SacGraphique.draw()
             self.SacItems.draw()
 

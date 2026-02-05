@@ -295,7 +295,7 @@ class Map(arcade.View):
         elif self.player_sprite.center_x == 500 and self.player_sprite.center_y > 100:
             if key == arcade.key.Q:  # Gauche
                 self.player_sprite.strafe(-200)
-        if key == arcade.key.ENTER: # Lancer un combat
+        if key == arcade.key.ENTER or key == arcade.key.SPACE: # Lancer un combat
             if self.player_sprite.center_x == 100 and self.player_sprite.center_y == 500:
                 pass
             elif self.player_sprite.center_x == 300 and self.player_sprite.center_y == 500 and self.cleared_lvls==0:
