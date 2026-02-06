@@ -52,6 +52,13 @@ class Spawn(arcade.View):
         self.portal_list = arcade.SpriteList()
         self.portal_list.append(self.portal_sprite)
 
+        # Sprite Gear
+        self.gear= arcade.Sprite(os.path.join(os.path.dirname(__file__), "..", "Images", "gear.png"), scale=0.167)
+        self.gear.center_x = 565
+        self.gear.center_y = 570
+        self.gear_list = arcade.SpriteList()
+        self.gear_list.append(self.gear)
+
         # Limite de la map
         self.map_width = 1200
         self.map_height = 1200
@@ -104,7 +111,7 @@ class Spawn(arcade.View):
         self.manager = arcade.gui.UIManager()
 
         # Bouton Menu
-        self.spawn_button = arcade.gui.UIFlatButton(x=450, y=0, text="Menu", width=100)
+        self.spawn_button = arcade.gui.UIFlatButton(x=450, y=0, text="", width=70, height=65)
         @self.spawn_button.event("on_click")
         def on_click_resume_button(event):
             """
@@ -181,6 +188,7 @@ class Spawn(arcade.View):
         self.player_list.draw()
         self.deco_list.draw()
         self.manager.draw()
+        self.gear_list.draw()
 
 
     def center_camera_on_player(self):

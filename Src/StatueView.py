@@ -103,7 +103,7 @@ class StatueView(arcade.View):
                 Aucune.
             """
             self.coins_button.text = "Coins"
-            AddArgent(100 + self.compteur_maps*2)
+            AddArgent(100 + self.compteur_maps*5)
             from Map import Map
             Map_view = Map(self.player, self.compteur_maps, self.cleared_lvls)
             self.window.show_view(Map_view)

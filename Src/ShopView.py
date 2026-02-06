@@ -261,13 +261,12 @@ class WeaponShop(arcade.View):
                 Aucune.
             """
             self.buy_branche_button.text = "Stick (free)"
-            if GetArgent() > 0:
-                item = GetItems()
-                for x in range(3):
-                    for y in range(2):
-                        if item[y][x] == 0:
-                            GiveItem(1,x,y)
-                            return
+            item = GetItems()
+            for x in range(3):
+                for y in range(2):
+                    if item[y][x] == 0:
+                        GiveItem(1,x,y)
+                        return
 
 
         @self.buy_banana_button.event("on_click")
