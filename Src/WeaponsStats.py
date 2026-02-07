@@ -67,6 +67,6 @@ def GetLegendaireWeapons():
 
 if __name__ == '__main__':
     print(GetWeapons())
-    print(GetPourieWeapons())
+    print(GetPourrieWeapons())
     print(GetOkWeapons())
     print(GetLegendaireWeapons())
