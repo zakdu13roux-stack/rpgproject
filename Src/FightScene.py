@@ -93,7 +93,7 @@ class FightScene(arcade.View):
 
         self.joueurLife = arcade.Text(f"{int(self.plr[0].vie)}/{self.plr[0].maxVie}",(self.bordureViePlayer.center_x+40)//2,12, arcade.csscolor.RED, 15)
 
-        self.tour=0
+        self.tour=-1
 
         self.ennemies = {}
         if self.compteur_maps < 6:
@@ -304,7 +304,7 @@ class FightScene(arcade.View):
 
         if self.victory:
             self.text_list.draw()
-        elif self.tour == 0 and self.plr[0].vie != 0:
+        elif (self.tour == 0 or self.tour == -1) and self.plr[0].vie != 0:
             self.SacGraphique.draw()
             self.SacItems.draw()
 
@@ -341,8 +341,11 @@ class FightScene(arcade.View):
                     Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
                     self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] =0
                     self.sac_cree()
-                    self.tour=1
-                    arcade.schedule(self.SetUpTours, 1/60)
+                    self.tour+=1
+                    if self.tour >= 1:
+                        arcade.schedule(self.SetUpTours, 1/60)
+                    else:
+                        self.clicked=False
 
 
                 if self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] !=0:
@@ -350,8 +353,11 @@ class FightScene(arcade.View):
                     Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
                     # self.plr,self.AllEnemy,1,0 --> Attaque l'ennemie 0 avec la branche
                     # self.ennemies[0],self.plr,1 --> Attaque le joueur avec l'ennemie 0 avec la branche
-                    self.tour=1
-                    arcade.schedule(self.SetUpTours, 1/60)
+                    self.tour+=1
+                    if self.tour >= 1:
+                        arcade.schedule(self.SetUpTours, 1/60)
+                    else:
+                        self.clicked=False
 
     def SetUpTours(self,delta_time):
         """
@@ -381,7 +387,7 @@ class FightScene(arcade.View):
                 self.EnnemieEnVie+=1
         if self.tour>self.EnnemieEnVie:
             arcade.unschedule(self.enemyTour)
-            self.tour = 0
+            self.tour = -1
             self.clicked=False
         else:
             for i in range(self.nbEnemies):
@@ -393,6 +399,6 @@ class FightScene(arcade.View):
 
 if __name__ == "__main__":
     window = arcade.Window(600, 600, "FightScene")
-    FightScene_view = FightScene(1,player(),1)
+    FightScene_view = FightScene(8,player(),1)
     window.show_view(FightScene_view)
     arcade.run()
