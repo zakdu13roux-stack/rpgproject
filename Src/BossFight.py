@@ -90,7 +90,7 @@ class BossFight(arcade.View):
         self.ViePlayer.append(self.bordureViePlayer)
         self.ViePlayer.append(self.BarreViePlayer)
 
-        self.tour=0
+        self.tour=-1
 
         self.ennemies = {}
         self.nbEnemies = 1
@@ -99,6 +99,9 @@ class BossFight(arcade.View):
         self.healthBars = arcade.SpriteList()
         self.Healths = []
         self.bordureVie=[]
+        
+        self.joueurLife = arcade.Text(f"{int(self.plr[0].vie)}/{self.plr[0].maxVie}",(self.bordureViePlayer.center_x+40)//2,12, arcade.csscolor.RED, 15)
+
 
         self.fight_music = arcade.Sound(os.path.join(os.path.dirname(__file__), "..", "Sounds", "musicfight.mp3"), False)
         self.sonjoue = self.fight_music.play(volume=0.2)
@@ -264,14 +267,14 @@ class BossFight(arcade.View):
         """
         self.clear()
         self.trucs_tt_devant_list.draw()
-        self.batch.draw()
         self.listeSprite.draw()
-
-
+        self.batch.draw()
+        vieEnnemies=None
         for i in range(self.nbEnemies):
             if self.ennemies[i][0][2] > 0:
                 self.healthBars[i].texture = arcade.make_soft_square_texture(20, arcade.csscolor.RED, outer_alpha=255)
                 self.healthBars[i].width = int((self.ennemies[i][0][2]*100)/self.ennemies[i][0][1])
+                vieEnnemies=arcade.Text(f"{int(self.ennemies[i][0][2])}/{self.ennemies[i][0][1]}",267,392, arcade.csscolor.GREEN, 15)
             elif self.healthBars[i].alpha != 0:
                 self.healthBars[i].alpha = 0
                 self.ennemies[i][1].alpha = 0
@@ -285,10 +288,14 @@ class BossFight(arcade.View):
         self.bordureViePlayer.width = 104
         self.ViePlayer.draw()
         self.healthBars.draw()
+        if vieEnnemies is not None:
+            vieEnnemies.draw()
+        self.joueurLife.text = f"{int(self.plr[0].vie)}/{self.plr[0].maxVie}"
+        self.joueurLife.draw()
 
         if self.victory:
             self.text_list.draw()
-        elif self.tour == 0:
+        elif (self.tour == 0 or self.tour == -1) and self.plr[0].vie != 0:
             self.SacGraphique.draw()
             self.SacItems.draw()
 
@@ -312,8 +319,11 @@ class BossFight(arcade.View):
                     Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
                     self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] =0
                     self.sac_cree()
-                    self.tour=1
-                    arcade.schedule(self.SetUpTours, 1/60)
+                    self.tour+=1
+                    if self.tour >= 1:
+                        arcade.schedule(self.SetUpTours, 1/60)
+                    else:
+                        self.clicked=False
 
 
                 if self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])] !=0:
@@ -321,8 +331,11 @@ class BossFight(arcade.View):
                     Animations.Attaquer(self.plr, self.AllEnemy, self.SacStorage[int(ItemClicked[0].pos[0])][int(ItemClicked[0].pos[1])], self.enemySelected)
                     # self.plr,self.AllEnemy,1,0 --> Attaque l'ennemie 0 avec la branche
                     # self.ennemies[0],self.plr,1 --> Attaque le joueur avec l'ennemie 0 avec la branche
-                    self.tour=1
-                    arcade.schedule(self.SetUpTours, 1/60)
+                    self.tour+=1
+                    if self.tour >= 1:
+                        arcade.schedule(self.SetUpTours, 1/60)
+                    else:
+                        self.clicked=False
 
 
     def SetUpTours(self,delta_time):
@@ -353,7 +366,7 @@ class BossFight(arcade.View):
                 self.EnnemieEnVie+=1
         if self.tour>self.EnnemieEnVie:
             arcade.unschedule(self.enemyTour)
-            self.tour = 0
+            self.tour = -1
             self.clicked=False
 
         else:
@@ -361,7 +374,7 @@ class BossFight(arcade.View):
                 if self.Healths[self.tour-1+self.decalage]==0:
                     self.decalage+=1
             if self.Healths[self.tour-1+self.decalage]!=0:
-                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,"Branche")
+                Animations.Attaquer(self.ennemies[self.tour-1+self.decalage],self.plr,5)
             self.tour+=1
 
 
