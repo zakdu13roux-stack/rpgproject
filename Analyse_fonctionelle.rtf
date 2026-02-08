@@ -1,0 +1,679 @@
+{\rtf1\fbidis\ansi\ansicpg1252\deff0\nouicompat\deflang1036{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset1 Segoe UI Symbol;}{\f2\fnil Calibri;}{\f3\fnil\fcharset1 Segoe UI Emoji;}{\f4\fnil\fcharset1 Segoe UI Symbol;}{\f5\fnil\fcharset1 Cambria Math;}}
+{\*\generator Riched20 10.0.19041}{\*\mmathPr\mmathFont5\mwrapIndent1440 }\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang12 # Analyse Fonctionnelle des Fichiers du Dossier Src\par
+\par
+**Projet :** RPG Project (Jeu de R\'f4le)  \par
+**Date :** F\'e9vrier 2026  \par
+**Structure :** Jeu bas\'e9 sur la librairie Arcade (Python)\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9013?\f2  \f0 Table des mati\'e8res\par
+\par
+1. [Fichiers de Gestion de Donn\'e9es](#gestion-de-donn\'e9es)\par
+2. [Fichiers de Joueur](#fichiers-de-joueur)\par
+3. [Fichiers d'Ennemis](#fichiers-dennemis)\par
+4. [Fichiers de Syst\'e8me de Combat](#syst\'e8me-de-combat)\par
+5. [Fichiers de Vues (UI)](#fichiers-de-vues-ui)\par
+6. [Fichiers d'Animations et Utilitaires](#animations-et-utilitaires)\par
+7. [Dossier DB - Base de Donn\'e9es](#dossier-db---base-de-donn\'e9es)\par
+8. [Structure G\'e9n\'e9rale du Jeu](#structure-g\'e9n\'e9rale)\par
+\par
+---\par
+\par
+## \f3\u-10179?\u-8764?\u-497?\f2  \f0 Gestion de Donn\'e9es\par
+\par
+### **PlayerStats.py**\par
+**Objectif :** Acc\'e8s et gestion des statistiques du joueur dans la base de donn\'e9es MySQL\par
+\par
+**Fonctionnalit\'e9s principales :**\par
+- Connexion \'e0 la base de donn\'e9es "testosterone"\par
+- G\'e9n\'e9ration et gestion de l'UUID unique de la machine (stock\'e9 dans `game_uuid.txt`)\par
+- Enregistrement automatique d'un nouveau joueur ou validation de l'existence\par
+- **Fonctions principales :**\par
+  - `get_computer_uuid()` : R\'e9cup\'e8re ou g\'e9n\'e8re l'UUID du joueur\par
+  - `OG()` : V\'e9rifie l'existence du joueur\par
+  - `SignIn()` : Enregistre un nouveau joueur avec nom et mot de passe\par
+  - `GetLife()` : R\'e9cup\'e8re les points de vie actuels\par
+  - `GetAtk()` : Obtient la valeur d'attaque\par
+  - `GetReducDegat()` : R\'e9cup\'e8re la r\'e9duction de d\'e9g\'e2ts\par
+  - `GetName()` : R\'e9cup\'e8re le nom du joueur\par
+  - `GetItems()` : R\'e9cup\'e8re l'inventaire du joueur\par
+  - `GetArgent()` : Obtient l'argent du joueur\par
+  - Fonctions d'ajout : `AddLife()`, `AddArgent()`, etc.\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit (utilis\'e9 par tous les modules)\par
+\par
+---\par
+\par
+### **WeaponsStats.py**\par
+**Objectif :** Acc\'e8s aux statistiques des armes depuis la base de donn\'e9es\par
+\par
+**Fonctionnalit\'e9s principales :**\par
+- R\'e9cup\'e9ration des armes par raret\'e9\par
+- Requ\'eates SQL pour filtrer les armes\par
+\par
+**Fonctions principales :**\par
+- `GetWeapons()` : Toutes les armes\par
+- `GetPourrieWeapons()` : Armes de raret\'e9 "Pourrie"\par
+- `GetOkWeapons()` : Armes de raret\'e9 "Ok"\par
+- `GetLegendaireWeapons()` : Armes de raret\'e9 "L\'e9gendaire"\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **EnnemiesStats.py**\par
+**Objectif :** Acc\'e8s aux statistiques des ennemis par type\par
+\par
+**Fonctionnalit\'e9s principales :**\par
+- R\'e9cup\'e9ration des ennemis filtr\'e9s par classe\par
+- Requ\'eates SQL cat\'e9goris\'e9es\par
+\par
+**Fonctions principales :**\par
+- `GetDamageDealers()` : Ennemis DamageDealer\par
+- `GetTanks()` : Ennemis Tank (d\'e9fenseurs)\par
+- `GetSupports()` : Ennemis Support (gu\'e9risseurs)\par
+- `GetBoss()` : Ennemis Boss\par
+- `GetEnemyStats()` : Statistiques d'un ennemi sp\'e9cifique\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-9116?\f2  \f0 Fichiers de Joueur\par
+\par
+### **PlayerInGame.py**\par
+**Objectif :** Repr\'e9sentation et gestion du joueur pendant le jeu\par
+\par
+**Classe :** `player`\par
+\par
+**Attributs :**\par
+- `maxVie` : Points de vie maximum\par
+- `vie` : Points de vie actuels\par
+- `attaque` : Valeur d'attaque\par
+- `ReducDegat` : R\'e9duction de d\'e9g\'e2ts\par
+- `Name` : Nom du joueur\par
+- `sac` : Inventaire (matrice 2x3)\par
+\par
+**M\'e9thodes principales :**\par
+- `takeDamage(dmg)` : Applique des d\'e9g\'e2ts au joueur\par
+- `heal(health)` : Soigne le joueur\par
+- `GetPlayerStats()` : Retourne (maxVie, vie, attaque, ReducDegat)\par
+- `GetPlayerWeapons()` : Retourne l'inventaire\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+## \f3\u-10178?\u-8737?\f2  \f0 Fichiers d'Ennemis\par
+\par
+### **Ennemies.py**\par
+**Objectif :** D\'e9finition et g\'e9n\'e9ration al\'e9atoire des ennemis selon la difficult\'e9\par
+\par
+**Classe :** `Ennemi`\par
+\par
+**Syst\'e8me de g\'e9n\'e9ration :**\par
+- **Types d'ennemis :** Tank, Damage Dealer, Support (+ Boss)\par
+- **Statistiques :**\par
+  - Vie bas\'e9e sur la difficult\'e9 + valeurs al\'e9atoires\par
+  - Attaque bas\'e9e sur celle du joueur (\'bd r\'e9duction max)\par
+  - Chaque type a des statistiques diff\'e9rentes\par
+\par
+**M\'e9thodes principales :**\par
+- `ennemi_al\'e9atoire()` : G\'e9n\'e8re un ennemi al\'e9atoire selon le type\par
+- `Random_Damage_Dealer()` : S\'e9lectionne un DamageDealer\par
+- `Random_Tank()` : S\'e9lectionne un Tank\par
+- `Random_Support()` : S\'e9lectionne un Support\par
+- `Random_Boss()` : S\'e9lectionne un Boss\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **EnnemiesInGame.py**\par
+**Objectif :** Gestion des ennemis actifs pendant le combat\par
+\par
+**Classe :** `SetUpEnemy`\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Initialisation d'une liste d'ennemis pour un combat\par
+- Gestion de plusieurs ennemis avec dictionnaire interne\par
+- Format : `\{index: [nom, maxVie, vieActuelle, attaque]\}`\par
+\par
+**M\'e9thodes principales :**\par
+- `dealDamage(enemy, dmg)` : Applique des d\'e9g\'e2ts \'e0 un ennemi\par
+- `Heal(enemy, health)` : Soigne un ennemi\par
+- `GetEnnemieStats(enemy)` : R\'e9cup\'e8re les stats d'un ennemi\par
+- `GetAllEnnemies()` : Retourne tous les ennemis\par
+- `GetNbEnnemies()` : Compte le nombre d'ennemis\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+## \f3\u9876?\u-497?\f2  \f0 Syst\'e8me de Combat\par
+\par
+### **Weapons.py**\par
+**Objectif :** Impl\'e9mentation des attaques d'armes et application des d\'e9g\'e2ts\par
+\par
+**Armes impl\'e9ment\'e9es :**\par
+1. **Branche** : 10 points de d\'e9g\'e2ts base\par
+2. **Banane** : 7 points + 7 soins (effet unique)\par
+3. **Hache de Fer** : 32 points (forte)\par
+4. **\'c9p\'e9e Rouill\'e9e** : 17 points\par
+5. **Lance** : 30 points\par
+6. **Toile** : 11 points\par
+\par
+**Syst\'e8me de d\'e9g\'e2ts :**\par
+- Chaque arme a une fonction qui applique des d\'e9g\'e2ts multipli\'e9 par le bonus d'attaque\par
+- Distinction entre attaques du joueur et des ennemis\par
+\par
+**Fonctions principales :**\par
+- `branche(type, target, mul)` : Applique les d\'e9g\'e2ts de branche\par
+- `H2F()`, `epeeRouille()`, `toile()`, `lance()`, `banane()` : Autres armes\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **FightScene.py**\par
+**Objectif :** Vue de combat standard contre plusieurs ennemis\par
+\par
+**Classe :** `FightScene` (h\'e9rite de `arcade.View`)\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Interface de combat en temps r\'e9el\par
+- Affichage du joueur et des ennemis (jusqu'\'e0 3)\par
+- Barres de vie visuelles\par
+- Musique de combat (musicfight.mp3)\par
+- S\'e9lection de cible avec souris\par
+- Syst\'e8me de tour (joueur \f5\u8594?\f2  \f0 ennemis)\par
+- Gestion de la victoire\par
+\par
+**\'c9l\'e9ments visuels :**\par
+- Sprites d'herbe et chemins (d\'e9cor)\par
+- Barres de sant\'e9 pour chaque combattant\par
+- Sprites des ennemis (Singe, Araign\'e9e, Gorille, Oazo, Gro-oazo, Ours)\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **BossFight.py**\par
+**Objectif :** Vue de combat sp\'e9cialis\'e9e contre un boss unique\par
+\par
+**Classe :** `BossFight` (h\'e9rite de `arcade.View`)\par
+\par
+**Diff\'e9rences avec FightScene :**\par
+- Un seul ennemi (le boss)\par
+- Interface d'attaque sp\'e9cialis\'e9e\par
+- Barre de vie verte pour le boss\par
+- Syst\'e8me de tours identique\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+## \f1\u-10180?\u-8274?\f2  \f0 Fichiers de Vues (UI)\par
+\par
+### **Spawn.py**\par
+**Objectif :** Zone de d\'e9part / Hub du jeu\par
+\par
+**Classe :** `Spawn` (h\'e9rite de `arcade.View`)\par
+\par
+**\'c9l\'e9ments :**\par
+- Sprite du joueur (d\'e9pla\'e7able avec Z/Q/S/D)\par
+- Shop (petit b\'e2timent interactif)\par
+- Portail vers la carte (transition au prochain niveau)\par
+- Gear (ic\'f4ne d'options)\par
+- Herbe et chemins (d\'e9cor)\par
+- Son des pas (pas.wav)\par
+\par
+**M\'e9caniques :**\par
+- D\'e9placement du joueur avec les touches ZQSD\par
+- Collision avec le shop \f5\u8594?\f2  \f0 acc\'e8s \'e0 `ShopView()`\par
+- Collision avec le portail \f5\u8594?\f2  \f0 acc\'e8s \'e0 `Map()` ou `MapBoss()`\par
+- Retour \'e0 Spawn apr\'e8s mort\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **Map.py**\par
+**Objectif :** Carte de progression avec niveaux et s\'e9lection\par
+\par
+**Classe :** `Map` (h\'e9rite de `arcade.View`)\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Affichage de la progression (nombre de cartes compl\'e9t\'e9es)\par
+- Position du joueur sur la carte (4 positions possibles)\par
+- Ic\'f4nes de niveaux (d\'e9part, combat, area, boss, fin)\par
+- Appui sur ENTER pour lancer un niveau\par
+\par
+**Logique de progression :**\par
+- Niveau 0 : Combat normal\par
+- Niveau 1 : Combat normal\par
+- Niveau 2 : Combats\par
+- Niveaux multiples de 10 : Boss\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **MapBoss.py**\par
+**Objectif :** Variante de la carte pour les combats de boss\par
+\par
+**Classe :** `MapBoss` (h\'e9rite de `arcade.View`)\par
+\par
+**Structure :**\par
+- Identique \'e0 `Map.py` mais sans les niveaux optionnels\par
+- Chemin direct vers le boss (4 niveaux au lieu de 3)\par
+- Ic\'f4ne de boss au lieu de fin normal\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **ShopView.py**\par
+**Objectif :** Boutique pour am\'e9liorer le joueur\par
+\par
+**Classe :** `ShopView` (h\'e9rite de `arcade.View`)\par
+\par
+**Articles disponibles :**\par
+1. **Potion de Vie** : +50 PV, co\'fbt = PVActuels + 50\par
+2. **Armes Meilleures** : Ouvre `WeaponShop()` (d\'e9tail non fourni ici)\par
+\par
+**M\'e9canique :**\par
+- V\'e9rification de l'argent avant achat\par
+- Mise \'e0 jour des stats apr\'e8s achat\par
+- Sprites des items affich\'e9s\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Partiellement complet (WeaponShop non impl\'e9ment\'e9e)\par
+\par
+---\par
+\par
+### **StatueView.py**\par
+**Objectif :** \'c9cran de r\'e9compense apr\'e8s un niveau bonus\par
+\par
+**Classe :** `StatueView` (h\'e9rite de `arcade.View`)\par
+\par
+**Choix de r\'e9compense :**\par
+- **Vie** : +25% des PV max\par
+- **Pi\'e8ces** : +argent (montant non sp\'e9cifi\'e9)\par
+\par
+**D\'e9cor :**\par
+- Statue comme \'e9l\'e9ment central\par
+- \'c9glise en arri\'e8re-plan\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **Menu.py**\par
+**Objectif :** Menu principal avec options et affichage des contr\'f4les\par
+\par
+**Classe :** `MenuView` (h\'e9rite de `arcade.View`)\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Bouton "Return to Game" \f5\u8594?\f2  \f0 retour \'e0 `Spawn()`\par
+- Bouton "Options" \f5\u8594?\f2  \f0 acc\'e8s \'e0 `Options()`\par
+- Affichage des commandes (Z/Q/S/D, Shop, Portail)\par
+- UI organis\'e9e en grille\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Options non compl\'e8tement impl\'e9ment\'e9es\par
+\par
+---\par
+\par
+### **Main.py**\par
+**Objectif :** Vue de titre/lancement du jeu\par
+\par
+**Classe :** `main` (h\'e9rite de `arcade.View`)\par
+\par
+**\'c9l\'e9ments :**\par
+- Image de titre (TITLE.png)\par
+- Bouton "Play" qui lance le jeu (`Spawn()`)\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **Bonus_lvl.py**\par
+**Objectif :** Niveau bonus avec statue et r\'e9compense\par
+\par
+**Classe :** `Bonus_lvl` (h\'e9rite de `arcade.View`)\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Sprite du joueur (d\'e9pla\'e7able)\par
+- Statue au centre (collision pour r\'e9compense)\par
+- D\'e9cor avec sol\par
+- Transition vers `StatueView()`\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+## \f1\u-10180?\u-8276?\f2  \f0 Animations et Utilitaires\par
+\par
+### **Animations.py**\par
+**Objectif :** Gestion des animations d'attaque\par
+\par
+**Variables globales :**\par
+- `isPlayer` : Indique si l'attaquant est le joueur\par
+- `numero` : Index de la cible\par
+- `sprite_ref` : Sprite de l'attaquant\par
+- `userStats` : Statistiques de l'attaquant\par
+- `Target` : Cible de l'attaque\par
+- `arme` : Type d'arme utilis\'e9e\par
+\par
+**Fonctions principales :**\par
+- `UseWeapon()` : Ex\'e9cute l'attaque avec l'arme s\'e9lectionn\'e9e\par
+- `Attaquer(user, target, weapon, num)` : Initialise l'attaque\par
+- `Move1(delta_time)` : Premi\'e8re phase d'animation (cri et strafe)\par
+\par
+**Animation :**\par
+- Planifi\'e9e avec `arcade.schedule()`\par
+- Phase 1 : Cri et d\'e9placement de l'attaquant\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Produit\par
+\par
+---\par
+\par
+### **CombatSystemExample.py**\par
+**Objectif :** Exemple de syst\'e8me de combat en console\par
+\par
+**Fonction :** `Start()`\par
+\par
+**Logique :**\par
+- Cr\'e9e un joueur et des ennemis\par
+- Simule un combat au tour par tour\par
+- Tour 0 : Attaque du joueur\par
+- Tour 1 : Attaques des ennemis\par
+- Boucle jusqu'\'e0 mort du joueur ou des ennemis\par
+\par
+**\'c9tat :** \f1\u-10179?\u-8998?\f2  \f0 Exemple/Test (non utilis\'e9 en jeu)\par
+\par
+---\par
+\par
+### **User Input Handling.py**\par
+**Objectif :** Exemple de gestion des entr\'e9es clavier\par
+\par
+**Fonctions :**\par
+- `on_key_press()` : Affiche la touche press\'e9e\par
+- `on_key_release()` : Affiche la touche rel\'e2ch\'e9e\par
+\par
+**\'c9tat :** \f1\u-10179?\u-8998?\f2  \f0 Exemple (mod\'e8le pour impl\'e9mentation)\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-8998?\f2  \f0 Fichiers Auxiliaires\par
+\par
+### **__init__.py**\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Vide (initialisation du package)\par
+\par
+---\par
+\par
+### **game_uuid.txt** et **Main.spec**, **pyinstaller**\par
+**\'c9tat :** \f1\u-10179?\u-8921?\f2  \f0 Configuration et compilation\par
+\par
+---\par
+\par
+## \f3\u-10179?\u-8764?\u-497?\f2  \f0 Dossier DB - Base de Donn\'e9es\par
+\par
+### **CheckDB.py**\par
+**Objectif :** Initialisation et gestion de la base de donn\'e9es MySQL\par
+\par
+**Fonction principale :** `createDB()`\par
+\par
+**Processus :**\par
+1. Connexion \'e0 MySQL Server (localhost, user: root)\par
+2. V\'e9rification de l'existence de la base "testosterone"\par
+3. **Si elle existe :** Suppression compl\'e8te (`DROP DATABASE`)\par
+4. **Cr\'e9ation nouvelle :** `CREATE DATABASE testosterone`\par
+5. **Ex\'e9cution du script SQL :** Lecture et ex\'e9cution de `testosterone.sql`\par
+6. Validation des tables cr\'e9\'e9es avec succ\'e8s\par
+\par
+**Fonctionnalit\'e9s :**\par
+- Reconnexion \'e0 la BD fra\'eechement cr\'e9\'e9e\par
+- Parsing des requ\'eates SQL (division par `;`)\par
+- Gestion des erreurs MySQL\par
+- Affichage de messages de progression\par
+\par
+**Utilisation :** Permet de reset compl\'e8tement la BD et la repeupler avec les donn\'e9es initiales\par
+\par
+**\'c9tat :** \f4\u9989?\f2  \f0 Utilitaire fonctionnel\par
+\par
+---\par
+\par
+### **testosterone.sql**\par
+**Objectif :** Script de cr\'e9ation compl\'e8te de la base de donn\'e9es\par
+\par
+**Information du serveur :**\par
+- Version MariaDB : 10.4.28\par
+- Version PHP PhpMyAdmin : 8.2.4\par
+- G\'e9n\'e9r\'e9 le : 02 f\'e9vrier 2026\par
+\par
+**Tables cr\'e9\'e9es :**\par
+\par
+#### **Table `enemies`**\par
+R\'e9f\'e9rence tous les types d'ennemis du jeu\par
+\par
+| Colonne | Type | Description |\par
+|---------|------|-------------|\par
+| `Nom` | VARCHAR(20) | Identificateur unique (PRIMARY KEY) |\par
+| `Type` | VARCHAR(20) | Classe de l'ennemi : Tank, DamageDealer, Support, Boss |\par
+| `Atout` | VARCHAR(20) | Capacit\'e9 sp\'e9ciale (ex: "Poison" pour Araign\'e9e) |\par
+\par
+**Ennemis r\'e9f\'e9renc\'e9s (7 total) :**\par
+- **Tank :** Gorille, Ours\par
+- **DamageDealer :** Singe, Gro-oazo\par
+- **Support :** Araign\'e9e (Poison), Oazo\par
+- **Boss :** Snake\par
+\par
+---\par
+\par
+#### **Table `players`**\par
+Stocke les donn\'e9es de tous les joueurs\par
+\par
+| Colonne | Type | D\'e9faut | Description |\par
+|---------|------|--------|-------------|\par
+| `PlayerID` | VARCHAR(40) | - | UUID unique (PRIMARY KEY) |\par
+| `Vie` | INT | 100 | Points de vie maximum |\par
+| `AtkDeBase` | INT | 1 | Valeur d'attaque de base |\par
+| `ReducDegat` | INT | 0 | R\'e9duction de d\'e9g\'e2ts re\'e7us |\par
+| `Argent` | INT | 0 | Argent en jeu |\par
+| `Name` | VARCHAR(10) | - | Nom du joueur (UNIQUE) |\par
+| `MDP` | VARCHAR(30) | - | Mot de passe (stock\'e9 en clair \f3\u9888?\u-497?\f0 ) |\par
+| `Volume` | FLOAT | 0.2 | Volume audio (0.0 \'e0 1.0) |\par
+| `Weapons` | VARCHAR(24) | `[[2, 0, 0], [1, 0, 0]]` | Inventaire d'armes (matrice 2x3) |\par
+\par
+**Donn\'e9es de test :**\par
+```\par
+PlayerID: 368b4e87-fd2c-4f06-aa56-a8ee6fa9a42f\par
+- Nom: Bernard, MDP: Patate10, Vie: 100, Argent: 0\par
+\par
+PlayerID: 7e176586-3829-4c65-8df8-528faeb87beb\par
+- Nom: Orneige, MDP: emojiSmegma, Vie: 100, Argent: 200\par
+- Armes: Bannane (ID 2) et Branche (ID 1 avec 2 en slot 3)\par
+```\par
+\par
+---\par
+\par
+#### **Table `weapons`**\par
+Catalogue des armes disponibles\par
+\par
+| Colonne | Type | D\'e9faut | Description |\par
+|---------|------|--------|-------------|\par
+| `Nom` | VARCHAR(20) | - | Nom de l'arme (PRIMARY KEY) |\par
+| `Effet` | VARCHAR(20) | NULL | Effet sp\'e9cial (ex: "Poison", "Soin") |\par
+| `Taille` | VARCHAR(6) | '1X1' | Taille dans l'inventaire |\par
+| `Rarete` | VARCHAR(20) | - | Raret\'e9 : Pourie, Ok, Rare, L\'e9gendaire |\par
+| `Degats` | INT | - | D\'e9g\'e2ts inflig\'e9s |\par
+\par
+**Armes actuellement en BD (3) :**\par
+1. **Branche** - Raret\'e9: Pourie, D\'e9g\'e2ts: 10, Taille: 1x1\par
+2. **\'c9p\'e9e rouill\'e9e** - Raret\'e9: Pourie, D\'e9g\'e2ts: 17, Taille: 1x1\par
+3. **Hache de fer** - Raret\'e9: Ok, D\'e9g\'e2ts: 32, Taille: 1x2\par
+\par
+**Note :** Le code impl\'e9mente 6 armes (Branche, Banane, Hache de Fer, \'c9p\'e9e Rouill\'e9e, Lance, Toile), mais seules 3 sont en base\par
+\par
+---\par
+\par
+### **Relation entre fichiers et DB**\par
+\par
+```\par
+CheckDB.py (Initialisation)\par
+\f2     \f5\u8595?\f0\par
+testosterone.sql (Sch\'e9ma)\par
+\f2     \f5\u8595?\f0\par
+PlayerStats.py (Acc\'e8s Joueur)\par
+\f4\u9500?\u9472?\f2  \f0 GetLife(), GetAtk(), GetReducDegat()\par
+\f4\u9500?\u9472?\f2  \f0 AddLife(), AddArgent()\par
+\f4\u9492?\u9472?\f2  \f0 OG(), SignIn()\par
+\par
+WeaponsStats.py (Acc\'e8s Armes)\par
+\f4\u9500?\u9472?\f2  \f0 GetWeapons()\par
+\f4\u9500?\u9472?\f2  \f0 GetPourrieWeapons()\par
+\f4\u9500?\u9472?\f2  \f0 GetOkWeapons()\par
+\f4\u9492?\u9472?\f2  \f0 GetLegendaireWeapons()\par
+\par
+EnnemiesStats.py (Acc\'e8s Ennemis)\par
+\f4\u9500?\u9472?\f2  \f0 GetDamageDealers()\par
+\f4\u9500?\u9472?\f2  \f0 GetTanks()\par
+\f4\u9500?\u9472?\f2  \f0 GetSupports()\par
+\f4\u9492?\u9472?\f2  \f0 GetBoss()\par
+```\par
+\par
+---\par
+\par
+### **Points Importants**\par
+\par
+\f4\u9989?\f2  \f0 **Probl\'e8mes identifi\'e9s :**\par
+1. **S\'e9curit\'e9 :** Mots de passe stock\'e9s en clair \f4\u10060?\f0\par
+2. **Incoh\'e9rence d'armes :** Seules 3 armes en BD vs 6 impl\'e9ment\'e9es dans le code\par
+3. **Inventaire :** Format de texte (`VARCHAR`) au lieu de table relationnelle\par
+4. **Atout d'ennemi :** Non utilis\'e9 dans le code actuel\par
+\par
+\f4\u9989?\f2  \f0 **Points forts :**\par
+- Structure claire avec cl\'e9s primaires et uniques\par
+- Charset UTF-8 pour caract\'e8res sp\'e9ciaux\par
+- Donn\'e9es de test pr\'e9sentes\par
+- Script exportable pour sauvegarde/partage\par
+\par
+**\'c9tat global DB :** \f4\u9989?\f2  \f0 Fonctionnel mais n\'e9cessite une migration aux armes manquantes\par
+\par
+---\par
+\par
+## \f3\u-10180?\u-8233?\u-497?\f2  \f0 Structure G\'e9n\'e9rale\par
+\par
+### **Architecture du Jeu**\par
+\par
+```\par
+\f4\u9484?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9488?\f0\par
+\f4\u9474?\f2     \f0 Main.py (Titre)          \f4\u9474?\f0\par
+\f4\u9474?\f2     \f5\u8595?\f2  \f0 "Play" button          \f4\u9474?\f0\par
+\f4\u9500?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9508?\f0\par
+\f4\u9474?\f2     \f0 Spawn.py (Hub)           \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 Shop \f5\u8594?\f2  \f0 ShopView.py    \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9492?\u9472?\f2  \f0 Portal \f5\u8594?\f2  \f0 Map/MapBoss  \f4\u9474?\f0\par
+\f4\u9500?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9508?\f0\par
+\f4\u9474?\f2     \f0 Map.py (Progression)     \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 4 positions sur map   \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 Combat \f5\u8594?\f2  \f0 FightScene   \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9492?\u9472?\f2  \f0 Bonus \f5\u8594?\f2  \f0 Bonus_lvl     \f4\u9474?\f0\par
+\f4\u9500?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9508?\f0\par
+\f4\u9474?\f2     \f0 FightScene.py (Combat)   \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 jusqu'\'e0 3 ennemis     \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 Syst\'e8me de tours      \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 R\'e9compense StatueView \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9492?\u9472?\f2  \f0 Mort \f5\u8594?\f2  \f0 Spawn          \f4\u9474?\f0\par
+\f4\u9500?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9508?\f0\par
+\f4\u9474?\f2     \f0 BossFight.py (Boss)      \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 1 ennemi unique       \f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9500?\u9472?\f2  \f0 M\'eame syst\'e8me de combat\f4\u9474?\f0\par
+\f4\u9474?\f2     \f4\u9492?\u9472?\f2  \f0 Progression ++        \f4\u9474?\f0\par
+\f4\u9492?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9472?\u9496?\f0\par
+```\par
+\par
+### **Flux de Donn\'e9es**\par
+\par
+**BASE DE DONN\'c9ES (MySQL - "testosterone")**\par
+```\par
+Players Table                Weapons Table           Enemies Table\par
+\f4\u9500?\u9472?\f2  \f0 PlayerID (UUID)          \f4\u9500?\u9472?\f2  \f0 ID                   \f4\u9500?\u9472?\f2  \f0 Nom\par
+\f4\u9500?\u9472?\f2  \f0 Name                     \f4\u9500?\u9472?\f2  \f0 Nom                  \f4\u9500?\u9472?\f2  \f0 Type (Tank/DamageDealer/Support/Boss)\par
+\f4\u9500?\u9472?\f2  \f0 MDP                      \f4\u9500?\u9472?\f2  \f0 Rarete               \f4\u9500?\u9472?\f2  \f0 PV\par
+\f4\u9500?\u9472?\f2  \f0 Vie                      \f4\u9492?\u9472?\f2  \f0 D\'e9g\'e2ts               \f4\u9492?\u9472?\f2  \f0 Attaque\par
+\f4\u9500?\u9472?\f2  \f0 Attaque\par
+\f4\u9500?\u9472?\f2  \f0 ReducDegat\par
+\f4\u9500?\u9472?\f2  \f0 Argent\par
+\f4\u9492?\u9472?\f2  \f0 Items (inventaire)\par
+```\par
+\par
+---\par
+\par
+## \f1\u-10180?\u-8273?\f2  \f0 Syst\'e8me de Difficult\'e9\par
+\par
+La difficult\'e9 progresse avec le compteur de cartes (`compteur_maps`):\par
+- **Compteur < 6** : 1 ennemi, difficult\'e9 faible\par
+- **Compteur 6-10** : 2 ennemis, difficult\'e9 moyenne\par
+- **Compteur > 10** : 3 ennemis, difficult\'e9 \'e9lev\'e9e\par
+- **Cartes multiples de 10** : Combat de boss\par
+\par
+---\par
+\par
+## \f1\u-10180?\u-8280?\f2  \f0 Ressources Multim\'e9dia Utilis\'e9es\par
+\par
+### **Images :**\par
+- perso.png, TITLE.png, SHOP.png, portal.png, gear.png\par
+- herbe.webp, pathcomplet.png, stonepath.png, Target.png\par
+- Ennemis : banana.png, spider.png, gorilla.png, ouaso.png, groazo.png, ours.png\par
+- Items : potionverte.png, epeeblack.png, coins.png, statue.png, bonus_floor.jpg, church.webp\par
+- Ic\'f4nes : start.png, battle.png, area.png, end.png, bossmort.png\par
+\par
+### **Sons :**\par
+- pas.wav, Scream.wav, musicfight.mp3\par
+\par
+---\par
+\par
+## \f4\u9889?\f2  \f0\'c9tat Global du Projet\par
+\par
+| Cat\'e9gorie | \'c9tat | Notes |\par
+|-----------|------|-------|\par
+| **Base de Donn\'e9es** | \f4\u9989?\f2  \f0 | CheckDB.py fonctionne; 3 armes en BD vs 6 impl\'e9ment\'e9es |\par
+| **Sch\'e9ma BD** | \f4\u9989?\f2  \f0 | Tables bien structur\'e9es, donn\'e9es de test pr\'e9sentes |\par
+| **Gestion BD** | \f4\u9989?\f2  \f0 | PlayerStats, Weapons, Enemies Stats |\par
+| **Joueur** | \f4\u9989?\f2  \f0 | Classe player fonctionnelle |\par
+| **Ennemis** | \f4\u9989?\f2  \f0 | G\'e9n\'e9ration al\'e9atoire, 3 types + Boss |\par
+| **Combat basique** | \f4\u9989?\f2  \f0 | FightScene fonctionnelle |\par
+| **Combat Boss** | \f4\u9989?\f2  \f0 | BossFight fonctionnelle |\par
+| **Armes** | \f4\u9989?\f2  \f0 | 6 armes impl\'e9ment\'e9es |\par
+| **Animations** | \f4\u9989?\f2  \f0 | Basiques (phase 1 seulement compl\'e8tement impl\'e9ment\'e9e) |\par
+| **Map/Navigation** | \f4\u9989?\f2  \f0 | Map et MapBoss fonctionnelles |\par
+| **Boutique** | \f4\u9989?\f2  \f0 | Basique, WeaponShop non impl\'e9ment\'e9e |\par
+| **Menu** | \f4\u9989?\f2  \f0 | Options non compl\'e8tement d\'e9velopp\'e9es |\par
+| **Hub/Spawn** | \f4\u9989?\f2  \f0 | Fonctionnel avec collisions |\par
+\par
+---\par
+\par
+## \f1\u-10179?\u-8995?\f2  \f0 Notes de D\'e9veloppement\par
+\par
+1. **Points forts :**\par
+   - Architecture bien organis\'e9e avec s\'e9paration donn\'e9es/logique/UI\par
+   - Syst\'e8me de difficult\'e9s adaptatif\par
+   - Gestion coh\'e9rente des ressources multim\'e9dia\par
+\par
+2. **Points \'e0 am\'e9liorer :**\par
+   - Compl\'e9ter les animations (phases 2, 3, etc.)\par
+   - Impl\'e9menter `WeaponShop` complet\par
+   - Am\'e9liorer l'affichage du menu Options\par
+   - Ajouter plus de vari\'e9t\'e9 aux armes/ennemis\par
+\par
+3. **D\'e9pendances :**\par
+   - Arcade (GUI, sprites, sons)\par
+   - mysql.connector (base de donn\'e9es)\par
+   - uuid (construction des identifiants)\par
+\par
+---\lang12\par
+}
+ 
